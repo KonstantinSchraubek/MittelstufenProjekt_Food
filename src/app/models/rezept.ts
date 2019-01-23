@@ -21,46 +21,48 @@ export class Rezept {
   private totalDaily: object;
 
   constructor(responseObject: {
-    totalDaily: object;
     bought: boolean;
     bookmarked: boolean;
-    digest: object[];
-    totalNutrients: object;
-    totalTime: number;
-    totalWeight: number;
-    calories: number;
-    healthLabels: string[];
-    ingredients: object[];
-    ingredientLines: string[];
-    cautions: string[];
-    dietLabels: string[];
-    yield: number;
-    shareAs: string;
-    uri: string,
-    label: string,
-    image: string,
-    source: string,
-    url: string
+    recipe: {
+      totalDaily: object;
+      digest: object[];
+      totalNutrients: object;
+      totalTime: number;
+      totalWeight: number;
+      calories: number;
+      healthLabels: string[];
+      ingredients: object[];
+      ingredientLines: string[];
+      cautions: string[];
+      dietLabels: string[];
+      yield: number;
+      shareAs: string;
+      uri: string,
+      label: string,
+      image: string,
+      source: string,
+      url: string
+    }
   }) {
-    this.uri = responseObject.uri;
-    this.label = responseObject.label;
-    this.image = responseObject.image;
-    this.source = responseObject.source;
-    this.url = responseObject.url;
-    this.shareAs = responseObject.shareAs;
-    this.yield = responseObject.yield;
-    this.dietLabels = responseObject.dietLabels;
-    this.cautions = responseObject.cautions;
-    this.ingredientLines = responseObject.ingredientLines;
-    this.ingredients = responseObject.ingredients;
-    this.healthLabels = responseObject.healthLabels;
-    this.calories = responseObject.calories;
-    this.totalWeight = responseObject.totalWeight;
-    this.totalTime = responseObject.totalTime;
-    this.totalNutrients = responseObject.totalNutrients;
-    this.digest = responseObject.digest;
+    this.uri = responseObject.recipe.uri;
+    this.label = responseObject.recipe.label;
+    this.image = responseObject.recipe.image;
+    this.source = responseObject.recipe.source;
+    this.url = responseObject.recipe.url;
+    this.shareAs = responseObject.recipe.shareAs;
+    this.yield = responseObject.recipe.yield;
+    this.dietLabels = responseObject.recipe.dietLabels;
+    this.cautions = responseObject.recipe.cautions;
+    this.ingredientLines = responseObject.recipe.ingredientLines;
+    this.ingredients = responseObject.recipe.ingredients;
+    this.healthLabels = responseObject.recipe.healthLabels;
+    this.calories = responseObject.recipe.calories;
+    this.totalWeight = responseObject.recipe.totalWeight;
+    this.totalTime = responseObject.recipe.totalTime;
+    this.totalNutrients = responseObject.recipe.totalNutrients;
+    this.digest = responseObject.recipe.digest;
     this.bookmarked = responseObject.bookmarked;
     this.bought = responseObject.bought;
-    this.totalDaily = responseObject.totalDaily;
+    this.totalDaily = responseObject.recipe.totalDaily;
   }
 }
