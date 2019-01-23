@@ -1,17 +1,19 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { EncryptComponent } from './components/encrypt/encrypt.component';
+import { encrypt } from './components/encrypt/encrypt.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    EncryptComponent
+    encrypt
   ],
   imports: [
     BrowserModule,
+    HttpModule,
     AppRoutingModule
   ],
   providers: [],
