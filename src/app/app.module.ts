@@ -5,18 +5,23 @@ import { HttpModule } from '@angular/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { encrypt } from './components/encrypt/encrypt.component';
-
+import { RecipeListComponent } from './components/recipe-list/recipe-list.component';
+import { RecipeServiceService} from './services/recipe-service.service';
+import {HttpClientModule} from '@angular/common/http';
+/////
 @NgModule({
   declarations: [
     AppComponent,
-    encrypt
+    encrypt,
+    RecipeListComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [RecipeServiceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
