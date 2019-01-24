@@ -6,25 +6,43 @@ import * as CryptoJS from 'crypto-js';
   templateUrl: './encrypt.component.html',
   styleUrls: ['./encrypt.component.css']
 })
-export class EncryptComponent {
+
+export class encrypt {
 
   password: string;
-  encrypted: string;
-  decrypted: string;
+  key: string;
+  encrypted;
+  decrypted;
 
-  constructor(password: string) {
-    this.password = password;
+  constructor() {
+    this.key = 'alpha';
+  }
+
+  set(keys, value) {
+    this.key = CryptoJS.enc.Utf8.parse(keys);
+    var iv = CryptoJS.enc.Utf8.parse(keys);
+    this.encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(value.toString()), this.key,
+      {
+        keySize: 128 / 8,
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+      });
+
+    return this.encrypted.toString();
   }
 
 
-  encryptPassword() {
-    this.encrypted = CryptoJS.AES.encrypt(this.password.trim()).toString();
+  get(keys, value) {
+    this.key = CryptoJS.enc.Utf8.parse(keys);
+    var iv = CryptoJS.enc.Utf8.parse(keys);
+    this.decrypted = CryptoJS.AES.decrypt(value, this.key, {
+      keySize: 128 / 8,
+      iv: iv,
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7
+    });
+
+    return this.decrypted.toString(CryptoJS.enc.Utf8);
   }
-
-  decryptPassword() {
-    this.decrypted = CryptoJS.AES.decrypt(this.password.trim()).toString(CryptoJS.enc.Utf8);
-  }
-
-
-
 }
