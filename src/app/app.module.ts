@@ -4,9 +4,11 @@ import { HttpModule } from '@angular/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { StartseiteComponent } from './components/startseite/startseite.component';
+import { RegistrierungComponent } from './components/registrierung/registrierung.component';
+import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { StartseiteComponent } from './components/startseite/startseite.component';
-
 import { DetailViewComponent } from './components/detail-view/detail-view.component';
 
 import { encrypt } from './components/encrypt/encrypt.component';
@@ -21,13 +23,15 @@ import {HttpClientModule} from '@angular/common/http';
     DetailViewComponent,
     RecipeListComponent
     NavbarComponent,
-    StartseiteComponent
+    StartseiteComponent,
+    RegistrierungComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [RecipeServiceService],
   bootstrap: [AppComponent]
