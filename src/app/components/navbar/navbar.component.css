@@ -73,3 +73,28 @@ a:hover {
   padding: .75rem 1.25rem;
   font-weight: 700;
 }
+
+
+@import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css');
+/* Fixed navbar */
+body {
+  padding-top: 90px;
+}
+/* General sizing */
+ul.dropdown-lr {
+  width: 300px;
+}
+
+/* mobile fix */
+@media (max-width: 768px) {
+  .dropdown-lr h3 {
+    color: #ffffff;
+  }
+  .dropdown-lr label {
+    color: #eee;
+  }
+}
+
+#forgetpasswort{
+  color: dodgerblue;
+}
