@@ -11,9 +11,7 @@ export class DetailViewComponent implements OnInit {
 
   constructor(private recipeService: RecipeServiceService) { }
 
-  get selected(): Rezept {
-    return this.recipeService.selectedRecipe;
-  }
+
 
   ngOnInit() {
 

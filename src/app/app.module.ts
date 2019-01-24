@@ -4,7 +4,7 @@ import { HttpModule } from '@angular/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { EncryptComponent } from './components/encrypt/encrypt.component';
+
 import { DetailViewComponent } from './components/detail-view/detail-view.component';
 
 import { encrypt } from './components/encrypt/encrypt.component';
@@ -15,8 +15,9 @@ import {HttpClientModule} from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
-    EncryptComponent,
-    DetailViewComponent
+    encrypt,
+    DetailViewComponent,
+    RecipeListComponent
   ],
   imports: [
     BrowserModule,
