@@ -1,5 +1,13 @@
 <div>
   <li *ngFor="let Recipe of service.recipes">
-    <span>{{Recipe.label}}</span>
+    <div class="card">
+      <img class="card-img-top" src="{{Recipe.image}}" alt="Recipe image">
+      <div class="card-img-overlay">
+        <h1>{{Recipe.label}}</h1>
+        <div *ngFor="let ingredient of Recipe.ingredients">
+          <span>{{ingredient.text}}</span>
+        </div>
+      </div>
+    </div>
   </li>
 </div>
