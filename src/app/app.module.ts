@@ -8,12 +8,14 @@ import { encrypt } from './components/encrypt/encrypt.component';
 import { RecipeListComponent } from './components/recipe-list/recipe-list.component';
 import { RecipeServiceService} from './services/recipe-service.service';
 import {HttpClientModule} from '@angular/common/http';
+import { RecipeViewComponent } from './views/recipe-view/recipe-view.component';
 /////
 @NgModule({
   declarations: [
     AppComponent,
     encrypt,
-    RecipeListComponent
+    RecipeListComponent,
+    RecipeViewComponent
   ],
   imports: [
     BrowserModule,
