@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {RecipeServiceService} from '../../services/recipe-service.service';
+import {Rezept} from '../../models/rezept';
 
 @Component({
   selector: 'app-detail-view',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DetailViewComponent implements OnInit {
 
-  constructor() { }
+  constructor(private recipeService: RecipeServiceService) { }
+
+  get selected(): Rezept {
+    return this.recipeService.selectedRecipe;
+  }
 
   ngOnInit() {
+
   }
 
 }

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {Rezept} from '../models/rezept';
 
 @Injectable({
   providedIn: 'root'
@@ -6,4 +7,10 @@ import { Injectable } from '@angular/core';
 export class RecipeServiceService {
 
   constructor() { }
+
+  selectedRecipe: Rezept;
+
+
+
+
 }
