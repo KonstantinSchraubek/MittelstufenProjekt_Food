@@ -1,0 +1,62 @@
+<div class="container mx-auto">
+
+  <div class="row mt-4 w-100 detailHeader">
+    <h1>
+      {{selected.label}}
+    </h1>
+
+
+  </div>
+
+  <div class="row">
+    <div class="d-flex p-3 justify-content-end text-black font-weight-bold w-100">
+      <div class="px-2 ">Total energy {{calories}} kcal</div>
+      <div class="px-2 ">Weight {{weight}} g</div>
+      <div class="px-2 ">Time {{selected.totalTime}}</div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row m-2 imgRow">
+    <div class="col-6" >
+        <img class="img-fluid rounded" src="{{selected.image}}"/>
+    </div>
+
+    <div class="col-3">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item" *ngFor="let ing of ingridients1"> {{ing}} </li>
+      </ul>
+    </div>
+
+    <div class="col-3">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item" *ngFor="let ing2 of ingridients2"> {{ing2}} </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <table class="table">
+      <thead class="thead-light">
+      <tr>
+        <th scope="col">Nutrient</th>
+        <th scope="col">Daily %</th>
+        <th scope="col">Total Nutrients</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <th scope="row"></th>
+        <td> </td>
+        <td></td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
+
+
