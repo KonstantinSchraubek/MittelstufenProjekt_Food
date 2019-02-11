@@ -1,18 +1,16 @@
 <div class="container mx-auto">
 
-  <div class="row mt-4 w-100 detailHeader">
-    <h1>
+  <div class="row mt-2 w-100 detailHeader">
+    <div class="display-4">
       {{selected.label}}
-    </h1>
-
-
+    </div>
   </div>
 
   <div class="row">
-    <div class="d-flex p-3 justify-content-end text-black font-weight-bold w-100">
-      <div class="px-2 ">Total energy {{calories}} kcal</div>
-      <div class="px-2 ">Weight {{weight}} g</div>
-      <div class="px-2 ">Time {{selected.totalTime}}</div>
+    <div class="d-flex justify-content-end text-black font-weight-bold w-100 px-5">
+      <div class="px-2 ">Total energy: {{calories}} kcal</div>
+      <div class="px-2 ">Weight: {{weight}} g</div>
+      <div class="px-2 ">Time: {{selected.totalTime}} mins</div>
     </div>
   </div>
 
@@ -37,26 +35,70 @@
   </div>
 
   <div class="row">
+    <div class="col">
+    <table class="table">
+      <thead class="thead-light">
+      <tr>
+        <th scope="col">Cautions</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of cautions">
+          <td>{{c}}</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="col">
+    <table class="table">
+      <thead class="thead-light">
+      <tr>
+        <th scope="col">Diet labels</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let d of dietlabels">
+        <td>{{d}}</td>
+      </tr>
+      </tbody>
+    </table>
+    </div>
+      <div class="col">
+    <table class="table">
+      <thead class="thead-light">
+      <tr>
+        <th scope="col">Health labels</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let h of healthlabels">
+        <td>{{h}}</td>
+      </tr>
+      </tbody>
+    </table>
+   </div>
+  </div>
 
+  <hr>
+  <div class="row">
     <table class="table">
       <thead class="thead-light">
       <tr>
         <th scope="col">Nutrient</th>
-        <th scope="col">Daily %</th>
         <th scope="col">Total Nutrients</th>
+        <th scope="col">Daily %</th>
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <th scope="row"></th>
-        <td> </td>
-        <td></td>
+      <tr *ngFor="let dig of digest">
+        <th scope="row"> {{dig.label}}</th>
+        <td> {{dig.total.toFixed(2)}} {{dig.unit}}</td>
+        <td> {{dig.daily.toFixed(2)}} % </td>
       </tr>
       </tbody>
     </table>
 
   </div>
 
-</div>
 
 
