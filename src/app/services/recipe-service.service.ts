@@ -20,4 +20,8 @@ export class RecipeServiceService {
       }, this);
     });
   }
+
+  allRecipes() : Rezept[]{
+    return this._recipes;
+  }
 }

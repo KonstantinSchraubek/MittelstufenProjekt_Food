@@ -11,14 +11,13 @@ export class DetailViewComponent implements OnInit {
 
   constructor(private recipeService: RecipeServiceService) { }
 
-
-
   ngOnInit() {
 
   }
 
   get selected(): Rezept {
-    return this.recipeService.recipes[0];
+    let r: Rezept[] = this.recipeService.recipes;
+    return r[0];
   }
 
   get ingridients1(): string[] {
