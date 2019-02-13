@@ -33,11 +33,11 @@
   z-index: 1;
 }
 
-.glyphicon-search {
+.fas {
   font-size: 20px;
 }
 
-.btn-default {
+.btn-primary {
   width: 50px;
   padding: 12.0px;
 }
