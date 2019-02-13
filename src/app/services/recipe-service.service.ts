@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Rezept} from '../models/rezept';
 import {HttpClient} from '@angular/common/http';
+import {selectValueAccessor} from '@angular/forms/src/directives/shared';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,9 @@ export class RecipeServiceService {
     });
   }
 
-  allRecipes() : Rezept[]{
-    return this._recipes;
+  public selected: Rezept;
+
+  changeSelected(nowSelected: Rezept): void{
+    this.selected = nowSelected;
   }
 }

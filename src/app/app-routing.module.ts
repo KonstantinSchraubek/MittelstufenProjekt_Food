@@ -3,11 +3,14 @@ import { Routes, RouterModule } from '@angular/router';
 import {RecipeViewComponent} from './views/recipe-view/recipe-view.component';
 import {StartseiteComponent} from './components/startseite/startseite.component';
 import {RegistrierungComponent} from './components/registrierung/registrierung.component';
+import {DetailViewComponent} from './components/detail-view/detail-view.component';
 
 const routes: Routes = [
   { path: 'registration', component: RegistrierungComponent },
   { path: '',      component: StartseiteComponent },
-  {path: 'list', component: RecipeViewComponent}
+  {path: 'list', component: RecipeViewComponent},
+  {path: 'details', component: DetailViewComponent},
+  { path: 'home',      component: StartseiteComponent }
 ];
 
 @NgModule({

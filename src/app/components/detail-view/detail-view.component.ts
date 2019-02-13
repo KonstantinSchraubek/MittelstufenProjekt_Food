@@ -12,12 +12,10 @@ export class DetailViewComponent implements OnInit {
   constructor(private recipeService: RecipeServiceService) { }
 
   ngOnInit() {
-
   }
 
   get selected(): Rezept {
-    let r: Rezept[] = this.recipeService.recipes;
-    return r[0];
+    return this.recipeService.selected;
   }
 
   get ingridients1(): string[] {
@@ -34,6 +32,26 @@ export class DetailViewComponent implements OnInit {
       test.push(this.selected.ingredientLines[i]);
     }
     return test;
+  }
+
+  get digest(): object[]{
+    return this.selected.digest;
+  }
+
+  get cautions(): string[]{
+    return this.selected.cautions;
+  }
+
+  get healthlabels() : string[]{
+    return this.selected.healthLabels;
+  }
+
+  get dietlabels(): string[]{
+    return this.selected.dietLabels
+  }
+
+  get url(): string{
+    return this.selected.url;
   }
 
   get time(): number {
