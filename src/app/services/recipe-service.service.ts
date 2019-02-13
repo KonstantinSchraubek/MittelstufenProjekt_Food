@@ -10,10 +10,12 @@ export class RecipeServiceService {
   get recipes(): Rezept[] {
     return this._recipes;
   }
-  private _recipes: Rezept[] = [];
   constructor(private http: HttpClient) {
     this.addRecipes();
   }
+  private _recipes: Rezept[] = [];
+
+  public selected: Rezept;
   addRecipes() {
     this.http.get('./assets/response.json').subscribe((data: Object) => {
       data['hits'].forEach(function (recipes) {
@@ -22,9 +24,7 @@ export class RecipeServiceService {
     });
   }
 
-  public selected: Rezept;
-
-  changeSelected(nowSelected: Rezept): void{
+  changeSelected(nowSelected: Rezept): void {
     this.selected = nowSelected;
   }
 }

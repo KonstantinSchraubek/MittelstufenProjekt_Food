@@ -13,7 +13,7 @@ export class StartseiteComponent implements OnInit {
 
   startSearch(ingredients: string) {
     let locationString = 'list?ingredients=';
-    ingredients.split(',').forEach(ingredient => locationString += ingredient + '+');
+    ingredients.split(',').forEach(ingredient => locationString += ingredient + ',');
     locationString = locationString.slice(0, -1);
     window.location.href = locationString;
   }
