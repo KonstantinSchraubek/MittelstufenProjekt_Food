@@ -34,8 +34,8 @@
 
       <form novalidate="novalidate" onsubmit="return false;" class="searchbox sbx-google">
         <div role="search" class="sbx-google__wrapper">
-          <input type="search" name="search" placeholder="Hunger auf ..." autocomplete="off" required="required" class="sbx-google__input">
-          <button type="submit" title="Submit your search query." class="sbx-google__submit">
+          <input #ingredients type="search" name="search" placeholder="Hunger auf ..." autocomplete="off" required="required" class="sbx-google__input">
+          <button (click)="startSearch(ingredients.value)" type="submit" title="Submit your search query." class="sbx-google__submit">
             <svg role="img" aria-label="Search">
               <use xlink:href="#sbx-icon-search-13"></use>
             </svg>
