@@ -1,5 +1,5 @@
 .h-40 {
-  height: 30% !important
+  height: 10% !important
 }
 
 
@@ -75,6 +75,10 @@ a:hover {
   font-weight: 700;
 }
 
+.nav{
+  padding-top: 17px;
+}
+
 
 /* General sizing */
 ul.dropdown-lr {
@@ -94,4 +98,9 @@ ul.dropdown-lr {
 
 #forgetpasswort {
   color: dodgerblue;
+}
+
+#logo{
+  width: 45%;
+  height: auto;
 }

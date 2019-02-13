@@ -15,14 +15,13 @@
 
 .cover {
   padding: 0 1.5rem;
+  padding-top: 10em;
 }
 
 .cover .btn-lg {
   padding: .75rem 1.25rem;
   font-weight: 700;
 }
-
-
 
 
 .buscar-caja {
@@ -39,7 +38,7 @@
 
 .btn-primary {
   width: 50px;
-  padding: 12.0px;
+  padding: 13.0px;
 }
 
 .form-control {
