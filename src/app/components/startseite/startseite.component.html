@@ -1,3 +1,44 @@
-<div class="col-md-6 col-md-offset-3">
-    <a [routerLink]="['/registration']">Register</a>
+
+<!--<div class="text-center ">
+  <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+
+    <main role="main" class="inner cover">
+      <div class="videosection">
+        <video autoplay loop muted oncanplay="this.play()" onloadedmetadata="this.muted = true">
+          <source src="./assets/kitchen.mp4" type="video/mp4">
+        </video>
+      </div>
+    </main>
+
+    <footer class="mastfoot mt-auto">
+      <div class="inner">
+      </div>
+    </footer>
+
+  </div>
 </div>
+-->
+
+<main role="main" class="inner cover">
+  <div class="videosection">
+    <div class="buscar-caja">
+      <form>
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search" name="search">
+          <div class="input-group-btn">
+            <button class="btn btn-primary" type="submit">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+      <div align="center">
+        <a>Advanced Search</a>
+      </div>
+    </div>
+    <video autoplay loop muted oncanplay="this.play()" onloadedmetadata="this.muted = true">
+      <source src="./assets/kitchen.mp4" type="video/mp4">
+    </video>
+  </div>
+</main>
+

@@ -1,0 +1,61 @@
+<div class="cover-container d-flex h-40 p-5 mx-auto flex-column">
+  <div class="masthead mb-auto">
+    <div class="inner">
+
+      <div class="masthead-brand">
+        <a [routerLink]="['home']">
+          <img id="logo" src="./assets/logo.png">
+        </a>
+      </div>
+
+      <nav class="nav nav-masthead">
+        <a class="nav-link active" [routerLink]="['home']">Home</a>
+        <li class="dropdown">
+          <a href="#" class="nav-link mx-2" data-toggle="dropdown">Log In/Sign Up <span class="caret"></span></a>
+          <ul class="dropdown-menu dropdown-lr animated slideInRight" role="menu">
+            <div class="col-lg-12">
+              <div class="text-center">
+                <h3><b>Log In</b></h3>
+              </div>
+              <form id="ajax-login-form" action="" method="post" role="form" autocomplete="off">
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username"
+                    value="" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password"
+                    autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                  <div class="row">
+                    <input type="submit" (click)="logInUser()" name="login-submit" id="login-submit" class="form-control btn btn-success m-2"
+                      value="Log In">
+                    <a [routerLink]="['/registration']" name="signup-submit" id="signup-submit" class="form-control btn btn-success m-2">
+                      Sign Up </a>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="text-center">
+                        <a id="forgetpasswort" tabindex="5" class="forgot-password">Forgot Password?</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </ul>
+        </li>
+        <a class="nav-link" [routerLink]="['/userSettings']" *ngIf="loggedIn"> User </a>
+        <a class="nav-link" href="#">Contact</a>
+        <a class="nav-link" (click)="logOutUser()" *ngIf="loggedIn" [routerLink]="['home']">Logout</a>
+      </nav>
+    </div>
+  </div>
+</div>
