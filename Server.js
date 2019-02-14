@@ -50,5 +50,8 @@ app.post('/benutzer', (req, res) => {
         if (err) throw err;
       })
     }
+    else{
+      res.status(404).send({error: 'username_or_email_duplicate'});
+    }
   })
 });
