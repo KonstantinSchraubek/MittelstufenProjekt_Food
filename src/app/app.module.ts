@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { RecipeListComponent } from './components/recipe-list/recipe-list.component';
 import { RecipeServiceService} from './services/recipe-service.service';
 import { RecipeViewComponent } from './views/recipe-view/recipe-view.component';
+import { UsermenueComponent } from './components/usermenue/usermenue.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { RecipeViewComponent } from './views/recipe-view/recipe-view.component';
     RecipeListComponent,
     RegistrierungComponent,
     RecipeListComponent,
-    RecipeViewComponent
+    RecipeViewComponent,
+    UsermenueComponent
   ],
   imports: [
     BrowserModule,

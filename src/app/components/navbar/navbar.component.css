@@ -44,7 +44,7 @@ a:hover {
 
 .nav-masthead .nav-link:hover,
 .nav-masthead .nav-link:focus {
-  border-bottom-color: rgba(255, 255, 255, 0.25);
+  border-bottom-color: rgba(0, 0, 0, 0.25);
 }
 
 .nav-masthead .nav-link+.nav-link {
@@ -76,7 +76,7 @@ a:hover {
 }
 
 .nav{
-  padding-top: 17px;
+  padding-top: 24px;
 }
 
 
@@ -101,6 +101,6 @@ ul.dropdown-lr {
 }
 
 #logo{
-  width: 45%;
+  width: 150px;
   height: auto;
 }

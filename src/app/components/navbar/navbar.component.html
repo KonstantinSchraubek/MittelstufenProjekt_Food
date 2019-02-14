@@ -8,10 +8,10 @@
         </a>
       </div>
 
-      <nav class="nav nav-masthead justify-content-center">
-        <a class="nav-link active" [routerLink]="['']">Home</a>
+      <nav class="nav nav-masthead">
+        <a class="nav-link active" [routerLink]="['home']">Home</a>
         <li class="dropdown">
-          <a href="#" class="nav-link mx-2" data-toggle="dropdown">Log In <span class="caret"></span></a>
+          <a href="#" class="nav-link mx-2" data-toggle="dropdown">Log In/Sign Up <span class="caret"></span></a>
           <ul class="dropdown-menu dropdown-lr animated slideInRight" role="menu">
             <div class="col-lg-12">
               <div class="text-center">
@@ -32,7 +32,7 @@
 
                 <div class="form-group">
                   <div class="row">
-                    <input type="submit" name="login-submit" id="login-submit" class="form-control btn btn-success m-2"
+                    <input type="submit" (click)="logInUser()" name="login-submit" id="login-submit" class="form-control btn btn-success m-2"
                       value="Log In">
                     <a [routerLink]="['/registration']" name="signup-submit" id="signup-submit" class="form-control btn btn-success m-2">
                       Sign Up </a>
@@ -43,8 +43,7 @@
                   <div class="row">
                     <div class="col-lg-12">
                       <div class="text-center">
-                        <a href="http://google.de" id="forgetpasswort" tabindex="5" class="forgot-password">Forgot
-                          Password?</a>
+                        <a id="forgetpasswort" tabindex="5" class="forgot-password">Forgot Password?</a>
                       </div>
                     </div>
                   </div>
@@ -53,8 +52,9 @@
             </div>
           </ul>
         </li>
+        <a class="nav-link" [routerLink]="['/userSettings']" *ngIf="loggedIn"> User </a>
         <a class="nav-link" href="#">Contact</a>
-        <a class="nav-link" *ngIf="loggedIn" href="#">Logout</a>
+        <a class="nav-link" (click)="logOutUser()" *ngIf="loggedIn" [routerLink]="['home']">Logout</a>
       </nav>
     </div>
   </div>
