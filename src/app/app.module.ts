@@ -15,6 +15,8 @@ import { RecipeListComponent } from './components/recipe-list/recipe-list.compon
 import { RecipeServiceService} from './services/recipe-service.service';
 import { RecipeViewComponent } from './views/recipe-view/recipe-view.component';
 import { UsermenueComponent } from './components/usermenue/usermenue.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { ChangeEmailComponent } from './components/change-email/change-email.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { UsermenueComponent } from './components/usermenue/usermenue.component';
     RegistrierungComponent,
     RecipeListComponent,
     RecipeViewComponent,
-    UsermenueComponent
+    UsermenueComponent,
+    ChangePasswordComponent,
+    ChangeEmailComponent
   ],
   imports: [
     BrowserModule,
