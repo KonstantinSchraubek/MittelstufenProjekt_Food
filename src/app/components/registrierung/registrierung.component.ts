@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Validation } from '../../models/validation'
+import { Encrypt } from '../../models/encrypt';
 
 @Component({
   selector: 'app-registrierung',

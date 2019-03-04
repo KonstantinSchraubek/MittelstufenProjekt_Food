@@ -21,10 +21,11 @@ export class DatabaseService {
 
   updatePasswordOfUser(username: string, password: string) {
     let encrypt = new Encrypt(password);
-    encrypt.set('test12345');
+    encrypt.set();
     this.http.put('http://localhost:3000/benutzer' ,{
       username: username,
-      password: encrypt.encrypted
+      password: encrypt.encrypted,
+      KeyID: encrypt.num
     }).subscribe(data => {
         res => {
           //logik um Nutzer über erfolgreichen Passwort wechsel zu berichten
@@ -54,11 +55,12 @@ export class DatabaseService {
     if (userForm.dirty && userForm.valid) {
       if (password == confirmedPassword) {
         let encrypt = new Encrypt(password);
-        encrypt.set('test12345');
+        encrypt.set();
         const req = this.http.post('http://localhost:3000/benutzer', {
           email: email,
           username: username,
-          password: encrypt.encrypted
+          password: encrypt.encrypted,
+          KeyID: encrypt.num
         }).subscribe(
             res => {
               this.router.navigateByUrl('/successfulRegistration');

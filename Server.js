@@ -14,9 +14,9 @@ app.use(function (req, res, next) {
 
 
 var mysqlConnection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'toor',
+  host: '10.102.181.126',
+  user: 'DataBaseUser',
+  password: 'dbu',
   database: 'mittelstufe'
 });
 
@@ -46,7 +46,7 @@ app.post('/benutzer', (req, res) => {
   mysqlConnection.query(sql, function (err, results) {
     if (err) throw err;
     if (results.length == 0) {
-      var sql = "INSERT INTO `benutzer`(`Email`, `Password`, `Benutzername`,  `KeyID`) VALUES ('" + emp.email + "','" + emp.password + "','" + emp.username + "','" + emp.KeyID+"');";
+      var sql = "INSERT INTO `benutzer`(`Email`, `Password`, `Benutzername`,  `KeyID`) VALUES ('" + emp.email + "','" + emp.password + "','" + emp.username + "','" + emp.KeyID + "');";
       mysqlConnection.query(sql, function (err, results) {
         if (err) throw err;
       })

@@ -1,3 +1,4 @@
+import * as CryptoJS from 'crypto-js';
 import { Encrypt } from './Encrypt';
 
 describe('Encrypt', () => {
@@ -5,22 +6,23 @@ describe('Encrypt', () => {
     expect(new Encrypt('password123456')).toBeTruthy();
   });
 
+
   it('should create', () => {
     let crypt = new Encrypt('password123456');
     expect(crypt).toBeTruthy();
   });
 
   it('should Encrypt', () => {
-    let cryp = new Encrypt('password123456');
-    cryp.set();
-    console.log('Encrypted: ' + cryp.encrypted.toString());
+    let crypt = new Encrypt('password123456');
+    crypt.set('123456$#@$^@1ERF');
+    console.log('Encrypted: ' + crypt.encrypted.toString());
+
   });
 
-  it('should Decrypt', () => {
+  it('should decrypt', () => {
     let crypt = new Encrypt('password123456');
-    crypt.set();
-    crypt.get(crypt.num);
-    console.log('Decrypted: ' + crypt.decrypted);
-    expect(crypt.decrypted).toBe('password123456');
+    crypt.set('123456$#@$^@1ERF');
+    crypt.get('123456$#@$^@1ERF');
+    console.log('Decrypted: ' + crypt.decrypted.toString());
   })
 });
