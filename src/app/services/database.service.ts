@@ -64,15 +64,17 @@ export class DatabaseService {
         }).subscribe(
             res => {
               this.router.navigateByUrl('/successfulRegistration');
+              return true;
             },
             err => {
               alert('Username or Email is already taken.')
+              return false;
             }
           );
       }
       else {
         alert("Passwords need to be the same!")
-        return;
+        return false;
       }
     }
   }

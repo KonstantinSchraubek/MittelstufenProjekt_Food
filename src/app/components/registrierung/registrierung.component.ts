@@ -30,7 +30,7 @@ export class RegistrierungComponent implements OnInit {
     password: string,
     confirmedPassword: string,
     username: string) {
-    this.databaseService.addUser(email, password, confirmedPassword, username, this.userForm);
+    return this.databaseService.addUser(email, password, confirmedPassword, username, this.userForm);
   }
 
   private updatePasswordOfUser(username:string, password: string) {

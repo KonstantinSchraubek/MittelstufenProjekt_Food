@@ -2,7 +2,7 @@ const mysql = require('mysql');
 const express = require('express');
 var app = express();
 const bodyparser = require('body-parser');
-
+const cors = require('cors');
 app.use(bodyparser.json());
 
 app.use(function (req, res, next) {
@@ -11,7 +11,6 @@ app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
   next();
 });
-
 
 var mysqlConnection = mysql.createConnection({
   host: '10.102.181.126',
@@ -31,6 +30,7 @@ app.listen(3000, () => console.log('Express server is runnig at port no : 3000')
 
 //Get all benutzer
 app.get('/benutzer', (req, res) => {
+  req.setTimeout(500000);
   mysqlConnection.query('SELECT * FROM benutzer', (err, rows, fields) => {
     if (!err)
       res.send(rows);
@@ -40,7 +40,8 @@ app.get('/benutzer', (req, res) => {
 });
 
 //Insert a benutzer
-app.post('/benutzer', (req, res) => {
+app.post('/benutzer', cors() ,(req, res) => {
+  req.setTimeout(500000);
   let emp = req.body;
   var sql = "SELECT 1 FROM benutzer WHERE Benutzername = '" + emp.username + "' OR Email = '" + emp.email + "';"
   mysqlConnection.query(sql, function (err, results) {
@@ -60,6 +61,7 @@ app.post('/benutzer', (req, res) => {
 
 //update a benutzers email or password => more features are possible
 app.put('/benutzer', (req,res) => {
+  req.setTimeout(500000);
   let emp = req.body;
   if(typeof emp.password !== "undefined") {
   var sql = "UPDATE `benutzer` SET `Password`='"+emp.password+"' WHERE `Benutzername` = '"+emp.username+"'";
