@@ -1,4 +1,3 @@
-import * as CryptoJS from 'crypto-js';
 import { Encrypt } from './Encrypt';
 
 describe('Encrypt', () => {

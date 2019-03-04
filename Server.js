@@ -5,9 +5,10 @@ const bodyparser = require('body-parser');
 
 app.use(bodyparser.json());
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
   next();
 });
 
@@ -38,20 +39,35 @@ app.get('/benutzer', (req, res) => {
   })
 });
 
-//Insert an benutzer
+//Insert a benutzer
 app.post('/benutzer', (req, res) => {
   let emp = req.body;
-  var sql = "SELECT 1 FROM benutzer WHERE Benutzername = '"+emp.username+"' OR Email = '"+emp.email+"';"
-  var t = mysqlConnection.query(sql, function (err, results) {
+  var sql = "SELECT 1 FROM benutzer WHERE Benutzername = '" + emp.username + "' OR Email = '" + emp.email + "';"
+  mysqlConnection.query(sql, function (err, results) {
     if (err) throw err;
-    if(results.length == 0) {
-      var sql = "INSERT INTO `benutzer`(`Email`, `Password`, `Benutzername`) VALUES ('" + emp.email + "','" + emp.password + "','" + emp.username + "');";
+    if (results.length == 0) {
+      var sql = "INSERT INTO `benutzer`(`Email`, `Password`, `Benutzername`,  `KeyID`) VALUES ('" + emp.email + "','" + emp.password + "','" + emp.username + "','" + emp.KeyID+"');";
       mysqlConnection.query(sql, function (err, results) {
         if (err) throw err;
       })
+      res.send(results);
     }
-    else{
-      res.status(404).send({error: 'username_or_email_duplicate'});
+    else {
+      res.status(404).send({ err: 'username_or_email_duplicate' });
     }
   })
+});
+
+//update a benutzers email or password => more features are possible
+app.put('/benutzer', (req,res) => {
+  let emp = req.body;
+  if(typeof emp.password !== "undefined") {
+  var sql = "UPDATE `benutzer` SET `Password`='"+emp.password+"' WHERE `Benutzername` = '"+emp.username+"'";
+  }else if(typeof emp.email !== "undefined"){
+  var sql = "UPDATE `benutzer` SET `Email`='"+emp.email+"' WHERE `Benutzername` = '"+emp.username+"'";
+  }
+      mysqlConnection.query(sql, function (err, rows, fields) {
+        if (!err)
+          res.send(fields);
+      });
 });
