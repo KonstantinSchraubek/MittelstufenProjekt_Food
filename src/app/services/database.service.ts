@@ -7,7 +7,15 @@ import {Http} from '@angular/http';
 })
 export class DatabaseService {
 
-  constructor(private http: Http) { }
+  abort: boolean;
+
+  constructor(private http: Http) {
+    this.abort = false;
+  }
+
+  // this.http.get('http://localhost:3000/benutzer').subscribe(data => {
+  //   console.log(data);
+  // });
 
   addUser(  email: string,
                     password: string,
@@ -27,14 +35,23 @@ export class DatabaseService {
         .subscribe(
           res => {
             console.log(res);
+            // if(res.toString() == 'error, Username or email already exists.') {
+            //   alert("User credentials already exist.");
+            // }
           },
           err => {
+            this.abort = true;
+            alert('Username or Email is already taken.')
             console.log("Error occured");
           }
         );
     }
     else{
       alert("Passwords need to be the same!")
+    }
+
+    if(!this.abort) {
+
     }
 
 
