@@ -55,3 +55,6 @@ app.post('/benutzer', (req, res) => {
     }
   })
 });
+app.get('/rezepte', (req, res) => {
+  res.send('test')
+})

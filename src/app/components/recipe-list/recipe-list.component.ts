@@ -15,6 +15,7 @@ export class RecipeListComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.ingredients = params['ingredients'];
+      this.service.addRecipes(this.ingredients);
     });
   }
 

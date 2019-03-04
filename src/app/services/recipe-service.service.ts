@@ -10,17 +10,17 @@ export class RecipeServiceService {
     return this._recipes;
   }
   constructor(private http: HttpClient) {
-    this.addRecipes();
   }
   private _recipes: Rezept[] = [];
 
   public selected: Rezept;
-  addRecipes() {
-    this.http.get('./assets/response.json').subscribe((data: Object) => {
-      data['hits'].forEach(function (recipes) {
-        this._recipes.push(new Rezept(recipes));
-      }, this);
-    });
+  addRecipes(ingredients?: String[]) {
+    let url = './rezepte?ingredients=';
+    url += ingredients;
+    console.log(ingredients)
+    this.http.get(encodeURI(url)).subscribe((data: Object) => {
+      }
+    );
   }
 
   changeSelected(nowSelected: Rezept): void {

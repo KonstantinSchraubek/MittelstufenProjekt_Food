@@ -24,9 +24,9 @@
     <div class="buscar-caja">
       <form>
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Search" name="search">
+          <input #ingredients type="text" class="form-control" placeholder="Search" name="search">
           <div class="input-group-btn">
-            <button class="btn btn-primary" type="submit">
+            <button (click)="startSearch(ingredients.value)" class="btn btn-primary" type="submit">
               <i class="fas fa-search"></i>
             </button>
           </div>
