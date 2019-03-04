@@ -26,7 +26,7 @@ export class RegistrierungComponent implements OnInit {
   ngOnInit() {
   }
 
-  private addUser(email: string,
+  public addUser(email: string,
     password: string,
     confirmedPassword: string,
     username: string) {
