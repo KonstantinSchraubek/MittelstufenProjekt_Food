@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Benutzer } from '../../models/benutzer';
+import {Http} from '@angular/http';
+import {DatabaseService} from '../../services/database.service';
 
 @Component({
   selector: 'app-registrierung',
@@ -8,12 +9,22 @@ import { Benutzer } from '../../models/benutzer';
 })
 export class RegistrierungComponent implements OnInit {
 
-  testNutzer: Benutzer;
-
-  constructor() { }
+  constructor(private databaseService: DatabaseService) { }
 
   ngOnInit() {
-    
+
+
+
+    // this.http.get('http://localhost:3000/benutzer').subscribe(data => {
+    //   console.log(data);
+    // });
+  }
+
+  private addUser(email: string,
+                  password: string,
+                  confirmedPassword: string,
+                  username: string) {
+    this.databaseService.addUser(email,password,confirmedPassword,username);
   }
 
 }

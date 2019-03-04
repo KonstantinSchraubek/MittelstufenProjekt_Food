@@ -16,9 +16,8 @@
 
   <hr>
   <div class="row">
-    <div class="d-flex justify-content-end text-black font-weight-bold w-100 px-5">
-      <a href="{{selected.url}}" class="btn btn-info text-white mx-4"> Cook it </a>
-      <a href="#digestCollapse" class="btn btn-info" data-toggle="collapse" href="#digestCollapse" role="button" aria-expanded="false" aria-controls="digestCollapse"> Nutrients</a>
+    <div class="d-flex justify-content-end text-black font-weight-bold w-100 px-3">
+      <a href="{{selected.url}}" class="btn btn-info w-25"> Cook it </a>
     </div>
   </div>
 
@@ -87,9 +86,11 @@
    </div>
   </div>
 
-  <hr>
+  <div class="row px-3">
+      <a href="#digestCollapse" class="btn btn-info" data-toggle="collapse" href="#digestCollapse" role="button" aria-expanded="false" aria-controls="digestCollapse"> Nutrients</a>
+  </div>
 
-  <div class="row">
+  <div class="row pt-2">
     <div class="col collapse" id="digestCollapse">
     <table class="table">
       <thead class="thead-light">
