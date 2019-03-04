@@ -9,7 +9,16 @@ export class ChangeEmailComponent implements OnInit {
 
   constructor() { }
 
+  public password: string;
+  public newMail: string;
+
+  public error: string;
+
   ngOnInit() {
+  }
+
+  changeEmail(): void{
+    this.error = "this works, test error lol";
   }
 
 }
