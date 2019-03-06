@@ -17,6 +17,7 @@ import { RecipeViewComponent } from './views/recipe-view/recipe-view.component';
 import { UsermenueComponent } from './components/usermenue/usermenue.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { ChangeEmailComponent } from './components/change-email/change-email.component';
+import {APP_BASE_HREF} from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,7 @@ import { ChangeEmailComponent } from './components/change-email/change-email.com
     HttpClientModule,
     FormsModule
   ],
-  providers: [RecipeServiceService],
+  providers: [RecipeServiceService, {provide: APP_BASE_HREF, useValue: '/'}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
