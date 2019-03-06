@@ -20,7 +20,7 @@ export class Rezept {
   public bought: boolean;
   public totalDaily: object;
 
-  constructor(responseObject: {
+  constructor(responseObject?: {
     bought: boolean;
     bookmarked: boolean;
     recipe: {

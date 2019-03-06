@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Rezept } from './Rezept';
+import {AppModule} from '../app.module';
+import * as data from '../../assets/response.json';
 
 describe('RecipeViewComponent', () => {
   let component: Rezept;
@@ -8,7 +10,9 @@ describe('RecipeViewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ Rezept ]
+      imports :[
+        AppModule
+      ],
     })
       .compileComponents();
   }));
@@ -21,5 +25,13 @@ describe('RecipeViewComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should work with responeObject contructor', () =>{
+    var r: Rezept = new Rezept(data.hits[0]);
+    expect(r).toBeDefined();
+
+
+
   });
 });
