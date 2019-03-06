@@ -1,7 +1,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {Rezept} from './Rezept';
-import {AppModule} from '../app.module';
 import * as data from '../../assets/response.json';
 
 describe('Rezept', () => {
