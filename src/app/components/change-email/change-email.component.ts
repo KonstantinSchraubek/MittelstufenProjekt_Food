@@ -20,5 +20,4 @@ export class ChangeEmailComponent implements OnInit {
   changeEmail(): void{
     this.error = "this works, test error lol";
   }
-
 }
