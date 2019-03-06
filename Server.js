@@ -1,6 +1,7 @@
 const sqlite3 = require('sqlite3');
 const express = require('express');
 const bodyparser = require('body-parser');
+const util = require('util');
 var app = express();
 app.use(bodyparser.json());
 // app.use(express.static(__dirname + '/static'));
@@ -16,7 +17,6 @@ let db = new sqlite3.Database("./db/mittelstufe.sqlite3", (err) => {
 if(err) {
   console.log('Error while creating the database', err);
 }else{
-  console.log('Database created!');
   createTable();
 }
 });
@@ -42,17 +42,19 @@ app.get('/benutzer', (req, res) => {
 //Insert a benutzer
 app.post('/benutzer' ,(req, res) => {
 
-
   let emp = req.body;
 
-  let sql = "INSERT INTO benutzer(Email,Nutzername,Passwort,KeyID) SELECT '"+emp.email+"','"+emp.username+"','"+emp.password+"','"+emp.KeyID+"' WHERE NOT EXISTS(SELECT 1 FROM benutzer WHERE Nutzername = '"+emp.username+"' AND Email = '"+emp.email+"')";
+  let sqlCheck = "SELECT * FROM benutzer WHERE Nutzername = '"+emp.username+"' OR Email = '"+emp.email+"'";
 
-  db.run(sql, function(err, results) {
-    if (err) {
-      console.log(err);
-      res.status(404).send({ err: 'username_or_email_duplicate' });
-    }
-    res.send(results);
+  db.all(sqlCheck, [], (err, row) => {
+    if(err) throw err;
+    if(row.length == 0) {
+      let sql = "INSERT INTO benutzer(Email,Nutzername,Passwort,KeyID) SELECT '"+emp.email+"','"+emp.username+"','"+emp.password+"','"+emp.KeyID+"' WHERE NOT EXISTS(SELECT 1 FROM benutzer WHERE Nutzername = '"+emp.username+"' OR Email = '"+emp.email+"')";
+
+      db.run(sql, function(err, result) {
+        if (err) throw err;
+        res.send();
+      });
+    }  
   });
-
 });

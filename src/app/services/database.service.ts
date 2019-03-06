@@ -9,15 +9,9 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 })
 export class DatabaseService {
 
-  abort: boolean;
-
   constructor(private http: Http, private router: Router) {
 
   }
-
-  // this.http.get('http://localhost:3000/benutzer').subscribe(data => {
-  //   console.log(data);
-  // });
 
   updatePasswordOfUser(username: string, password: string) {
     let encrypt = new Encrypt(password);
@@ -51,9 +45,8 @@ export class DatabaseService {
   }
 
   addUser(email: string, password: string, confirmedPassword: string, username: string, userForm: FormGroup) {
-    this.abort = false;
     if (userForm.dirty && userForm.valid) {
-      if (password == confirmedPassword) {
+      if (password == confirmedPassword) {   
         let encrypt = new Encrypt(password);
         encrypt.set();
         const req = this.http.post('http://localhost:3000/benutzer', {
@@ -62,20 +55,20 @@ export class DatabaseService {
           password: encrypt.encrypted,
           KeyID: encrypt.num
         }).subscribe(
-            res => {
+            res => {        
               this.router.navigateByUrl('/successfulRegistration');
-              return true;
+              return false;
             },
             err => {
-              alert('Username or Email is already taken.')
-              return false;
+              return true;
             }
           );
       }
       else {
         alert("Passwords need to be the same!")
-        return false;
+        return true;
       }
     }
+    return true;
   }
 }

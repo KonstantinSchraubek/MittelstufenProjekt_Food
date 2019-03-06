@@ -11,10 +11,11 @@ import { Encrypt } from '../../models/encrypt';
 })
 export class RegistrierungComponent implements OnInit {
 
+  a : boolean;
   userForm: FormGroup;
 
   constructor(private databaseService: DatabaseService, private fb: FormBuilder) {
-
+    this.a = false;
     this.userForm = fb.group({
       'email': ['', [Validators.required, Validation.emailValidator]],
       'username': ['', Validators.required],
@@ -30,7 +31,11 @@ export class RegistrierungComponent implements OnInit {
     password: string,
     confirmedPassword: string,
     username: string) {
-    return this.databaseService.addUser(email, password, confirmedPassword, username, this.userForm);
+    this.a = this.databaseService.addUser(email, password, confirmedPassword, username, this.userForm);
+    alert(this.a)
+    if(this.a) {
+      alert('Username or Email is already taken.')
+    }
   }
 
   private updatePasswordOfUser(username:string, password: string) {
