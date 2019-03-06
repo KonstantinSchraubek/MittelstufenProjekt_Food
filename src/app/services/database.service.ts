@@ -22,7 +22,7 @@ export class DatabaseService {
   updatePasswordOfUser(username: string, password: string) {
     let encrypt = new Encrypt(password);
     encrypt.set();
-    this.http.put('http://10.102.181.126:3000/benutzer' ,{
+    this.http.put('http://localhost:3000/benutzer' ,{
       username: username,
       password: encrypt.encrypted,
       KeyID: encrypt.num
@@ -37,7 +37,7 @@ export class DatabaseService {
   }
 
   updateEmailOfUser(username: string, email: string) {
-    this.http.put('http://10.102.181.126:3000/benutzer' ,{
+    this.http.put('http://localhost:3000/benutzer' ,{
       username: username,
       email: email
     }).subscribe(data => {
@@ -56,7 +56,7 @@ export class DatabaseService {
       if (password == confirmedPassword) {
         let encrypt = new Encrypt(password);
         encrypt.set();
-        const req = this.http.post('http://10.102.181.126:3000/benutzer', {
+        const req = this.http.post('http://localhost:3000/benutzer', {
           email: email,
           username: username,
           password: encrypt.encrypted,
