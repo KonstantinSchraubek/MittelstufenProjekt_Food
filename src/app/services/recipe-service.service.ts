@@ -14,13 +14,14 @@ export class RecipeServiceService {
   private _recipes: Rezept[] = [];
 
   public selected: Rezept;
-  addRecipes(ingredients?: String[]) {
-    let url = './rezepte?ingredients=';
-    url += ingredients;
-    console.log(ingredients)
-    this.http.get(encodeURI(url)).subscribe((data: Object) => {
-      }
-    );
+  addRecipes(ingredients?: string) {
+    let url = 'http://localhost:3000/rezepte?ingredients=';
+    url += encodeURIComponent(ingredients);
+    this.http.get(url).subscribe((data: Object) => {
+      data['hits'].forEach(function (recipes) {
+        this._recipes.push(new Rezept(recipes));
+      }, this);
+    });
   }
 
   changeSelected(nowSelected: Rezept): void {

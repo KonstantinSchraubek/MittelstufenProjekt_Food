@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-startseite',
@@ -6,17 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./startseite.component.css']
 })
 export class StartseiteComponent implements OnInit {
-  constructor() { }
+  constructor(private r: Router) { }
 
   ngOnInit() {
   }
 
   startSearch(ingredients: string) {
-    console.log(ingredients)
-    let locationString = 'list?ingredients=';
-    ingredients.split(',').forEach(ingredient => locationString += ingredient + ',');
-    locationString = locationString.slice(0, -1);
-    console.log(locationString)
-    window.location.href = locationString;
+    ingredients = ingredients.replace(/,/g, '+')
+    this.r.navigate(['/list'], {queryParams: {ingredients: ingredients}});
   }
 }

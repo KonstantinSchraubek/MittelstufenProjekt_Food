@@ -8,7 +8,7 @@ import {ActivatedRoute} from '@angular/router';
   styleUrls: ['./recipe-list.component.css']
 })
 export class RecipeListComponent implements OnInit {
-  ingredients = [];
+  ingredients: string;
   constructor(public service: RecipeServiceService, private route: ActivatedRoute) {
   }
   get recipes() {return this.service.recipes; }
