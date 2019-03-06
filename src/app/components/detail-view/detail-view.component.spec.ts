@@ -26,17 +26,14 @@ describe('DetailViewComponent', () => {
     service.changeSelected(r);
     fixture = TestBed.createComponent(DetailViewComponent);
     component = fixture.componentInstance;
-
     fixture.detectChanges();
-
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('should get a selected recipe from service', () =>{
-  //   spyOnProperty(service, 'selected').and.returnValue(new Rezept());
-  //   let x = component.selected;
-  // });
+   it('Should return the rounded number of calories', () => {
+     expect(component.calories).toBe('4230.31');
+   });
 });
