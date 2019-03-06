@@ -59,13 +59,11 @@ app.post('/benutzer', (req, res) => {
 });
 app.get('/rezepte', (req, res) => {
   let path = 'http://api.edamam.com';
-  const ingredients = req.query.ingredients.split('+');
 
   path += '/search?app_id=' + API_ID + '&app_key=' + API_KEY
-  ingredients.forEach(function(value) {
-    path += '&q=' + value;
-  })
-
+  if(req.query.ingredients) {
+    path += '&q=' + req.query.ingredients;
+  }
   console.log(path)
   let httpreq = http.get(path, function(response) {
     var responseString = '';
