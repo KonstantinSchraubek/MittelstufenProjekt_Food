@@ -23,7 +23,7 @@ export class RecipeServiceService {
 
   public selected: Rezept;
 
-  changeSelected(nowSelected: Rezept): void{
+  changeSelected(nowSelected: Rezept): void {
     this.selected = nowSelected;
   }
 }
