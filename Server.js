@@ -29,12 +29,7 @@ app.listen(3000, () => console.log('Express server is runnig at port no : 3000')
 
 app.get('/benutzer', (req, res) => {
   let emp = req.body;
-  let sql = "";
-  if(emp.username != undefined)
-  sql = "SELECT * FROM benutzer WHERE Nutzername = '"+emp.username+"'";
-  else{
-  sql = 'SELECT * FROM benutzer'
-  }
+  let sql = 'SELECT * FROM benutzer'
   db.all(sql, [], (err, rows) => {
     if(err) {
       throw err;
