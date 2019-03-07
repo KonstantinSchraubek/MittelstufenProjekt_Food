@@ -11,9 +11,9 @@
       <nav class="nav nav-masthead">
         <a class="nav-link active" [routerLink]="['home']">Home</a>
         <app-login></app-login>
-        <a class="nav-link" [routerLink]="['/userSettings']" *ngIf="loggedIn"> User </a>
+        <a class="nav-link" [routerLink]="['/userSettings']" *ngIf="loginservice.loggedIn"> User </a>
         <a class="nav-link" href="#">Contact</a>
-        <a class="nav-link" (click)="logOutUser()" *ngIf="loggedIn" [routerLink]="['home']">Logout</a>
+        <a class="nav-link" (click)="logOutUser()" *ngIf="loginservice.loggedIn" [routerLink]="['home']">Logout</a>
       </nav>
     </div>
   </div>
