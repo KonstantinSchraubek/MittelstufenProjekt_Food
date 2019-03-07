@@ -22,3 +22,8 @@ export class LoginComponent implements OnInit {
     // this.loggedIn = true;
   }
 }
+
+
+//https://www.youtube.com/watch?v=FKPfiQQz5hY
+//https://www.npmjs.com/package/ngx-cookie-service
+
