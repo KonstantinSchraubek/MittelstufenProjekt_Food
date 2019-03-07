@@ -27,13 +27,12 @@ export class RegistrierungComponent implements OnInit {
 
   public addUser(email: string,
     password: string,
-    confirmedPassword: string,
     username: string) {
-    this.databaseService.addUser(email, password, confirmedPassword, username, this.userForm);
+    this.databaseService.addUser(email, password, username, this.userForm);
   }
 
   public authenticateUser() {
-   const a = this.databaseService.authenticateUser("","");
+   const a = this.databaseService.authenticateUser("frosor123","123456");
    a.then(function(result) {
      alert(result)
 });

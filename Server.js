@@ -28,6 +28,7 @@ const createTable = () => {
 app.listen(3000, () => console.log('Express server is runnig at port no : 3000'));
 
 app.get('/benutzer', (req, res) => {
+  let emp = req.body;
   let sql = 'SELECT * FROM benutzer'
   db.all(sql, [], (err, rows) => {
     if(err) {
@@ -87,29 +88,6 @@ if(emp.username != undefined && emp.password != undefined && emp.email == undefi
         let sql = "UPDATE benutzer SET Token = '"+token+"' WHERE Nutzername = '"+emp.username+"'";
         db.run(sql);
       });
-    }  
-  });
-}
-if(emp.username != undefined && emp.password == undefined && emp.email == undefined && emp.KeyID == undefined) {
-  let emp = req.body;
-  console.log(emp);
-  let sql = "SELECT * FROM benutzer WHERE Nutzername = '"+emp.username+"'";
-  db.all(sql, [], (err, row) => {
-    if(err) throw err;
-    if(row.length == 0) {
-      res.status(400).send(); 
-    }
-    else{
-      let sqlGetKey = "SELECT KeyID FROM benutzer WHERE Nutzername = '"+emp.username+"'";
-      db.all(sqlGetKey, [], (err, row) => {
-        console.log(row[0].KeyID)
-        res.json({
-          message: row[0].KeyID
-        })
-      });
-        // res.json({
-        //   message: 
-        // });
     }  
   });
 }
