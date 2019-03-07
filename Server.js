@@ -38,6 +38,16 @@ app.get('/benutzer', (req, res) => {
     });
   })
 
+app.put('/benutzer', (req,res) => {
+
+  let emp = req.body;
+
+  if(emp.username != undefined && emp.password != undefined) {
+    let sql = "UPDATE benutzer SET Email = '"+emp.email+"' WHERE Nutzername = '"+emp.username+"'"
+  }
+
+});
+
 //Insert a benutzer
 app.post('/benutzer' ,(req, res) => {
   let emp = req.body;

@@ -49,8 +49,8 @@ export class DatabaseService {
       let encrypt = new Encrypt(password);
       encrypt.set();
       const req = this.http.post('http://localhost:3000/benutzer', {
-        email: email,
-        username: username,
+        email: email.toLowerCase(),
+        username: username.toLowerCase(),
         password: encrypt.encrypted,
         KeyID: encrypt.num
       }).subscribe(
