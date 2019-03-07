@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {Http} from '@angular/http';
-import {DatabaseService} from '../../services/database.service';
+import { DatabaseService } from '../../services/database.service';
+import { FormBuilder, Validators, FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
+import { Validation } from '../../models/validation'
+import { Encrypt } from '../../models/encrypt';
 
 @Component({
   selector: 'app-registrierung',
@@ -9,22 +11,24 @@ import {DatabaseService} from '../../services/database.service';
 })
 export class RegistrierungComponent implements OnInit {
 
-  constructor(private databaseService: DatabaseService) { }
+  userForm: FormGroup;
+
+  constructor(private databaseService: DatabaseService, private fb: FormBuilder) {
+    this.userForm = fb.group({
+      'email': ['', [Validators.required, Validation.emailValidator]],
+      'username': ['', Validators.required],
+      'password': ['', [Validators.required, Validation.passwordValidator]],
+      'confirmedPassword': ['', [Validators.required, Validation.passwordValidator]]
+    }, {validator: Validation.checkPasswords })
+  }
 
   ngOnInit() {
-
-
-
-    // this.http.get('http://localhost:3000/benutzer').subscribe(data => {
-    //   console.log(data);
-    // });
   }
 
-  private addUser(email: string,
-                  password: string,
-                  confirmedPassword: string,
-                  username: string) {
-    this.databaseService.addUser(email,password,confirmedPassword,username);
+  public addUser(email: string,
+    password: string,
+    confirmedPassword: string,
+    username: string) {
+    this.databaseService.addUser(email, password, confirmedPassword, username, this.userForm);
   }
-
 }
