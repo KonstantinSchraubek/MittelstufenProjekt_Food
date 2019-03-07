@@ -8,9 +8,12 @@ import {of} from 'rxjs';
 })
 export class LoginService {
 
-  public loggedIn: boolean = false;
+  public loggedIn = false;
 
   constructor(private cookieservice: CookieService, private databaseservice: DatabaseService) {
+    if (this.cookieservice.get('User')) {
+      this.loggedIn = true;
+    }
   }
 
 
@@ -32,5 +35,6 @@ export class LoginService {
   logoutUser() {
     // this.databaseservice.logout();
     this.cookieservice.delete('User');
+    this.loggedIn = false;
   }
 }

@@ -9,9 +9,9 @@
       </div>
 
       <nav class="nav nav-masthead">
-        <a class="nav-link active" [routerLink]="['home']">Home</a>
+        <a class="nav-link" [routerLink]="['home']">Home</a>
         <app-login></app-login>
-        <a class="nav-link" [routerLink]="['/userSettings']" *ngIf="loginservice.loggedIn"> User </a>
+        <a class="nav-link" style="margin-left: 16px" [routerLink]="['/userSettings']" *ngIf="loginservice.loggedIn"> User </a>
         <a class="nav-link" href="#">Contact</a>
         <a class="nav-link" (click)="logOutUser()" *ngIf="loginservice.loggedIn" [routerLink]="['home']">Logout</a>
       </nav>
