@@ -28,7 +28,13 @@ const createTable = () => {
 app.listen(3000, () => console.log('Express server is runnig at port no : 3000'));
 
 app.get('/benutzer', (req, res) => {
-  let sql = 'SELECT * FROM benutzer';
+  let emp = req.body;
+  let sql = "";
+  if(emp.username != undefined)
+  sql = "SELECT * FROM benutzer WHERE Nutzername = '"+emp.username+"'";
+  else{
+  sql = 'SELECT * FROM benutzer'
+  }
   db.all(sql, [], (err, rows) => {
     if(err) {
       throw err;
@@ -66,9 +72,7 @@ app.post('/benutzer' ,(req, res) => {
       });
     }
     else{
-      res.status(400).send({
-        message: 'Username or Email duplicate'
-     });    
+      res.status(400).send();    
     }  
   });
 }
@@ -78,9 +82,7 @@ if(emp.username != undefined && emp.password != undefined && emp.email == undefi
   db.all(sql, [], (err, row) => {
     if(err) throw err;
     if(row.length == 0) {
-      res.status(400).send({
-        message: 'No User found'
-     }); 
+      res.status(400).send(); 
     }
     else{
       require('crypto').randomBytes(48, function(err, buffer) {

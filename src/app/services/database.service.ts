@@ -44,34 +44,45 @@ export class DatabaseService {
     });
   }
 
-  addUser(email: string, password: string, confirmedPassword: string, username: string, userForm: FormGroup) {
+  async addUser(email: string, password: string, confirmedPassword: string, username: string, userForm: FormGroup) {
     if (userForm.dirty && userForm.valid) {
       let encrypt = new Encrypt(password);
       encrypt.set();
-      this.http.post('http://localhost:3000/benutzer', {
+      try{
+      await this.http.post('http://localhost:3000/benutzer', {
         email: email.toLowerCase(),
         username: username.toLowerCase(),
         password: encrypt.encrypted,
         KeyID: encrypt.num
-      }).subscribe(
-        res => {
-          this.router.navigateByUrl('/successfulRegistration');
-          return;
-        },
-        err => {
-          alert("username or email is already taken!");
-          return;
-        }
-      );
+    });
+    this.router.navigateByUrl('/successfulRegistration');
+  }
+  catch{
+    alert("username or email is already taken");
+  }
+      // subscribe(
+      //   res => {
+      //     this.router.navigateByUrl('/successfulRegistration');
+      //     return;
+      //   },
+      //   err => {
+      //     alert("username or email is already taken!");
+      //     return;
+      //   }
+      // );
     }
   }
 
   async authenticateUser(username: string, password: string) {
+    try {
+      let data = await this.http.get('http://localhost:3000/benutzer', {
+    }).toPromise();
+
     let encrypt = new Encrypt(password);
     encrypt.set();
     try {
       let data = await this.http.post('http://localhost:3000/benutzer', {
-      username: "frosor",
+      username: username,
       password: "cutETTpC5eqi71vbuaTHfQ=="
     }).toPromise();
       return data.json().message;
