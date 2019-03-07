@@ -25,4 +25,9 @@ describe('RegistrierungComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  // it('should add an user if the user is not already in the database', () => {
+  //  let a = component.addUser("flex@mail.com","test", "test", "flexi");
+  //  expect(a).toBe(true);
+  // });
 });

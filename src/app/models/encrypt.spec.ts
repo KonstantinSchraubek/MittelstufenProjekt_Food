@@ -14,15 +14,17 @@ describe('Encrypt', () => {
 
   it('should Encrypt', () => {
     let crypt = new Encrypt('password123456');
-    crypt.set('123456$#@$^@1ERF');
+    crypt.set();
     console.log('Encrypted: ' + crypt.encrypted.toString());
+    expect(crypt.encrypted).toBeTruthy();
 
   });
 
   it('should decrypt', () => {
     let crypt = new Encrypt('password123456');
-    crypt.set('123456$#@$^@1ERF');
-    crypt.get('123456$#@$^@1ERF');
-    console.log('Decrypted: ' + crypt.decrypted.toString());
+    crypt.set();
+    crypt.get(crypt.num);
+    console.log('Decrypted: ' + crypt.decrypted);
+    expect(crypt.decrypted).toBe('password123456');
   })
 });
