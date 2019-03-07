@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
+import {Injectable} from '@angular/core';
+import {CookieService} from 'ngx-cookie-service';
 import {DatabaseService} from './database.service';
 import {of} from 'rxjs';
 
@@ -8,21 +8,29 @@ import {of} from 'rxjs';
 })
 export class LoginService {
 
-  public loggedIn: boolean = true;
+  public loggedIn: boolean = false;
 
-  constructor(private cookieservice: CookieService, private databaseservice: DatabaseService) { }
+  constructor(private cookieservice: CookieService, private databaseservice: DatabaseService) {
+  }
 
 
   checkUser(username: string, passwort: string) {
-   // const res = this.databaseservice.authenticateUser(username, passwort);
-    const res = '234123';
+    const res = this.databaseservice.authenticateUser(username, passwort);
 
-      this.createCookie(res);
-
+    res.then(value => {
+      if (value !== false) {
+        this.createCookie(value);
+      }
+    });
   }
 
   createCookie(res: string) {
-    this.loggedIn = true;
     this.cookieservice.set('User', res);
+    this.loggedIn = true;
+  }
+
+  logoutUser() {
+    // this.databaseservice.logout();
+    this.cookieservice.delete('User');
   }
 }

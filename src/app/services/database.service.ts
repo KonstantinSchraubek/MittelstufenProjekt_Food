@@ -66,12 +66,12 @@ export class DatabaseService {
     }
   }
 
-  async authenticateUser(username: string, password: string) {
+  async authenticateUser (username: string, password: string) {
     let encrypt = new Encrypt(password);
     encrypt.set();
     try {
       let data = await this.http.post('http://localhost:3000/benutzer', {
-      username: "frosor",
+      username: "frosor1",
       password: "cutETTpC5eqi71vbuaTHfQ=="
     }).toPromise();
       return data.json().message;
