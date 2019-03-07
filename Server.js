@@ -59,7 +59,11 @@ app.post('/benutzer', (req, res) => {
 });
 app.get('/rezepte', (req, res) => {
   let path = 'http://api.edamam.com';
-
+  if(API_ID == '' || API_KEY == '') {
+    console.error('API_ID und API_KEY müssen gegeben sein!');
+    res.status(500).send('keine API Daten gegeben');
+    return;
+  }
   path += '/search?app_id=' + API_ID + '&app_key=' + API_KEY
   if(req.query.ingredients) {
     path += '&q=' + req.query.ingredients;
