@@ -48,18 +48,18 @@ export class DatabaseService {
     if (userForm.dirty && userForm.valid) {
       let encrypt = new Encrypt(password);
       encrypt.set();
-      try{
-      await this.http.post('http://localhost:3000/benutzer', {
-        email: email.toLowerCase(),
-        username: username.toLowerCase(),
-        password: encrypt.encrypted,
-        KeyID: encrypt.num
-    });
-    this.router.navigateByUrl('/successfulRegistration');
-  }
-  catch{
-    alert("username or email is already taken");
-  }
+      try {
+        await this.http.post('http://localhost:3000/benutzer', {
+          email: email.toLowerCase(),
+          username: username.toLowerCase(),
+          password: encrypt.encrypted,
+          KeyID: encrypt.num
+        });
+        this.router.navigateByUrl('/successfulRegistration');
+      }
+      catch{
+        alert("username or email is already taken");
+      }
       // subscribe(
       //   res => {
       //     this.router.navigateByUrl('/successfulRegistration');
@@ -74,22 +74,30 @@ export class DatabaseService {
   }
 
   async authenticateUser(username: string, password: string) {
+    let KeyID = 21;
     try {
-      let data = await this.http.get('http://localhost:3000/benutzer', {
-    }).toPromise();
+      let data = await this.http.post('http://localhost:3000/benutzer', {
+        username: username
+      }).toPromise();
+      
+      KeyID = data.json().message; 
+    }
+    catch{
 
+    }
+    
     let encrypt = new Encrypt(password);
     encrypt.set();
     try {
       let data = await this.http.post('http://localhost:3000/benutzer', {
-      username: username,
-      password: "cutETTpC5eqi71vbuaTHfQ=="
-    }).toPromise();
+        username: 'frosor1',
+        password: "cutETTpC5eqi71vbuaTHfQ=="
+      }).toPromise();
       return data.json().message;
-    } catch(e) {
-        alert("There is no User like that registered.\nPlease register first or check your data.");
-        return false;
-  }
+    } catch (e) {
+      alert("There is no User like that registered.\nPlease register first or check your data.");
+      return false;
+    }
 
   }
 }

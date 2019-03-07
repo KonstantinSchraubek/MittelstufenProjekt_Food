@@ -36,7 +36,6 @@ export class RegistrierungComponent implements OnInit {
    const a = this.databaseService.authenticateUser("","");
    a.then(function(result) {
      alert(result)
-    // here you can use the result of promiseB
 });
   }
 }
