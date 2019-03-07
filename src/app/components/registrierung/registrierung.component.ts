@@ -12,12 +12,6 @@ export class RegistrierungComponent implements OnInit {
   constructor(private databaseService: DatabaseService) { }
 
   ngOnInit() {
-
-
-
-    // this.http.get('http://localhost:3000/benutzer').subscribe(data => {
-    //   console.log(data);
-    // });
   }
 
   private addUser(email: string,

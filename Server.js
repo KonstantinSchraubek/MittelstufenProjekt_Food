@@ -1,8 +1,10 @@
 const mysql = require('mysql');
 const express = require('express');
+const http = require('http');
 var app = express();
 const bodyparser = require('body-parser');
-
+const API_KEY = '';
+const API_ID = '';
 app.use(bodyparser.json());
 
 app.use(function(req, res, next) {
@@ -50,5 +52,31 @@ app.post('/benutzer', (req, res) => {
         if (err) throw err;
       })
     }
+    else{
+      res.status(404).send({error: 'username_or_email_duplicate'});
+    }
   })
 });
+app.get('/rezepte', (req, res) => {
+  let path = 'http://api.edamam.com';
+  if(API_ID == '' || API_KEY == '') {
+    console.error('API_ID und API_KEY müssen gegeben sein!');
+    res.status(500).send('keine API Daten gegeben');
+    return;
+  }
+  path += '/search?app_id=' + API_ID + '&app_key=' + API_KEY
+  if(req.query.ingredients) {
+    path += '&q=' + req.query.ingredients;
+  }
+  console.log(path)
+  let httpreq = http.get(path, function(response) {
+    var responseString = '';
+    response.on("data", function (data) {
+      responseString += data;
+      // save all the data from response
+    });
+    response.on("end", function () {
+      res.status(200).send(JSON.parse(responseString))
+    });
+  })
+})

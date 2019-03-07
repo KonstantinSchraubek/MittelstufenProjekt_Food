@@ -9,19 +9,20 @@ export class RecipeServiceService {
   get recipes(): Rezept[] {
     return this._recipes;
   }
-  private _recipes: Rezept[] = [];
   constructor(private http: HttpClient) {
-    this.addRecipes();
   }
-  addRecipes() {
-    this.http.get('./assets/response.json').subscribe((data: Object) => {
+  private _recipes: Rezept[] = [];
+
+  public selected: Rezept;
+  addRecipes(ingredients?: string) {
+    let url = 'http://localhost:3000/rezepte?ingredients=';
+    url += encodeURIComponent(ingredients);
+    this.http.get(url).subscribe((data: Object) => {
       data['hits'].forEach(function (recipes) {
         this._recipes.push(new Rezept(recipes));
       }, this);
     });
   }
-
-  public selected: Rezept;
 
   changeSelected(nowSelected: Rezept): void {
     this.selected = nowSelected;
