@@ -22,8 +22,7 @@ if(err) {
 });
 
 const createTable = () => {
-  db.run("CREATE TABLE IF NOT EXISTS benutzer(ID INTEGER PRIMARY KEY AUTOINCREMENT, Email TEXT, Nutzername TEXT, Passwort TEXT, KeyID INTEGER)");
-  db.run("INSERT INTO benutzer(Email,Nutzername,Passwort,KeyID) SELECT 'test@mail.com','testUser','test123456', 5 WHERE NOT EXISTS(SELECT 1 FROM benutzer WHERE Nutzername = 'testUser' AND Email = 'test@mail.com')");
+  db.run("CREATE TABLE IF NOT EXISTS benutzer(ID INTEGER PRIMARY KEY AUTOINCREMENT, Email TEXT, Nutzername TEXT, Passwort TEXT, KeyID INTEGER, Token TEXT)");
 }
 
 app.listen(3000, () => console.log('Express server is runnig at port no : 3000'));
@@ -84,7 +83,14 @@ if(emp.username != undefined && emp.password != undefined && emp.email == undefi
      }); 
     }
     else{
-      res.send();
+      require('crypto').randomBytes(48, function(err, buffer) {
+        var token = buffer.toString('hex');
+        res.json({
+          message: token
+        });
+        let sql = "UPDATE benutzer SET Token = '"+token+"' WHERE Nutzername = '"+emp.username+"'";
+        db.run(sql);
+      });
     }  
   });
 }
