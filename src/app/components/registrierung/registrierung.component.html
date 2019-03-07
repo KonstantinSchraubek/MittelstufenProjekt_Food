@@ -9,25 +9,28 @@
                     <input #email formControlName="email" placeholder="example@mail.com" type="email" class="form-control" name="Email" required
                         [ngClass]="{'red': (userForm.get('email').hasError('required') || userForm.get('email').hasError('invalidEmailAddress')) && email.value !== ''}"
                     />
-                    <small *ngIf="userForm.get('email').hasError('invalidEmailAddress') && email.value !== ''">Please enter a valid email</small>
+                    <small *ngIf="userForm.get('email').hasError('invalidEmailAddress') && email.value !== ''">Please enter
+                        a valid email</small>
                 </div>
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input #username formControlName="username" type="text" class="form-control" name="Username" required [ngClass]="{'red': userForm.get('username').hasError('required') && username.value !== ''}"
                     />
-                    <small *ngIf="userForm.get('username').hasError('invalidUsername') && username.value !== ''">Your username does not match the requirements</small>
+                    <small *ngIf="userForm.get('username').hasError('invalidUsername') && username.value !== ''">Your username
+                        does not match the requirements</small>
                 </div>
                 <div class="form-group">
                     <label for="pw1">Password</label>
                     <input #pw1 formControlName="password" type="password" class="form-control" name="password" required [ngClass]="{'red': (userForm.get('password').hasError('required') || userForm.get('password').hasError('invalidPassword')) && pw1.value !== ''}"
                     />
-                    <small *ngIf="userForm.get('password').hasError('invalidPassword') && pw1.value !== ''">Your password does not match the requirements</small>
+                    <small *ngIf="userForm.get('password').hasError('invalidPassword') && pw1.value !== ''">Your password
+                        does not match the requirements</small>
                 </div>
                 <div class="form-group">
                     <label for="pw2">Confirm Password</label>
-                    <input #pw2 formControlName="confirmedPassword" type="password" class="form-control" name="confirmedPassword" required [ngClass]="{'red': (userForm.get('confirmedPassword').hasError('required') || userForm.get('confirmedPassword').hasError('invalidPassword')) && pw2.value !== ''}"
+                    <input #pw2 formControlName="confirmedPassword" type="password" class="form-control" name="confirmedPassword" required [ngClass]="{'red': (userForm.get('confirmedPassword').hasError('required') || userForm.hasError('notSame') || userForm.get('confirmedPassword').hasError('invalidPassword')) && pw2.value !== ''}"
                     />
-                    <small *ngIf="userForm.get('password').hasError('invalidPassword') && pw2.value !== ''">Your password does not match the requirements</small>
+                    <small *ngIf="userForm.hasError('notSame') && pw2.value !== ''">Your passwords do not match</small>
                 </div>
                 <div class="form-group">
                     <button type="submit" [disabled]="!userForm.valid" class="btn btn-primary">Register</button>

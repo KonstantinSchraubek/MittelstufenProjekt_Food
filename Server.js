@@ -35,15 +35,15 @@ app.get('/benutzer', (req, res) => {
       throw err;
     }
     res.send(rows);
-      
     });
   })
 
 //Insert a benutzer
 app.post('/benutzer' ,(req, res) => {
-
   let emp = req.body;
 
+  if(emp.username != undefined && emp.email != undefined && emp.password != undefined && emp.KeyID != undefined)
+  {
   let sqlCheck = "SELECT * FROM benutzer WHERE Nutzername = '"+emp.username+"' OR Email = '"+emp.email+"'";
 
   db.all(sqlCheck, [], (err, row) => {
@@ -55,6 +55,29 @@ app.post('/benutzer' ,(req, res) => {
         if (err) throw err;
         res.send();
       });
+    }
+    else{
+      res.status(400).send({
+        message: 'Username or Email duplicate'
+     });    
     }  
   });
+}
+if(emp.username != undefined && emp.password != undefined && emp.email == undefined && emp.KeyID == undefined) {
+  let emp = req.body;
+  let sql = "SELECT * FROM benutzer WHERE Nutzername = '"+emp.username+"' AND Passwort = '"+emp.password+"'";
+  db.all(sql, [], (err, row) => {
+    if(err) throw err;
+    if(row.length == 0) {
+      res.status(400).send({
+        message: 'No User found'
+     }); 
+    }
+    else{
+      res.send();
+    }  
+  });
+}
 });
+
+

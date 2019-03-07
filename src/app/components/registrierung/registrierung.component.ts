@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Validation } from '../../models/validation'
 import { Encrypt } from '../../models/encrypt';
 
@@ -11,17 +11,15 @@ import { Encrypt } from '../../models/encrypt';
 })
 export class RegistrierungComponent implements OnInit {
 
-  a : boolean;
   userForm: FormGroup;
 
   constructor(private databaseService: DatabaseService, private fb: FormBuilder) {
-    this.a = false;
     this.userForm = fb.group({
       'email': ['', [Validators.required, Validation.emailValidator]],
       'username': ['', Validators.required],
       'password': ['', [Validators.required, Validation.passwordValidator]],
       'confirmedPassword': ['', [Validators.required, Validation.passwordValidator]]
-    })
+    }, {validator: Validation.checkPasswords })
   }
 
   ngOnInit() {
@@ -31,17 +29,6 @@ export class RegistrierungComponent implements OnInit {
     password: string,
     confirmedPassword: string,
     username: string) {
-    this.a = this.databaseService.addUser(email, password, confirmedPassword, username, this.userForm);
-    alert(this.a)
-    if(this.a) {
-      alert('Username or Email is already taken.')
-    }
-  }
-
-  private updatePasswordOfUser(username:string, password: string) {
-    this.databaseService.updatePasswordOfUser(username, password);
-  }
-  private updateEmailOfUser(username:string, email: string) {
-    this.databaseService.updateEmailOfUser(username, email);
+    this.databaseService.addUser(email, password, confirmedPassword, username, this.userForm);
   }
 }
