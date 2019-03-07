@@ -5,7 +5,7 @@ export class Encrypt {
     password: string;
     keylist: string[] = ["123456$#@$^@1ERF", "GHIFUT4783%&$§4L", "ABCDEFG%&/(ÄÜ123",
         "WERTESINDDOOFJAU", "POL9876ETP136/&%", "WÖLK()/&BFRE1234",
-        "K&I(M&ER=WPLÄÖLK", "ÜPOI%&/(MNBV0987", "TZUR_:;?HRTZ7685",
+        "POURTOLKIESd6332", "ÜPOI%&/(MNBV0987", "TZUR_:;?HRTZ7685",
         "HRTZ/$?=1089PÖHR", "AÄHG(/!:LÖÄA0769", "URTLO=)(7695LAJD",
         "_:;!BERGUNDTAL/&", "TZUSCHUK=)(/%123", "ÄQURT%$)(12098CL",
         "QWERTZ_:;MN09182", "ÜPTRE_>/&%$10653", "10978QWERPOYLDES",
@@ -25,6 +25,23 @@ export class Encrypt {
     set() {
         this.num = Math.floor(Math.random() * 19);
         let key = CryptoJS.enc.Utf8.parse(this.keylist[this.num]);
+        //let key = CryptoJS.enc.Utf8.parse(keys)
+        var iv = CryptoJS.enc.Utf8.parse(key);
+        this.encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(this.password.toString()), key,
+            {
+                keySize: 128 / 8,
+                iv: iv,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+        this.encrypted = this.encrypted.toString();
+    }
+
+    encrypt(number) {
+        if (number == 21) {
+            return false;
+        }
+        let key = CryptoJS.enc.Utf8.parse(number);
         //let key = CryptoJS.enc.Utf8.parse(keys)
         var iv = CryptoJS.enc.Utf8.parse(key);
         this.encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(this.password.toString()), key,
