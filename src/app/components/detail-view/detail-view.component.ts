@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {RecipeServiceService} from '../../services/recipe-service.service';
 import {Rezept} from '../../models/rezept';
 
@@ -9,7 +9,8 @@ import {Rezept} from '../../models/rezept';
 })
 export class DetailViewComponent implements OnInit {
 
-  constructor(private recipeService: RecipeServiceService) { }
+  constructor(private recipeService: RecipeServiceService) {
+  }
 
   ngOnInit() {
   }
@@ -20,7 +21,7 @@ export class DetailViewComponent implements OnInit {
 
   get ingridients1(): string[] {
     let test: string[] = [];
-    for(let i = 0; i < this.selected.ingredientLines.length / 2; i++){
+    for (let i = 0; i < this.selected.ingredientLines.length / 2; i++) {
       test.push(this.selected.ingredientLines[i]);
     }
     return test;
@@ -28,29 +29,29 @@ export class DetailViewComponent implements OnInit {
 
   get ingridients2(): string[] {
     let test: string[] = [];
-    for(let i = this.selected.ingredientLines.length / 2; i < this.selected.ingredientLines.length; i++){
+    for (let i = this.selected.ingredientLines.length / 2; i < this.selected.ingredientLines.length; i++) {
       test.push(this.selected.ingredientLines[i]);
     }
     return test;
   }
 
-  get digest(): object[]{
+  get digest(): object[] {
     return this.selected.digest;
   }
 
-  get cautions(): string[]{
+  get cautions(): string[] {
     return this.selected.cautions;
   }
 
-  get healthlabels() : string[]{
+  get healthlabels(): string[] {
     return this.selected.healthLabels;
   }
 
-  get dietlabels(): string[]{
-    return this.selected.dietLabels
+  get dietlabels(): string[] {
+    return this.selected.dietLabels;
   }
 
-  get url(): string{
+  get url(): string {
     return this.selected.url;
   }
 
@@ -68,7 +69,6 @@ export class DetailViewComponent implements OnInit {
     // @ts-ignore
     return this.selected.calories.toFixed(2);
   }
-
 
 
 }

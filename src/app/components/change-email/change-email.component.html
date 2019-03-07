@@ -1,7 +1,27 @@
-<div class="col">
-  <div class="col">
+<div class="">
+  <div class="">
     <h4>
-    Change E-Mail
+      Change E-Mail
     </h4>
+  </div>
+
+  <div class="d-flex flex-column">
+    <div class="p-2">
+      New E-Mail
+      <input [(ngModel)]="newMail" class="form-control" type="text" />
+    </div>
+
+    <div class="p-2">
+      Password:
+      <input [(ngModel)]="password" class="form-control" type="password" />
+    </div>
+
+    <div class="p-2">
+      <button (click)="changeEmail()" class="btn btn-info"> Change Password </button>
+    </div>
+
+    <div class="p-2">
+      {{error}}
+    </div>
   </div>
 </div>

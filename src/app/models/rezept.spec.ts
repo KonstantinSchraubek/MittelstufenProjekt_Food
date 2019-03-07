@@ -1,25 +1,23 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { Rezept } from './Rezept';
+import {Rezept} from './Rezept';
+import * as data from '../../assets/response.json';
 
-describe('RecipeViewComponent', () => {
+describe('Rezept', () => {
   let component: Rezept;
-  let fixture: ComponentFixture<Rezept>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ Rezept ]
-    })
-      .compileComponents();
-  }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(Rezept);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  beforeEach(()=>{
+    component = new Rezept(data.hits[0]);
+  })
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should work with responeObject contructor', () => {
+    expect(component).toBeDefined();
+
+    expect(component.calories).toBe(4230.305691201081);
+    expect(component.yield).toBe(4.0);
   });
 });
