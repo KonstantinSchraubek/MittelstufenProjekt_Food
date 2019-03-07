@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Validation } from '../../models/validation'
 import { Encrypt } from '../../models/encrypt';
 
@@ -14,13 +14,12 @@ export class RegistrierungComponent implements OnInit {
   userForm: FormGroup;
 
   constructor(private databaseService: DatabaseService, private fb: FormBuilder) {
-
     this.userForm = fb.group({
       'email': ['', [Validators.required, Validation.emailValidator]],
       'username': ['', Validators.required],
       'password': ['', [Validators.required, Validation.passwordValidator]],
       'confirmedPassword': ['', [Validators.required, Validation.passwordValidator]]
-    })
+    }, {validator: Validation.checkPasswords })
   }
 
   ngOnInit() {
@@ -30,13 +29,14 @@ export class RegistrierungComponent implements OnInit {
     password: string,
     confirmedPassword: string,
     username: string) {
-    return this.databaseService.addUser(email, password, confirmedPassword, username, this.userForm);
+    this.databaseService.addUser(email, password, confirmedPassword, username, this.userForm);
   }
 
-  private updatePasswordOfUser(username:string, password: string) {
-    this.databaseService.updatePasswordOfUser(username, password);
-  }
-  private updateEmailOfUser(username:string, email: string) {
-    this.databaseService.updateEmailOfUser(username, email);
+  public authenticateUser() {
+   const a = this.databaseService.authenticateUser("","");
+   a.then(function(result) {
+     alert(result)
+    // here you can use the result of promiseB
+});
   }
 }

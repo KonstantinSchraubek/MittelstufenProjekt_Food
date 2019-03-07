@@ -9,73 +9,87 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 })
 export class DatabaseService {
 
-  abort: boolean;
-
   constructor(private http: Http, private router: Router) {
 
   }
 
-  // this.http.get('http://localhost:3000/benutzer').subscribe(data => {
-  //   console.log(data);
-  // });
-
   updatePasswordOfUser(username: string, password: string) {
     let encrypt = new Encrypt(password);
     encrypt.set();
-    this.http.put('http://localhost:3000/benutzer' ,{
+    this.http.put('http://localhost:3000/benutzer', {
       username: username,
       password: encrypt.encrypted,
       KeyID: encrypt.num
     }).subscribe(data => {
-        res => {
-          //logik um Nutzer über erfolgreichen Passwort wechsel zu berichten
-        }
-        err => {
-          //logik um Nutzer über fehlgeschlagenen Passwort wechsel zu berichten
-        }
+      res => {
+        //logik um Nutzer über erfolgreichen Passwort wechsel zu berichten
+      }
+      err => {
+        //logik um Nutzer über fehlgeschlagenen Passwort wechsel zu berichten
+      }
     });
   }
 
   updateEmailOfUser(username: string, email: string) {
-    this.http.put('http://localhost:3000/benutzer' ,{
+    this.http.put('http://localhost:3000/benutzer', {
       username: username,
       email: email
     }).subscribe(data => {
-        res => {
-          //logik um Nutzer über erfolgreichen email wechsel zu berichten
-        }
-        err => {
-          //logik um Nutzer über fehlgeschlagenen Passwort wechsel zu berichten
-        }
+      res => {
+        //logik um Nutzer über erfolgreichen email wechsel zu berichten
+      }
+      err => {
+        //logik um Nutzer über fehlgeschlagenen Passwort wechsel zu berichten
+      }
     });
   }
 
-  addUser(email: string, password: string, confirmedPassword: string, username: string, userForm: FormGroup) {
-    this.abort = false;
+  async addUser(email: string, password: string, confirmedPassword: string, username: string, userForm: FormGroup) {
     if (userForm.dirty && userForm.valid) {
-      if (password == confirmedPassword) {
-        let encrypt = new Encrypt(password);
-        encrypt.set();
-        const req = this.http.post('http://localhost:3000/benutzer', {
-          email: email,
-          username: username,
-          password: encrypt.encrypted,
-          KeyID: encrypt.num
-        }).subscribe(
-            res => {
-              this.router.navigateByUrl('/successfulRegistration');
-              return true;
-            },
-            err => {
-              alert('Username or Email is already taken.')
-              return false;
-            }
-          );
-      }
-      else {
-        alert("Passwords need to be the same!")
-        return false;
-      }
+      let encrypt = new Encrypt(password);
+      encrypt.set();
+      try{
+      await this.http.post('http://localhost:3000/benutzer', {
+        email: email.toLowerCase(),
+        username: username.toLowerCase(),
+        password: encrypt.encrypted,
+        KeyID: encrypt.num
+    });
+    this.router.navigateByUrl('/successfulRegistration');
+  }
+  catch{
+    alert("username or email is already taken");
+  }
+      // subscribe(
+      //   res => {
+      //     this.router.navigateByUrl('/successfulRegistration');
+      //     return;
+      //   },
+      //   err => {
+      //     alert("username or email is already taken!");
+      //     return;
+      //   }
+      // );
     }
+  }
+
+  async authenticateUser(username: string, password: string) {
+    try {
+      let data = await this.http.get('http://localhost:3000/benutzer', {
+    }).toPromise();
+
+    let encrypt = new Encrypt(password);
+    encrypt.set();
+    try {
+      let data = await this.http.post('http://localhost:3000/benutzer', {
+      username: username,
+      password: "cutETTpC5eqi71vbuaTHfQ=="
+    }).toPromise();
+      return data.json().message;
+    } catch(e) {
+        alert("There is no User like that registered.\nPlease register first or check your data.");
+        return false;
+  }
+
   }
 }
