@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
+import {DatabaseService} from '../../services/database.service';
 
 @Component({
   selector: 'app-login',
@@ -7,19 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  constructor(private cookieSerivce: CookieService, private databaseservive: DatabaseService ) { }
 
   private username: string;
   private passwort: string;
 
   ngOnInit() {
+    this.cookieSerivce.set("ID", "token");
   }
 
 
 
   logInUser(username: string, passwort: string): void {
-    this.passwort = passwort;
-    // this.loggedIn = true;
+    
   }
 }
 

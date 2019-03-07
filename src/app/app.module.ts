@@ -19,6 +19,7 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
 import { ChangeEmailComponent } from './components/change-email/change-email.component';
 import {APP_BASE_HREF} from '@angular/common';
 import { LoginComponent } from './components/login/login.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,7 @@ import { LoginComponent } from './components/login/login.component';
     HttpClientModule,
     FormsModule
   ],
-  providers: [RecipeServiceService, {provide: APP_BASE_HREF, useValue: '/'}],
+  providers: [RecipeServiceService, CookieService, {provide: APP_BASE_HREF, useValue: '/'}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
