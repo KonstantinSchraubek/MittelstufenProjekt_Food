@@ -32,7 +32,7 @@ export class RegistrierungComponent implements OnInit {
   }
 
   public authenticateUser() {
-   const a = this.databaseService.authenticateUser("frosor123","123456");
+   const a = this.databaseService.authenticateUser("eins","123456");
    a.then(function(result) {
      alert(result)
 });

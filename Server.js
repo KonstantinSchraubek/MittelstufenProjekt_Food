@@ -91,6 +91,21 @@ if(emp.username != undefined && emp.password != undefined && emp.email == undefi
     }  
   });
 }
+if(emp.username != undefined && emp.password == undefined && emp.email == undefined && emp.KeyID == undefined) {
+  let emp = req.body;
+  let sql = "SELECT KeyID FROM benutzer WHERE Nutzername = '"+emp.username+"'";
+  db.all(sql, [], (err, row) => {
+    if(err) throw err;
+    if(row.length == 0) {
+      res.status(400).send(); 
+    }
+    else{
+        res.json({
+          message: row[0].KeyID
+        })
+    }  
+  });
+}
 });
 
 
