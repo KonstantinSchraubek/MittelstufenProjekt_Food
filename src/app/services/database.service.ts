@@ -48,7 +48,7 @@ export class DatabaseService {
     if (userForm.dirty && userForm.valid) {
       let encrypt = new Encrypt(password);
       encrypt.set();
-      const req = this.http.post('http://localhost:3000/benutzer', {
+      this.http.post('http://localhost:3000/benutzer', {
         email: email.toLowerCase(),
         username: username.toLowerCase(),
         password: encrypt.encrypted,
@@ -66,23 +66,19 @@ export class DatabaseService {
     }
   }
 
-  authenticateUser(username: string, password: string) {
+  async authenticateUser(username: string, password: string) {
     let encrypt = new Encrypt(password);
     encrypt.set();
-    const req = this.http.post('http://localhost:3000/benutzer', {
-      username: "Frosor",
-      password: "9d7/5dIvetoci1Kk8soVjQ=="
-    }).subscribe(
-      res => {
-        //Logik wenn Benutzer erflogreich angemeldet wurde     
-        this.router.navigateByUrl('/successfulRegistration');
-        return;
-      },
-      err => {
-        //Logik wenn Nutzer nicht angemeldet werden konnte
+    try {
+      let data = await this.http.post('http://localhost:3000/benutzer', {
+      username: "frosor",
+      password: "cutETTpC5eqi71vbuaTHfQ=="
+    }).toPromise();
+      return data.json().message;
+    } catch(e) {
         alert("There is no User like that registered.\nPlease register first or check your data.");
-        return;
-      }
-    );
+        return false;
+  }
+
   }
 }
