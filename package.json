@@ -33,6 +33,7 @@
     "@angular/cli": "~7.0.6",
     "@angular/compiler-cli": "^7.2.5",
     "@angular/language-service": "~7.0.0",
+    "@types/crypto-js": "^3.1.43",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
