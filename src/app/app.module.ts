@@ -18,6 +18,7 @@ import { UsermenueComponent } from './components/usermenue/usermenue.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { ChangeEmailComponent } from './components/change-email/change-email.component';
 import {APP_BASE_HREF} from '@angular/common';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import {APP_BASE_HREF} from '@angular/common';
     RecipeViewComponent,
     UsermenueComponent,
     ChangePasswordComponent,
-    ChangeEmailComponent
+    ChangeEmailComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
