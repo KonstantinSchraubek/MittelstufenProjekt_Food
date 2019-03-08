@@ -26,5 +26,6 @@ describe('Encrypt', () => {
     crypt.get(crypt.num);
     console.log('Decrypted: ' + crypt.decrypted);
     expect(crypt.decrypted).toBe('password123456');
+
   })
 });

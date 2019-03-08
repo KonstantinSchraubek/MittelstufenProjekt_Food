@@ -44,7 +44,7 @@ export class DatabaseService {
     });
   }
 
-  addUser(email: string, password: string, confirmedPassword: string, username: string, userForm: FormGroup) {
+  addUser(email: string, password: string, username: string, userForm: FormGroup) {
     if (userForm.dirty && userForm.valid) {
       let encrypt = new Encrypt(password);
       encrypt.set();
@@ -67,16 +67,28 @@ export class DatabaseService {
   }
 
   async authenticateUser (username: string, password: string) {
-    let encrypt = new Encrypt(password);
-    encrypt.set();
+    let KeyID = 21;
     try {
       let data = await this.http.post('http://localhost:3000/benutzer', {
-      username: "frosor1",
-      password: "cutETTpC5eqi71vbuaTHfQ=="
+      username: username
+    }).toPromise();
+      KeyID = data.json().message;
+    } catch(e) {
+        // Schlüssel konnte nicht geholt werden
+  }
+  alert(password)
+    let encrypt = new Encrypt(password);
+    alert(KeyID)
+    encrypt.encrypt(KeyID);
+    alert(encrypt.encrypted)
+    try {
+      let data = await this.http.post('http://localhost:3000/benutzer', {
+      username: username,
+      password: encrypt.encrypted
     }).toPromise();
       return data.json().message;
     } catch(e) {
-        alert("There is no User like that registered.\nPlease register first or check your data.");
+        // alert("There is no User like that registered.\nPlease register first or check your data.");
         return false;
   }
 

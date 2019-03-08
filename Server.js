@@ -31,7 +31,8 @@ const createTable = () => {
 app.listen(3000, () => console.log('Express server is runnig at port no : 3000'));
 
 app.get('/benutzer', (req, res) => {
-  let sql = 'SELECT * FROM benutzer';
+  let emp = req.body;
+  let sql = 'SELECT * FROM benutzer'
   db.all(sql, [], (err, rows) => {
     if(err) {
       throw err;
@@ -69,10 +70,8 @@ app.post('/benutzer' ,(req, res) => {
       });
     }
     else{
-      res.status(400).send({
-        message: 'Username or Email duplicate'
-     });
-    }
+      res.status(400).send();
+    }  
   });
 }
 if(emp.username != undefined && emp.password != undefined && emp.email == undefined && emp.KeyID == undefined) {
@@ -81,9 +80,7 @@ if(emp.username != undefined && emp.password != undefined && emp.email == undefi
   db.all(sql, [], (err, row) => {
     if(err) throw err;
     if(row.length == 0) {
-      res.status(400).send({
-        message: 'No User found'
-     });
+      res.status(400).send();
     }
     else{
       require('crypto').randomBytes(48, function(err, buffer) {
@@ -94,6 +91,21 @@ if(emp.username != undefined && emp.password != undefined && emp.email == undefi
         let sql = "UPDATE benutzer SET Token = '"+token+"' WHERE Nutzername = '"+emp.username+"'";
         db.run(sql);
       });
+    }  
+  });
+}
+if(emp.username != undefined && emp.password == undefined && emp.email == undefined && emp.KeyID == undefined) {
+  let emp = req.body;
+  let sql = "SELECT KeyID FROM benutzer WHERE Nutzername = '"+emp.username+"'";
+  db.all(sql, [], (err, row) => {
+    if(err) throw err;
+    if(row.length == 0) {
+      res.status(400).send();
+    }
+    else{
+        res.json({
+          message: row[0].KeyID
+        })
     }
   });
 }
