@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Encrypt } from '../models/encrypt';
-import { Http } from '@angular/http';
-import { Router } from '@angular/router';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import {Injectable} from '@angular/core';
+import {Encrypt} from '../models/encrypt';
+import {Http} from '@angular/http';
+import {Router} from '@angular/router';
+import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class DatabaseService {
   }
 
   updatePasswordOfUser(username: string, password: string) {
-    let encrypt = new Encrypt(password);
+    const encrypt = new Encrypt(password);
     encrypt.set();
     this.http.put('http://localhost:3000/benutzer', {
       username: username,
@@ -23,10 +23,10 @@ export class DatabaseService {
     }).subscribe(data => {
       res => {
         //logik um Nutzer über erfolgreichen Passwort wechsel zu berichten
-      }
+      };
       err => {
         //logik um Nutzer über fehlgeschlagenen Passwort wechsel zu berichten
-      }
+      };
     });
   }
 
@@ -37,16 +37,16 @@ export class DatabaseService {
     }).subscribe(data => {
       res => {
         //logik um Nutzer über erfolgreichen email wechsel zu berichten
-      }
+      };
       err => {
         //logik um Nutzer über fehlgeschlagenen Passwort wechsel zu berichten
-      }
+      };
     });
   }
 
   addUser(email: string, password: string, username: string, userForm: FormGroup) {
     if (userForm.dirty && userForm.valid) {
-      let encrypt = new Encrypt(password);
+      const encrypt = new Encrypt(password);
       encrypt.set();
       this.http.post('http://localhost:3000/benutzer', {
         email: email.toLowerCase(),
@@ -59,38 +59,35 @@ export class DatabaseService {
           return;
         },
         err => {
-          alert("username or email is already taken!");
+          alert('username or email is already taken!');
           return;
         }
       );
     }
   }
 
-  async authenticateUser (username: string, password: string) {
+  async authenticateUser(username: string, password: string) {
     let KeyID = 21;
     try {
-      let data = await this.http.post('http://localhost:3000/benutzer', {
-      username: username
-    }).toPromise();
+      const data = await this.http.post('http://localhost:3000/benutzer', {
+        username: username
+      }).toPromise();
       KeyID = data.json().message;
-    } catch(e) {
-        // Schlüssel konnte nicht geholt werden
-  }
-  alert(password)
-    let encrypt = new Encrypt(password);
-    alert(KeyID)
-    encrypt.encrypt(KeyID);
-    alert(encrypt.encrypted)
+    } catch (e) {
+      // Schlüssel konnte nicht geholt werden
+    }
+    const encrypt = new Encrypt(password);
+    encrypt.check(KeyID);
     try {
-      let data = await this.http.post('http://localhost:3000/benutzer', {
-      username: username,
-      password: encrypt.encrypted
-    }).toPromise();
+      const data = await this.http.post('http://localhost:3000/benutzer', {
+        username: username,
+        password: encrypt.encrypted
+      }).toPromise();
       return data.json().message;
-    } catch(e) {
-        // alert("There is no User like that registered.\nPlease register first or check your data.");
-        return false;
-  }
+    } catch (e) {
+      // alert("There is no User like that registered.\nPlease register first or check your data.");
+      return false;
+    }
 
   }
 }
