@@ -37,11 +37,11 @@ export class Encrypt {
         this.encrypted = this.encrypted.toString();
     }
 
-    encrypt(number) {
+    check(number) {
         if (number == 21) {
             return false;
         }
-        let key = CryptoJS.enc.Utf8.parse(number);
+        let key = CryptoJS.enc.Utf8.parse(this.keylist[number]);
         //let key = CryptoJS.enc.Utf8.parse(keys)
         var iv = CryptoJS.enc.Utf8.parse(key);
         this.encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(this.password.toString()), key,
