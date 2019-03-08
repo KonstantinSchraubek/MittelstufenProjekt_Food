@@ -86,6 +86,7 @@ export class DatabaseService {
       return data.json().message;
     } catch (e) {
       // alert("There is no User like that registered.\nPlease register first or check your data.");
+      // funktoniert das?
       return false;
     }
 
