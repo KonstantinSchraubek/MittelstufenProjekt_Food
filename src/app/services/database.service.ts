@@ -18,7 +18,7 @@ export class DatabaseService {
     const encrypt = new Encrypt(password);
     encrypt.set();
 
-    this.socket.emit('addUser', { email: email.toLowerCase(), username: username, password: encrypt.encrypted, KeyID: encrypt.num });
+    this.socket.emit('addUser', { email: email, username: username, password: encrypt.encrypted, KeyID: encrypt.num });
 
     const response = await this.onMessage();
 
