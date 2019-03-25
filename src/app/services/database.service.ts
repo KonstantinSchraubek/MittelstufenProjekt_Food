@@ -1,24 +1,32 @@
-import { Injectable } from '@angular/core';
-import { Encrypt } from '../models/encrypt';
-import { Router } from '@angular/router';
-import { FormGroup } from '@angular/forms';
-import { Socket } from 'ngx-socket-io';
-import { Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Encrypt} from '../models/encrypt';
+import {Router} from '@angular/router';
+import {FormGroup} from '@angular/forms';
+import {Socket} from 'ngx-socket-io';
+import {Observable} from 'rxjs';
+import {first} from 'rxjs/operators';
+import {CookieService} from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService {
 
-  constructor(private router: Router, private socket: Socket) { }
+  token: string;
+
+  constructor(private router: Router, private socket: Socket, private cookieService: CookieService) {
+    this.token = this.cookieService.get('User');
+  }
 
   // adds a User to the Database
   async addUser(email: string, password: string, username: string, userForm: FormGroup) {
     const encrypt = new Encrypt(password);
     encrypt.set();
 
-    this.socket.emit('addUser', { email: email, username: username, password: encrypt.encrypted, KeyID: encrypt.num });
+    this.socket.emit('addUser', {
+      email: email.toLowerCase(),
+      username: username.toLowerCase(), password: encrypt.encrypted, KeyID: encrypt.num
+    });
 
     const response = await this.onMessage();
 
@@ -40,25 +48,25 @@ export class DatabaseService {
 
   // gets the KeyID of the corresponding user based on the username
   async getKeyID(username: string) {
-    this.socket.emit('getKeyID', { username: username });
+    this.socket.emit('getKeyID', {username: username.toLowerCase()});
     return (await this.onMessage());
   }
 
-  async getLoggedInUser(token: string) {
-    this.socket.emit('getLoggedInUser', { token: token });
+  async getLoggedInUser() {
+    this.socket.emit('getLoggedInUser', {token: this.token});
     return (await this.onMessage());
   }
 
   // gets the generated token of the corresponding user based on the username and hashed password
   async authenticateUser(username: string, password: string) {
 
-    const response = await this.getKeyID(username);
+    const response = await this.getKeyID(username.toLowerCase());
     if (response === 'USER_HAS_NO_KEY') {
       return false;
     } else {
       const encrypt = new Encrypt(password);
       encrypt.check(response);
-      this.socket.emit('authenticateUser', { username: username, password: encrypt.encrypted });
+      this.socket.emit('authenticateUser', {username: username.toLowerCase(), password: encrypt.encrypted});
 
       const authUserResponse = await this.onMessage();
 
@@ -74,24 +82,28 @@ export class DatabaseService {
 
   async checkPasswords(password: string, username: string) {
     const e = new Encrypt(password);
-    e.check(this.getKeyID(username));
-    this.socket.emit('checkPasswords', { password: password });
+    e.check(this.getKeyID(username.toLowerCase()));
+    this.socket.emit('checkPasswords', {password: e.password});
     return (await this.onMessage());
   }
 
   // resets the token of a specific user
   async disconnectUser(token: string) {
-    this.socket.emit('disconnectUser', { token: token });
+    this.socket.emit('disconnectUser', {token: token});
   }
 
-  async changePassword(token: string, newPassword: string, oldPassword: string) {
-    const username = await this.getLoggedInUser(token);
-    if (username !== 'USER_NOT_FOUND')  {
-      const passwordCheck = await this.checkPasswords(oldPassword, username);
+  async changePassword(newPassword: string, oldPassword: string) {
+    const LoggedInUser = await this.getLoggedInUser();
+    if (LoggedInUser !== 'USER_NOT_FOUND') {
+      const passwordCheck = await this.checkPasswords(oldPassword, LoggedInUser.Nutzername.toLowerCase());
       if (passwordCheck !== 'USER_NOT_FOUND') {
         const encrypt = new Encrypt(newPassword);
         encrypt.set();
-        this.socket.emit('updatePassword', { username: username, password: encrypt.encrypted, KeyID: encrypt.num });
+        this.socket.emit('updatePassword', {
+          username: LoggedInUser.Nutzername.toLowerCase(),
+          password: encrypt.encrypted,
+          KeyID: encrypt.num
+        });
         return true;
       } else {
         // logik wenn altes passwort falsch war
@@ -104,7 +116,7 @@ export class DatabaseService {
   }
 
   async getRezepte(ingredients: string) {
-    this.socket.emit('getRezepte', { ingredients: ingredients });
+    this.socket.emit('getRezepte', {ingredients: ingredients});
     return (await this.onMessage());
   }
 

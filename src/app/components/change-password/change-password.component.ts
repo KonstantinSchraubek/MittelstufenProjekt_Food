@@ -9,7 +9,7 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class ChangePasswordComponent implements OnInit {
 
-  constructor(private databaseService: DatabaseService, private cookieService: CookieService) { }
+  constructor(private databaseService: DatabaseService) { }
 
   public oldPassword: string;
   public newPassword: string;
@@ -21,6 +21,6 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   changePassword(): void{
-    this.databaseService.changePassword(this.cookieService.get('User'), this.newPassword, this.oldPassword);
+    this.databaseService.changePassword(this.newPassword, this.oldPassword);
   }
 }
