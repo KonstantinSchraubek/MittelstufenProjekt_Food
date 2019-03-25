@@ -1,94 +1,114 @@
-import {Injectable} from '@angular/core';
-import {Encrypt} from '../models/encrypt';
-import {Http} from '@angular/http';
-import {Router} from '@angular/router';
-import {FormBuilder, Validators, FormGroup} from '@angular/forms';
+import { Injectable } from '@angular/core';
+import { Encrypt } from '../models/encrypt';
+import { Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
+import { Socket } from 'ngx-socket-io';
+import { Observable } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService {
 
-  constructor(private http: Http, private router: Router) {
+  constructor(private router: Router, private socket: Socket) { }
 
-  }
-
-  updatePasswordOfUser(username: string, password: string) {
+  //adds a User to the Database
+  async addUser(email: string, password: string, username: string, userForm: FormGroup) {
     const encrypt = new Encrypt(password);
     encrypt.set();
-    this.http.put('http://localhost:3000/benutzer', {
-      username: username,
-      password: encrypt.encrypted,
-      KeyID: encrypt.num
-    }).subscribe(data => {
-      res => {
-        //logik um Nutzer über erfolgreichen Passwort wechsel zu berichten
-      };
-      err => {
-        //logik um Nutzer über fehlgeschlagenen Passwort wechsel zu berichten
-      };
-    });
-  }
 
-  updateEmailOfUser(username: string, email: string) {
-    this.http.put('http://localhost:3000/benutzer', {
-      username: username,
-      email: email
-    }).subscribe(data => {
-      res => {
-        //logik um Nutzer über erfolgreichen email wechsel zu berichten
-      };
-      err => {
-        //logik um Nutzer über fehlgeschlagenen Passwort wechsel zu berichten
-      };
-    });
-  }
+    this.socket.emit('addUser', { email: email.toLowerCase(), username: username, password: encrypt.encrypted, KeyID: encrypt.num });
 
-  addUser(email: string, password: string, username: string, userForm: FormGroup) {
-    if (userForm.dirty && userForm.valid) {
-      const encrypt = new Encrypt(password);
-      encrypt.set();
-      this.http.post('http://localhost:3000/benutzer', {
-        email: email.toLowerCase(),
-        username: username.toLowerCase(),
-        password: encrypt.encrypted,
-        KeyID: encrypt.num
-      }).subscribe(
-        res => {
-          this.router.navigateByUrl('/successfulRegistration');
-          return;
-        },
-        err => {
-          alert('username or email is already taken!');
-          return;
-        }
-      );
+    const response = await this.onMessage();
+
+    if (response == "USER_OR_EMAIL_TAKEN") {
+    }
+    else {
+      this.router.navigateByUrl('/successfulRegistration');
     }
   }
 
+  //gets every emit that has the tag 'message' and returns the data as promise
+  async onMessage(): Promise<any> {
+    return await new Observable<any>(observer => {
+      this.socket.on('message', (data: any) => observer.next(data));
+    }).pipe(first()).toPromise();
+  }
+
+  //gets the KeyID of the corresponding user based on the username
+  async getKeyID(username: string) {
+    this.socket.emit('getKeyID', { username: username });
+    return (await this.onMessage());
+  }
+
+  async getLoggedInUser(token: string) {
+    this.socket.emit('getLoggedInUser', { token: token });
+    return (await this.onMessage())
+  }
+
+  //gets the generated token of the corresponding user based on the username and hashed password 
   async authenticateUser(username: string, password: string) {
-    let KeyID = 21;
-    try {
-      const data = await this.http.post('http://localhost:3000/benutzer', {
-        username: username
-      }).toPromise();
-      KeyID = data.json().message;
-    } catch (e) {
-      // Schlüssel konnte nicht geholt werden
-    }
-    const encrypt = new Encrypt(password);
-    encrypt.check(KeyID);
-    try {
-      const data = await this.http.post('http://localhost:3000/benutzer', {
-        username: username,
-        password: encrypt.encrypted
-      }).toPromise();
-      return data.json().message;
-    } catch (e) {
-      // alert("There is no User like that registered.\nPlease register first or check your data.");
-      // geht da jetzt?
+
+    const response = await this.getKeyID(username);
+    if (response == "USER_HAS_NO_KEY") {
       return false;
     }
+    else {
+      const encrypt = new Encrypt(password);
+      encrypt.check(response);
+      this.socket.emit('authenticateUser', { username: username, password: encrypt.encrypted });
+
+      const authUserResponse = await this.onMessage();
+    
+      if (authUserResponse == "USER_DOES_NOT_EXIST") {
+        return false;
+      }
+
+      else {
+        //returns the token
+        return authUserResponse;
+      }
+    }
 
   }
+
+  async checkPasswords(password: string, username: string) {
+    const e = new Encrypt(password)
+    e.check(this.getKeyID(username))
+    this.socket.emit('checkPasswords', { password: password });
+    return (await this.onMessage())
+  }
+
+  //resets the token of a specific user
+  async disconnectUser(token: string) {
+    this.socket.emit('disconnectUser', { token: token });
+  }
+
+  async changePassword(token: string, newPassword: string, oldPassword: string) {
+    const username = await this.getLoggedInUser(token);
+    if (username != "USER_NOT_FOUND")  {
+      const passwordCheck = await this.checkPasswords(oldPassword, username);
+      if (passwordCheck != "USER_NOT_FOUND") {
+        const encrypt = new Encrypt(newPassword);
+        encrypt.set();
+        this.socket.emit('updatePassword', { username: username, password: encrypt.encrypted, KeyID: encrypt.num });
+        return true;
+      }
+      else{
+        //logik wenn altes passwort falsch war
+        return false;
+      }
+    }
+    else {
+      //logik wenn kein nutzer mit diesem token gefunden wurde
+      return false;
+    }
+  }
+
+  async getRezepte(ingredients: string) {
+    this.socket.emit('getRezepte', { ingredients: ingredients });
+    return (await this.onMessage())
+  }
+
 }

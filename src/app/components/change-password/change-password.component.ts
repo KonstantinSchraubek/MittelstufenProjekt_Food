@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DatabaseService } from 'src/app/services/database.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-change-password',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChangePasswordComponent implements OnInit {
 
-  constructor() { }
+  constructor(private databaseService: DatabaseService, private cookieService: CookieService) { }
 
   public oldPassword: string;
   public newPassword: string;
@@ -19,10 +21,6 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   changePassword(): void{
-    console.log(this.oldPassword + " " + this.newPassword + " " + this.repeatNewPassword);
-    this.newPassword = "";
-    this.oldPassword = "";
-    this.repeatNewPassword = "";
-    this.error = "testError";
+    this.databaseService.changePassword(this.cookieService.get('User'), this.newPassword, this.oldPassword);
   }
 }
