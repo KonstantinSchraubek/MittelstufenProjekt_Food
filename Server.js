@@ -105,7 +105,7 @@ io.on("connection", socket => {
   });
 
   socket.on("updateEmail", user => {
-    let sql = "UPDATE benutzer SET Email = '" + user.email + "' WHERE Nutzername = '" + user.username.toLowerCase() + "'";
+    let sql = "UPDATE benutzer SET Email = '" + user.email.toLowerCase() + "' WHERE Nutzername = '" + user.username.toLowerCase() + "'";
     db.run(sql);
   });
 
