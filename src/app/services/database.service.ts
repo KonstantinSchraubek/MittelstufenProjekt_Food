@@ -22,7 +22,10 @@ export class DatabaseService {
 
     const response = await this.onMessage();
 
-    if (response === 'USER_OR_EMAIL_TAKEN') {
+    if (response === 'USERNAME_TAKEN') {
+      alert(response);
+    } else if (response === 'EMAIL_TAKEN') {
+      alert(response);
     } else {
       this.router.navigateByUrl('/successfulRegistration');
     }

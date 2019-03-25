@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 import { FormBuilder, Validators, FormGroup, } from '@angular/forms';
-import { Validation } from '../../models/validation'
+import { Validation } from '../../models/validation';
 
 @Component({
   selector: 'app-registrierung',
@@ -18,7 +18,7 @@ export class RegistrierungComponent implements OnInit {
       'username': ['', Validators.required],
       'password': ['', [Validators.required, Validation.passwordValidator]],
       'confirmedPassword': ['', [Validators.required, Validation.passwordValidator]]
-    }, { validator: Validation.checkPasswords })
+    }, { validator: Validation.checkPasswords });
   }
 
   ngOnInit() {}
