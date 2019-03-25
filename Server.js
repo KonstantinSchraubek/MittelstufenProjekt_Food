@@ -32,21 +32,28 @@ io.on("connection", socket => {
   //adds a User to the database, if the nutzername or the email are not taken, emits nothing if action was successful
   socket.on("addUser", user => {
 
-    let sqlCheck = "SELECT * FROM benutzer WHERE Nutzername = '" + user.username.toLowerCase() + "' OR Email = '" + user.email.toLowerCase() + "'";
-
-    db.all(sqlCheck, [], (err, row) => {
+    let usernameCheck = "SELECT * FROM benutzer WHERE Nutzername = '" + user.username.toLowerCase() + "'";
+    let emailCheck = "SELECT * FROM benutzer WHERE Email = '" + user.email.toLowerCase() + "'";
+    db.all(usernameCheck, [], (err, row) => {
       if (err) throw err;
       if (row.length == 0) {
-        let sql = "INSERT INTO benutzer(Email,Nutzername,Passwort,KeyID) SELECT '" + user.email.toLowerCase() + "','" + user.username.toLowerCase() + "','" + user.password + "','" + user.KeyID + "'";
+        db.all(emailCheck, [], (err1, row1) => {
+          if (err1) throw err1;
+          if (row1.length == 0) {
+            let sql = "INSERT INTO benutzer(Email,Nutzername,Passwort,KeyID) SELECT '" + user.email.toLowerCase() + "','" + user.username.toLowerCase() + "','" + user.password + "','" + user.KeyID + "'";
 
-        db.run(sql, function (err) {
-          //if function fails throw server error (database is not reachable etc.)
-          if (err) throw err;
-          socket.emit("message", "REGISTRATION_SUCCESSFUL")
+            db.run(sql, function (err) {
+              //if function fails throw server error (database is not reachable etc.)
+              if (err) throw err;
+              socket.emit("message", "REGISTRATION_SUCCESSFUL")
+            });
+          } else {
+            socket.emit("message", "EMAIL_TAKEN");
+          }
         });
       } else {
         //if username or email are alredy taken emit this
-        socket.emit("message", "USER_OR_EMAIL_TAKEN");
+        socket.emit("message", "USERNAME_TAKEN");
       }
     });
   });
@@ -94,6 +101,11 @@ io.on("connection", socket => {
 
   socket.on("updatePassword", user => {
     let sql = "UPDATE benutzer SET Passwort = '" + user.password + "', KeyID = '" + user.KeyID + "' WHERE Nutzername = '" + user.username.toLowerCase() + "'";
+    db.run(sql);
+  });
+
+  socket.on("updateEmail", user => {
+    let sql = "UPDATE benutzer SET Email = '" + user.email + "' WHERE Nutzername = '" + user.username.toLowerCase() + "'";
     db.run(sql);
   });
 

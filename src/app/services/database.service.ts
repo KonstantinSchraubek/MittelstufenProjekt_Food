@@ -1,69 +1,71 @@
-import {Injectable} from '@angular/core';
-import {Encrypt} from '../models/encrypt';
-import {Router} from '@angular/router';
-import {FormGroup} from '@angular/forms';
-import {Socket} from 'ngx-socket-io';
-import {Observable} from 'rxjs';
-import {first} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Encrypt } from '../models/encrypt';
+import { Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
+import { Socket } from 'ngx-socket-io';
+import { Observable } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService {
 
-  constructor(private router: Router, private socket: Socket) {
-  }
+  constructor(private router: Router, private socket: Socket) { }
 
-  //adds a User to the Database
+  // adds a User to the Database
   async addUser(email: string, password: string, username: string, userForm: FormGroup) {
     const encrypt = new Encrypt(password);
     encrypt.set();
 
-    this.socket.emit('addUser', {email: email, username: username, password: encrypt.encrypted, KeyID: encrypt.num});
+    this.socket.emit('addUser', { email: email, username: username, password: encrypt.encrypted, KeyID: encrypt.num });
 
     const response = await this.onMessage();
 
-    if (response == 'USER_OR_EMAIL_TAKEN') {
+    if (response === 'USERNAME_TAKEN') {
+      alert(response);
+    } else if (response === 'EMAIL_TAKEN') {
+      alert(response);
     } else {
       this.router.navigateByUrl('/successfulRegistration');
     }
   }
 
-  //gets every emit that has the tag 'message' and returns the data as promise
+  // gets every emit that has the tag 'message' and returns the data as promise
   async onMessage(): Promise<any> {
     return await new Observable<any>(observer => {
       this.socket.on('message', (data: any) => observer.next(data));
     }).pipe(first()).toPromise();
   }
 
-  //gets the KeyID of the corresponding user based on the username
+  // gets the KeyID of the corresponding user based on the username
   async getKeyID(username: string) {
-    this.socket.emit('getKeyID', {username: username});
+    this.socket.emit('getKeyID', { username: username });
     return (await this.onMessage());
   }
 
   async getLoggedInUser(token: string) {
-    this.socket.emit('getLoggedInUser', {token: token});
+    this.socket.emit('getLoggedInUser', { token: token });
     return (await this.onMessage());
   }
 
-  //gets the generated token of the corresponding user based on the username and hashed password 
+  // gets the generated token of the corresponding user based on the username and hashed password
   async authenticateUser(username: string, password: string) {
 
     const response = await this.getKeyID(username);
-    if (response == 'USER_HAS_NO_KEY') {
+    if (response === 'USER_HAS_NO_KEY') {
       return false;
     } else {
       const encrypt = new Encrypt(password);
       encrypt.check(response);
-      this.socket.emit('authenticateUser', {username: username, password: encrypt.encrypted});
+      this.socket.emit('authenticateUser', { username: username, password: encrypt.encrypted });
 
       const authUserResponse = await this.onMessage();
 
-      if (authUserResponse == 'USER_DOES_NOT_EXIST') {
+      if (authUserResponse === 'USER_DOES_NOT_EXIST') {
         return false;
       } else {
-        //returns the token
+        // returns the token
         return authUserResponse;
       }
     }
@@ -73,36 +75,36 @@ export class DatabaseService {
   async checkPasswords(password: string, username: string) {
     const e = new Encrypt(password);
     e.check(this.getKeyID(username));
-    this.socket.emit('checkPasswords', {password: password});
+    this.socket.emit('checkPasswords', { password: password });
     return (await this.onMessage());
   }
 
-  //resets the token of a specific user
+  // resets the token of a specific user
   async disconnectUser(token: string) {
-    this.socket.emit('disconnectUser', {token: token});
+    this.socket.emit('disconnectUser', { token: token });
   }
 
   async changePassword(token: string, newPassword: string, oldPassword: string) {
     const username = await this.getLoggedInUser(token);
-    if (username != 'USER_NOT_FOUND') {
+    if (username !== 'USER_NOT_FOUND')  {
       const passwordCheck = await this.checkPasswords(oldPassword, username);
-      if (passwordCheck != 'USER_NOT_FOUND') {
+      if (passwordCheck !== 'USER_NOT_FOUND') {
         const encrypt = new Encrypt(newPassword);
         encrypt.set();
-        this.socket.emit('updatePassword', {username: username, password: encrypt.encrypted, KeyID: encrypt.num});
+        this.socket.emit('updatePassword', { username: username, password: encrypt.encrypted, KeyID: encrypt.num });
         return true;
       } else {
-        //logik wenn altes passwort falsch war
+        // logik wenn altes passwort falsch war
         return false;
       }
     } else {
-      //logik wenn kein nutzer mit diesem token gefunden wurde
+      // logik wenn kein nutzer mit diesem token gefunden wurde
       return false;
     }
   }
 
   async getRezepte(ingredients: string) {
-    this.socket.emit('getRezepte', {ingredients: ingredients});
+    this.socket.emit('getRezepte', { ingredients: ingredients });
     return (await this.onMessage());
   }
 
