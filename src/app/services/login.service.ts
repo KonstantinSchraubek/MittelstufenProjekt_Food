@@ -31,7 +31,7 @@ export class LoginService {
   }
 
   logoutUser() {
-    this.databaseservice.disconnectUser(this.cookieservice.get('User'));
+    this.databaseservice.disconnectUser();
     this.cookieservice.delete('User');
     this.loggedIn = false;
   }

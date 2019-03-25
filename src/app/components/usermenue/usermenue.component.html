@@ -1,12 +1,23 @@
 <div class="container mx-auto">
   <div class="row mt-2 px-3 w-100 headline">
     <h2>
-      User Settings
+      User
     </h2>
   </div>
 
-  <hr>
 
+
+  <hr>
+  <table class="table table-hover">
+    <tr>
+      <th>Username:</th>
+      <td>{{user}}</td>
+    </tr>
+    <tr>
+      <th>Email:</th>
+      <td>{{email}}</td>
+    </tr>
+  </table>
   <div class="d-flex justify-content-around pt-4">
   <app-change-email></app-change-email>
   <app-change-password></app-change-password>

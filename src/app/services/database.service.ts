@@ -11,7 +11,6 @@ import {CookieService} from 'ngx-cookie-service';
   providedIn: 'root'
 })
 export class DatabaseService {
-
   token: string;
 
   constructor(private router: Router, private socket: Socket, private cookieService: CookieService) {
@@ -92,8 +91,8 @@ export class DatabaseService {
   }
 
   // resets the token of a specific user
-  async disconnectUser(token: string) {
-    this.socket.emit('disconnectUser', {token: token});
+  async disconnectUser() {
+    this.socket.emit('disconnectUser', {token: this.token});
   }
 
   async changePassword(newPassword: string, oldPassword: string) {
@@ -109,6 +108,23 @@ export class DatabaseService {
           password: encrypt.encrypted,
           KeyID: encrypt.num
         });
+        return true;
+      } else {
+        // logik wenn altes passwort falsch war
+        return false;
+      }
+    } else {
+      // logik wenn kein nutzer mit diesem token gefunden wurde
+      return false;
+    }
+  }
+
+  async changeEmail(email: string, password: string) {
+    const username = await this.getLoggedInUser();
+    if (username !== 'USER_NOT_FOUND') {
+      const passwordCheck = await this.checkPasswords(password, username);
+      if (passwordCheck !== 'USER_NOT_FOUND') {
+        this.socket.emit('updateEmail', {username: username, email: email});
         return true;
       } else {
         // logik wenn altes passwort falsch war

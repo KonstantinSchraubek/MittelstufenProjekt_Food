@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {DatabaseService} from '../../services/database.service';
 
 @Component({
   selector: 'app-change-email',
@@ -7,17 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChangeEmailComponent implements OnInit {
 
-  constructor() { }
+  constructor(private datsbaseservice: DatabaseService) {
+  }
 
   public password: string;
   public newMail: string;
+  public newConfirmMail: string;
 
   public error: string;
 
   ngOnInit() {
   }
 
-  changeEmail(): void{
-    this.error = "this works, test error lol";
+  changeEmail(): void {
+    if (this.newMail === this.newConfirmMail) {
+      this.datsbaseservice.changeEmail(this.newMail, this.password);
+    }
   }
 }
