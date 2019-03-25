@@ -14,7 +14,11 @@ export class DatabaseService {
   token: string;
 
   constructor(private router: Router, private socket: Socket, private cookieService: CookieService) {
-    this.token = this.cookieService.get('User');
+    this.setToken();
+  }
+
+  async setToken() {
+    this.token = await this.cookieService.get('User');
   }
 
   // adds a User to the Database
