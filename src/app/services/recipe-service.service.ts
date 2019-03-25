@@ -16,14 +16,14 @@ export class RecipeServiceService {
 
   public selected: Rezept;
   async addRecipes(ingredients?: string) {
-    //codezeilen um über die API zu arbeiten -> API ID und KEY müssen eventuell in Server.js gesetzt werden
-    // const rezepte = await this.databaseService.getRezepte(ingredients) 
+    // codezeilen um über die API zu arbeiten -> API ID und KEY müssen eventuell in Server.js gesetzt werden
+    // const rezepte = await this.databaseService.getRezepte(ingredients)
     // rezepte['hits'].forEach(function (recipes) {
     //   this._recipes.push(new Rezept(recipes));
     // }, this);
 
-    //Nur für Offline Nutzung
-    const res = this.http.get("./assets/response.json")
+    // Nur für Offline Nutzung
+    const res = this.http.get('./assets/response.json')
     res.subscribe(data => {
       const a = JSON.parse(data.text())
       a['hits'].forEach(function (recipes) {
