@@ -86,7 +86,6 @@ io.on("connection", socket => {
 
   //gets the KeyID of a specific User and emits it when the action was successful
   socket.on("getKeyID", user => {
-    console.log(user.username)
     let sql = "SELECT KeyID FROM benutzer WHERE Nutzername = '" + user.username + "'";
     db.all(sql, [], (err, row) => {
       if (err) throw err;
@@ -119,7 +118,6 @@ io.on("connection", socket => {
         socket.emit("message", "USER_NOT_FOUND");
       } else {
         //emits the username of the loggedIn User
-        console.log(row[0])
         socket.emit("message", row[0]);
       }
     });
@@ -127,12 +125,15 @@ io.on("connection", socket => {
 
   socket.on("checkPasswords", user => {
     console.log(user.password)
-    let sql = "SELECT Nutzername FROM benutzer WHERE Passwort = '" + user.password + "'";
+    let sql = "SELECT * FROM benutzer WHERE Passwort = '" + user.password + "'";
     db.all(sql, [], (err, row) => {
       if (err) throw err;
       if (row.length == 0) {
         //if there is no corresponding token return this
         socket.emit("message", "USER_NOT_FOUND");
+      }
+      else{
+        console.log(row[0])
       }
     });
   })

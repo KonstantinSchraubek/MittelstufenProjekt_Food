@@ -15,7 +15,11 @@ export class DatabaseService {
   token: string;
 
   constructor(private router: Router, private socket: Socket, private cookieService: CookieService) {
-    this.token = this.cookieService.get('User');
+    this.setToken();
+  }
+
+  async setToken() {
+    this.token = await this.cookieService.get('User');
   }
 
   // adds a User to the Database
@@ -83,7 +87,7 @@ export class DatabaseService {
   async checkPasswords(password: string, username: string) {
     const e = new Encrypt(password);
     e.check(this.getKeyID(username.toLowerCase()));
-    this.socket.emit('checkPasswords', {password: e.password});
+    this.socket.emit('checkPasswords', {password: e.encrypted});
     return (await this.onMessage());
   }
 
@@ -96,6 +100,7 @@ export class DatabaseService {
     const LoggedInUser = await this.getLoggedInUser();
     if (LoggedInUser !== 'USER_NOT_FOUND') {
       const passwordCheck = await this.checkPasswords(oldPassword, LoggedInUser.Nutzername.toLowerCase());
+      alert(passwordCheck + '\r\n' + LoggedInUser.Nutzername);
       if (passwordCheck !== 'USER_NOT_FOUND') {
         const encrypt = new Encrypt(newPassword);
         encrypt.set();
