@@ -32,15 +32,15 @@ io.on("connection", socket => {
   //adds a User to the database, if the nutzername or the email are not taken, emits nothing if action was successful
   socket.on("addUser", user => {
 
-    let usernameCheck = "SELECT * FROM benutzer WHERE Nutzername = '" + user.username.toLowerCase() + "'";
-    let emailCheck = "SELECT * FROM benutzer WHERE Email = '" + user.email.toLowerCase() + "'";
+    let usernameCheck = "SELECT * FROM benutzer WHERE Nutzername = '" + user.username + "'";
+    let emailCheck = "SELECT * FROM benutzer WHERE Email = '" + user.email + "'";
     db.all(usernameCheck, [], (err, row) => {
       if (err) throw err;
       if (row.length == 0) {
         db.all(emailCheck, [], (err1, row1) => {
           if (err1) throw err1;
           if (row1.length == 0) {
-            let sql = "INSERT INTO benutzer(Email,Nutzername,Passwort,KeyID) SELECT '" + user.email.toLowerCase() + "','" + user.username.toLowerCase() + "','" + user.password + "','" + user.KeyID + "'";
+            let sql = "INSERT INTO benutzer(Email,Nutzername,Passwort,KeyID) SELECT '" + user.email + "','" + user.username + "','" + user.password + "','" + user.KeyID + "'";
 
             db.run(sql, function (err) {
               //if function fails throw server error (database is not reachable etc.)
@@ -60,7 +60,7 @@ io.on("connection", socket => {
 
   //gets the token of a specific user, emits token when successful, emits error if user was not found
   socket.on("authenticateUser", user => {
-    let sql = "SELECT * FROM benutzer WHERE Nutzername = '" + user.username.toLowerCase() + "' AND Passwort = '" + user.password + "'";
+    let sql = "SELECT * FROM benutzer WHERE Nutzername = '" + user.username + "' AND Passwort = '" + user.password + "'";
     db.all(sql, [], (err, row) => {
       if (err) throw err;
       if (row.length == 0) {
@@ -71,7 +71,7 @@ io.on("connection", socket => {
           var token = buffer.toString('hex');
           //emits the generated token for cookies
           socket.emit("message", token);
-          let sql = "UPDATE benutzer SET Token = '" + token + "' WHERE Nutzername = '" + user.username.toLowerCase() + "'";
+          let sql = "UPDATE benutzer SET Token = '" + token + "' WHERE Nutzername = '" + user.username + "'";
           db.run(sql);
         });
       }
@@ -86,7 +86,7 @@ io.on("connection", socket => {
 
   //gets the KeyID of a specific User and emits it when the action was successful
   socket.on("getKeyID", user => {
-    let sql = "SELECT KeyID FROM benutzer WHERE Nutzername = '" + user.username.toLowerCase() + "'";
+    let sql = "SELECT KeyID FROM benutzer WHERE Nutzername = '" + user.username + "'";
     db.all(sql, [], (err, row) => {
       if (err) throw err;
       if (row.length == 0) {
@@ -100,12 +100,12 @@ io.on("connection", socket => {
   });
 
   socket.on("updatePassword", user => {
-    let sql = "UPDATE benutzer SET Passwort = '" + user.password + "', KeyID = '" + user.KeyID + "' WHERE Nutzername = '" + user.username.toLowerCase() + "'";
+    let sql = "UPDATE benutzer SET Passwort = '" + user.password + "', KeyID = '" + user.KeyID + "' WHERE Nutzername = '" + user.username + "'";
     db.run(sql);
   });
 
   socket.on("updateEmail", user => {
-    let sql = "UPDATE benutzer SET Email = '" + user.email.toLowerCase() + "' WHERE Nutzername = '" + user.username.toLowerCase() + "'";
+    let sql = "UPDATE benutzer SET Email = '" + user.email + "' WHERE Nutzername = '" + user.username + "'";
     db.run(sql);
   });
 
