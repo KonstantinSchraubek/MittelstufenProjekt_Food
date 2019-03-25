@@ -22,7 +22,7 @@ export class ChangeEmailComponent implements OnInit {
 
   changeEmail(): void {
     if (this.newMail === this.newConfirmMail) {
-     // this.datsbaseservice.updateEmailOfUser(this.newMail)
+      this.datsbaseservice.changeEmail(this.newMail, this.password);
     }
   }
 }
