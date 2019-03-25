@@ -1,0 +1,26 @@
+.red {
+    border: 2px solid red;
+}
+
+.green {
+    border: 2px solid green;
+}
+
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+form {
+    width: 70%;
+    margin: 4% 15%;
+    box-sizing: border-box
+}
+
+div#envelope{
+width: 55%;
+margin: 10px 30% 10px 25%;
+padding:10px 0;
+border: 2px solid gray;
+border-radius:10px;
+}
