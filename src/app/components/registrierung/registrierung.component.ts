@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
-import { FormBuilder, Validators, FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, } from '@angular/forms';
 import { Validation } from '../../models/validation'
-import { Encrypt } from '../../models/encrypt';
 
 @Component({
   selector: 'app-registrierung',
@@ -19,22 +18,12 @@ export class RegistrierungComponent implements OnInit {
       'username': ['', Validators.required],
       'password': ['', [Validators.required, Validation.passwordValidator]],
       'confirmedPassword': ['', [Validators.required, Validation.passwordValidator]]
-    }, {validator: Validation.checkPasswords })
+    }, { validator: Validation.checkPasswords })
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  public addUser(email: string,
-    password: string,
-    username: string) {
+  public addUser(email: string, password: string, username: string) {
     this.databaseService.addUser(email, password, username, this.userForm);
-  }
-
-  public authenticateUser() {
-   const a = this.databaseService.authenticateUser("eins","123456");
-   a.then(function(result) {
-     alert(result)
-});
   }
 }

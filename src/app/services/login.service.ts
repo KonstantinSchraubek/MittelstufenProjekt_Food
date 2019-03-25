@@ -1,7 +1,6 @@
-import {Injectable} from '@angular/core';
-import {CookieService} from 'ngx-cookie-service';
-import {DatabaseService} from './database.service';
-import {of} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
+import { DatabaseService } from './database.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,15 +15,14 @@ export class LoginService {
     }
   }
 
-
-  checkUser(username: string, passwort: string) {
-    const res = this.databaseservice.authenticateUser(username, passwort);
-
-    res.then(value => {
-      if (value !== false) {
-        this.createCookie(value);
-      }
-    });
+  async checkUser(username: string, passwort: string) {
+    const res = await this.databaseservice.authenticateUser(username, passwort);
+    if (res !== false) {
+      this.createCookie(res);
+    }
+    else{
+      //logik wenn anmelden nicht erfolgreich war
+    }
   }
 
   createCookie(res: string) {
@@ -33,7 +31,7 @@ export class LoginService {
   }
 
   logoutUser() {
-    // this.databaseservice.logout();
+    this.databaseservice.disconnectUser(this.cookieservice.get('User'));
     this.cookieservice.delete('User');
     this.loggedIn = false;
   }

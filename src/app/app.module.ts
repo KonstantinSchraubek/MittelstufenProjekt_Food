@@ -19,7 +19,9 @@ import {APP_BASE_HREF} from '@angular/common';
 import { LoginComponent } from './components/login/login.component';
 import { CookieService } from 'ngx-cookie-service';
 import { SuccessfulRegistrationComponent } from './components/successful-registration/successful-registration.component';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
+const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 @NgModule({
   declarations: [
@@ -44,7 +46,8 @@ import { SuccessfulRegistrationComponent } from './components/successful-registr
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [RecipeServiceService, CookieService, {provide: APP_BASE_HREF, useValue: '/'}],
   bootstrap: [AppComponent]

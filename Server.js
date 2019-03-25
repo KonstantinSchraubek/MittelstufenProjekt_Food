@@ -1,135 +1,155 @@
+const app = require('express')();
+const http = require('http').Server(app);
+const http2 = require('http')
+const io = require('socket.io')(http);
 const sqlite3 = require('sqlite3');
-const express = require('express');
-const http = require('http');
-const bodyparser = require('body-parser');
-const util = require('util');
-var app = express();
-const API_KEY = '';
-const API_ID = '';
-app.use(bodyparser.json());
-// app.use(express.static(__dirname + '/static'));
+const API_KEY = ''; //107825e88315af6b3054a9ad7f08fa1d
+const API_ID = ''; //94481c62
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
-  next();
-});
-
+//creates the sqlite database if it doesnt exist
 let db = new sqlite3.Database("./db/mittelstufe.sqlite3", (err) => {
-if(err) {
-  console.log('Error while creating the database', err);
-}else{
-  createTable();
-}
+    if (err) {
+        console.log('Error while creating the database', err);
+    } else {
+        createTable();
+    }
 });
 
+//creates table benutzer if it doesnt exist 
 const createTable = () => {
-  db.run("CREATE TABLE IF NOT EXISTS benutzer(ID INTEGER PRIMARY KEY AUTOINCREMENT, Email TEXT, Nutzername TEXT, Passwort TEXT, KeyID INTEGER, Token TEXT)");
+    db.run("CREATE TABLE IF NOT EXISTS benutzer(ID INTEGER PRIMARY KEY AUTOINCREMENT, Email TEXT, Nutzername TEXT, Passwort TEXT, KeyID INTEGER, Token TEXT)");
 }
 
-app.listen(3000, () => console.log('Express server is runnig at port no : 3000'));
+//gives connect Client an ID to control access on the server
+io.on("connection", socket => {
+    let previousId;
+    const safeJoin = currentId => {
+        socket.leave(previousId);
+        socket.join(currentId);
+        previousId = currentId;
+    };
 
-app.get('/benutzer', (req, res) => {
-  let emp = req.body;
-  let sql = 'SELECT * FROM benutzer'
-  db.all(sql, [], (err, rows) => {
-    if(err) {
-      throw err;
-    }
-    res.send(rows);
-    });
-  })
+    //adds a User to the database, if the nutzername or the email are not taken, emits nothing if action was successful
+    socket.on("addUser", user => {
 
-app.put('/benutzer', (req,res) => {
+        let sqlCheck = "SELECT * FROM benutzer WHERE Nutzername = '" + user.username + "' OR Email = '" + user.email + "'";
 
-  let emp = req.body;
+        db.all(sqlCheck, [], (err, row) => {
+            if (err) throw err;
+            if (row.length == 0) {
+                let sql = "INSERT INTO benutzer(Email,Nutzername,Passwort,KeyID) SELECT '" + user.email + "','" + user.username + "','" + user.password + "','" + user.KeyID + "'";
 
-  if(emp.username != undefined && emp.password != undefined) {
-    let sql = "UPDATE benutzer SET Email = '"+emp.email+"' WHERE Nutzername = '"+emp.username+"'"
-  }
-
-});
-
-//Insert a benutzer
-app.post('/benutzer' ,(req, res) => {
-  let emp = req.body;
-
-  if(emp.username != undefined && emp.email != undefined && emp.password != undefined && emp.KeyID != undefined)
-  {
-  let sqlCheck = "SELECT * FROM benutzer WHERE Nutzername = '"+emp.username+"' OR Email = '"+emp.email+"'";
-
-  db.all(sqlCheck, [], (err, row) => {
-    if(err) throw err;
-    if(row.length == 0) {
-      let sql = "INSERT INTO benutzer(Email,Nutzername,Passwort,KeyID) SELECT '"+emp.email+"','"+emp.username+"','"+emp.password+"','"+emp.KeyID+"' WHERE NOT EXISTS(SELECT 1 FROM benutzer WHERE Nutzername = '"+emp.username+"' OR Email = '"+emp.email+"')";
-
-      db.run(sql, function(err, result) {
-        if (err) throw err;
-        res.send();
-      });
-    }
-    else{
-      res.status(400).send();
-    }  
-  });
-}
-if(emp.username != undefined && emp.password != undefined && emp.email == undefined && emp.KeyID == undefined) {
-  let emp = req.body;
-  let sql = "SELECT * FROM benutzer WHERE Nutzername = '"+emp.username+"' AND Passwort = '"+emp.password+"'";
-  db.all(sql, [], (err, row) => {
-    if(err) throw err;
-    if(row.length == 0) {
-      res.status(400).send();
-    }
-    else{
-      require('crypto').randomBytes(48, function(err, buffer) {
-        var token = buffer.toString('hex');
-        res.json({
-          message: token
+                db.run(sql, function (err) {
+                    //if function fails throw server error (database is not reachable etc.)
+                    if (err) throw err;
+                    socket.emit("message", "REGISTRATION_SUCCESSFUL")
+                });
+            }
+            else {
+                //if username or email are alredy taken emit this
+                socket.emit("message", "USER_OR_EMAIL_TAKEN");
+            }
         });
-        let sql = "UPDATE benutzer SET Token = '"+token+"' WHERE Nutzername = '"+emp.username+"'";
+    });
+
+    //gets the token of a specific user, emits token when successful, emits error if user was not found
+    socket.on("authenticateUser", user => {
+        let sql = "SELECT * FROM benutzer WHERE Nutzername = '" + user.username + "' AND Passwort = '" + user.password + "'";
+        db.all(sql, [], (err, row) => {
+            if (err) throw err;
+            if (row.length == 0) {
+                //the selected user does not exist (password and username do not match)
+                socket.emit("message", "USER_DOES_NOT_EXIST");
+            }
+            else {
+                require('crypto').randomBytes(48, function (err, buffer) {
+                    var token = buffer.toString('hex');
+                    //emits the generated token for cookies
+                    socket.emit("message", token);
+                    let sql = "UPDATE benutzer SET Token = '" + token + "' WHERE Nutzername = '" + user.username + "'";
+                    db.run(sql);
+                });
+            }
+        });
+    });
+
+    //sets the token of the user to null to disconnect him from the website
+    socket.on("disconnectUser", user => {
+        let sql = "UPDATE benutzer SET Token = NULL WHERE Token = '" + user.token + "'";
         db.run(sql);
-      });
-    }  
-  });
-}
-if(emp.username != undefined && emp.password == undefined && emp.email == undefined && emp.KeyID == undefined) {
-  let emp = req.body;
-  let sql = "SELECT KeyID FROM benutzer WHERE Nutzername = '"+emp.username+"'";
-  db.all(sql, [], (err, row) => {
-    if(err) throw err;
-    if(row.length == 0) {
-      res.status(400).send();
-    }
-    else{
-        res.json({
-          message: row[0].KeyID
-        })
-    }
-  });
-}
-});
-app.get('/rezepte', (req, res) => {
-  let path = 'http://api.edamam.com';
-  if(API_ID == '' || API_KEY == '') {
-    console.error('API_ID und API_KEY müssen gegeben sein!');
-    res.status(500).send('keine API Daten gegeben');
-    return;
-  }
-  path += '/search?app_id=' + API_ID + '&app_key=' + API_KEY
-  if(req.query.ingredients) {
-    path += '&q=' + req.query.ingredients;
-  }
-  console.log(path)
-  let httpreq = http.get(path, function(response) {
-    var responseString = '';
-    response.on("data", function (data) {
-      responseString += data;
-      // save all the data from response
     });
-    response.on("end", function () {
-      res.status(200).send(JSON.parse(responseString))
+
+    //gets the KeyID of a specific User and emits it when the action was successful
+    socket.on("getKeyID", user => {
+        let sql = "SELECT KeyID FROM benutzer WHERE Nutzername = '" + user.username + "'";
+        db.all(sql, [], (err, row) => {
+            if (err) throw err;
+            if (row.length == 0) {
+                //if User has no valid KeyID return this
+                socket.emit("message", "USER_HAS_NO_KEY");
+            }
+            else {
+                //emits the token
+                socket.emit("message", row[0].KeyID);
+            }
+        });
     });
-  })
-})
+
+    socket.on("updatePassword", user => {
+        let sql = "UPDATE benutzer SET Passwort = '" + user.password + "', KeyID = '" + user.KeyID + "' WHERE Nutzername = '" + user.username + "'";
+        db.run(sql);
+    });
+
+    socket.on("getLoggedInUser", user => {
+        let sql = "SELECT Nutzername FROM benutzer WHERE Token = '" + user.token + "'";
+        db.all(sql, [], (err, row) => {
+            if (err) throw err;
+            if (row.length == 0) {
+                //if there is no corresponding token return this
+                socket.emit("message", "USER_NOT_FOUND");
+            }
+            else {
+                //emits the username of the loggedIn User
+                socket.emit("message", row[0].Nutzername);
+            }
+        });
+    });
+
+    socket.on("checkPasswords", user => {
+        let sql = "SELECT Nutzername FROM benutzer WHERE Passwort = '" + user.password + "'";
+        db.all(sql, [], (err, row) => {
+            if (err) throw err;
+            if (row.length == 0) {
+                //if there is no corresponding token return this
+                socket.emit("message", "USER_NOT_FOUND");
+            }
+        });
+    })
+
+    socket.on('getRezepte', req => {
+        let path = 'http://api.edamam.com';
+        if (API_ID == '' || API_KEY == '') {
+            console.error('API_ID und API_KEY müssen gegeben sein!');
+            socket.emit('message', 'keine API Daten gegeben');
+            return;
+        }
+        path += '/search?app_id=' + API_ID + '&app_key=' + API_KEY
+        if (req.ingredients) {
+            path += '&q=' + req.ingredients;
+        }
+        console.log(path)
+        let httpreq = http2.get(path, function (response) {
+            var responseString = '';
+            response.on("data", function (data) {
+                responseString += data;
+                // save all the data from response
+            });
+            response.on("end", function () {
+                socket.emit('message', JSON.parse(responseString))
+            });
+        });
+    });
+    });
+
+    //port on which the server is running eg. localhost:3000
+    http.listen(3000, () => console.log('Server is runnig at port no : 3000'));
