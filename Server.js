@@ -110,7 +110,7 @@ io.on("connection", socket => {
   });
 
   socket.on("getLoggedInUser", user => {
-    let sql = "SELECT Nutzername FROM benutzer WHERE Token = '" + user.token + "'";
+    let sql = "SELECT Nutzername, Email FROM benutzer WHERE Token = '" + user.token + "'";
     db.all(sql, [], (err, row) => {
       if (err) throw err;
       if (row.length == 0) {
@@ -118,7 +118,7 @@ io.on("connection", socket => {
         socket.emit("message", "USER_NOT_FOUND");
       } else {
         //emits the username of the loggedIn User
-        socket.emit("message", row[0].Nutzername);
+        socket.emit("message", row[0]);
       }
     });
   });
