@@ -16,6 +16,7 @@ export class UsermenueComponent implements OnInit {
 
  async ngOnInit() {
     this.user = await this.databaseservice.getLoggedInUser()
+    alert(this.user)
    // this.email = await this.databaseservice.getLoggedInUser()
   }
 
