@@ -24,10 +24,7 @@ export class DatabaseService {
     const encrypt = new Encrypt(password);
     encrypt.set();
 
-    this.socket.emit('addUser', {
-      email: email.toLowerCase(),
-      username: username.toLowerCase(), password: encrypt.encrypted, KeyID: encrypt.num
-    });
+    this.socket.emit('addUser', {email: email, username: username, password: encrypt.encrypted, KeyID: encrypt.num});
 
     const response = await this.onMessage();
 
@@ -49,7 +46,7 @@ export class DatabaseService {
 
   // gets the KeyID of the corresponding user based on the username
   async getKeyID(username: string) {
-    this.socket.emit('getKeyID', {username: username.toLowerCase()});
+    this.socket.emit('getKeyID', {username: username});
     return (await this.onMessage());
   }
 
@@ -61,13 +58,13 @@ export class DatabaseService {
   // gets the generated token of the corresponding user based on the username and hashed password
   async authenticateUser(username: string, password: string) {
 
-    const response = await this.getKeyID(username.toLowerCase());
+    const response = await this.getKeyID(username);
     if (response === 'USER_HAS_NO_KEY') {
       return false;
     } else {
       const encrypt = new Encrypt(password);
       encrypt.check(response);
-      this.socket.emit('authenticateUser', {username: username.toLowerCase(), password: encrypt.encrypted});
+      this.socket.emit('authenticateUser', {username: username, password: encrypt.encrypted});
 
       const authUserResponse = await this.onMessage();
 
@@ -83,8 +80,8 @@ export class DatabaseService {
 
   async checkPasswords(password: string, username: string) {
     const e = new Encrypt(password);
-    e.check(this.getKeyID(username.toLowerCase()));
-    this.socket.emit('checkPasswords', {password: e.encrypted});
+    e.check(this.getKeyID(username));
+    this.socket.emit('checkPasswords', {password: password});
     return (await this.onMessage());
   }
 
@@ -94,18 +91,13 @@ export class DatabaseService {
   }
 
   async changePassword(newPassword: string, oldPassword: string) {
-    const LoggedInUser = await this.getLoggedInUser();
-    if (LoggedInUser !== 'USER_NOT_FOUND') {
-      const passwordCheck = await this.checkPasswords(oldPassword, LoggedInUser.Nutzername.toLowerCase());
-      alert(passwordCheck + '\r\n' + LoggedInUser.Nutzername);
+    const user = await this.getLoggedInUser();
+    if (user.Username !== 'USER_NOT_FOUND') {
+      const passwordCheck = await this.checkPasswords(oldPassword, user.Nutzeranme);
       if (passwordCheck !== 'USER_NOT_FOUND') {
         const encrypt = new Encrypt(newPassword);
         encrypt.set();
-        this.socket.emit('updatePassword', {
-          username: LoggedInUser.Nutzername.toLowerCase(),
-          password: encrypt.encrypted,
-          KeyID: encrypt.num
-        });
+        this.socket.emit('updatePassword', {username: user.Username, password: encrypt.encrypted, KeyID: encrypt.num});
         return true;
       } else {
         // logik wenn altes passwort falsch war
@@ -118,11 +110,11 @@ export class DatabaseService {
   }
 
   async changeEmail(email: string, password: string) {
-    const username = await this.getLoggedInUser();
-    if (username !== 'USER_NOT_FOUND') {
-      const passwordCheck = await this.checkPasswords(password, username);
+    const user = await this.getLoggedInUser();
+    if (user.Username !== 'USER_NOT_FOUND') {
+      const passwordCheck = await this.checkPasswords(password, user.Username);
       if (passwordCheck !== 'USER_NOT_FOUND') {
-        this.socket.emit('updateEmail', {username: username, email: email});
+        this.socket.emit('updateEmail', {username: user.Username, email: email});
         return true;
       } else {
         // logik wenn altes passwort falsch war
