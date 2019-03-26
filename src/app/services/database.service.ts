@@ -11,14 +11,12 @@ import {CookieService} from 'ngx-cookie-service';
   providedIn: 'root'
 })
 export class DatabaseService {
-  token: string;
 
   constructor(private router: Router, private socket: Socket, private cookieService: CookieService) {
-    this.setToken();
   }
 
-  async setToken() {
-    this.token = await this.cookieService.get('User');
+  async getToken() {
+    return (await this.cookieService.get('User'));
   }
 
   // adds a User to the Database
@@ -56,7 +54,7 @@ export class DatabaseService {
   }
 
   async getLoggedInUser() {
-    this.socket.emit('getLoggedInUser', {token: this.token});
+    this.socket.emit('getLoggedInUser', {token: await this.getToken()});
     return (await this.onMessage());
   }
 
@@ -92,7 +90,7 @@ export class DatabaseService {
 
   // resets the token of a specific user
   async disconnectUser() {
-    this.socket.emit('disconnectUser', {token: this.token});
+    this.socket.emit('disconnectUser', {token: await this.getToken()});
   }
 
   async changePassword(newPassword: string, oldPassword: string) {

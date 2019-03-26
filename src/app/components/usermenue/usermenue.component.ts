@@ -7,7 +7,7 @@ import {DatabaseService} from '../../services/database.service';
   styleUrls: ['./usermenue.component.css']
 })
 export class UsermenueComponent implements OnInit {
-  username: string;
+  user: string;
   email: string = "sample@mail.de";
 
   constructor(private databaseservice: DatabaseService) {
@@ -15,8 +15,8 @@ export class UsermenueComponent implements OnInit {
 
 
  async ngOnInit() {
-   let user = await this.databaseservice.getLoggedInUser()
-   this.username = user;
+    this.user = await this.databaseservice.getLoggedInUser()
+    alert(this.user)
    // this.email = await this.databaseservice.getLoggedInUser()
   }
 
