@@ -92,12 +92,12 @@ export class DatabaseService {
 
   async changePassword(newPassword: string, oldPassword: string) {
     const user = await this.getLoggedInUser();
-    if (user.Nutzername !== 'USER_NOT_FOUND') {
+    if (user.Username !== 'USER_NOT_FOUND') {
       const passwordCheck = await this.checkPasswords(oldPassword, user.Nutzeranme);
       if (passwordCheck !== 'USER_NOT_FOUND') {
         const encrypt = new Encrypt(newPassword);
         encrypt.set();
-        this.socket.emit('updatePassword', {username: user.Nutzername, password: encrypt.encrypted, KeyID: encrypt.num});
+        this.socket.emit('updatePassword', {username: user.Username, password: encrypt.encrypted, KeyID: encrypt.num});
         return true;
       } else {
         // logik wenn altes passwort falsch war
@@ -111,10 +111,10 @@ export class DatabaseService {
 
   async changeEmail(email: string, password: string) {
     const user = await this.getLoggedInUser();
-    if (user.Nutzername !== 'USER_NOT_FOUND') {
-      const passwordCheck = await this.checkPasswords(password, user.Nutzername);
+    if (user.Username !== 'USER_NOT_FOUND') {
+      const passwordCheck = await this.checkPasswords(password, user.Username);
       if (passwordCheck !== 'USER_NOT_FOUND') {
-        this.socket.emit('updateEmail', {username: user.Nutzername, email: email});
+        this.socket.emit('updateEmail', {username: user.Username, email: email});
         return true;
       } else {
         // logik wenn altes passwort falsch war
