@@ -22,7 +22,7 @@ const createTable = () => {
 
 //gives connect Client an ID to control access on the server
 io.on("connection", socket => {
-  const previousId;
+  let previousId;
   const safeJoin = currentId => {
     socket.leave(previousId);
     socket.join(currentId);
