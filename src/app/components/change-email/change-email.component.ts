@@ -21,7 +21,7 @@ export class ChangeEmailComponent implements OnInit {
   }
 
   async changeEmail(): void {
-    const user = this.datsbaseservice.getLoggedInUser();
+    const user = await this.datsbaseservice.getLoggedInUser();
     if (this.newMail === this.newConfirmMail && user.Email != this.newMail) {
       this.datsbaseservice.changeEmail(this.newMail, this.password);
     }
