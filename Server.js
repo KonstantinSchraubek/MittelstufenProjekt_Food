@@ -7,7 +7,7 @@ const API_KEY = ''; //107825e88315af6b3054a9ad7f08fa1d
 const API_ID = ''; //94481c62
 
 //creates the sqlite database if it doesnt exist
-let db = new sqlite3.Database("./db/mittelstufe.sqlite3", (err) => {
+const db = new sqlite3.Database("./db/mittelstufe.sqlite3", (err) => {
   if (err) {
     console.log('Error while creating the database', err);
   } else {
@@ -17,7 +17,7 @@ let db = new sqlite3.Database("./db/mittelstufe.sqlite3", (err) => {
 
 //creates table benutzer if it doesnt exist 
 const createTable = () => {
-  db.run("CREATE TABLE IF NOT EXISTS benutzer(ID INTEGER PRIMARY KEY AUTOINCREMENT, Email TEXT, Nutzername TEXT, Passwort TEXT, KeyID INTEGER, Token TEXT)");
+  db.run("CREATE TABLE IF NOT EXISTS benutzer(ID INTEGER PRIMARY KEY AUTOINCREMENT, Email TEXT, Username TEXT, Password TEXT, KeyID INTEGER, Token TEXT)");
 }
 
 //gives connect Client an ID to control access on the server
@@ -32,15 +32,15 @@ io.on("connection", socket => {
   //adds a User to the database, if the nutzername or the email are not taken, emits nothing if action was successful
   socket.on("addUser", user => {
 
-    let usernameCheck = "SELECT * FROM benutzer WHERE Nutzername = '" + user.username + "'";
-    let emailCheck = "SELECT * FROM benutzer WHERE Email = '" + user.email + "'";
+    const usernameCheck = "SELECT * FROM benutzer WHERE Username = '" + user.username + "'";
+    const emailCheck = "SELECT * FROM benutzer WHERE Email = '" + user.email + "'";
     db.all(usernameCheck, [], (err, row) => {
       if (err) throw err;
       if (row.length == 0) {
         db.all(emailCheck, [], (err1, row1) => {
           if (err1) throw err1;
           if (row1.length == 0) {
-            let sql = "INSERT INTO benutzer(Email,Nutzername,Passwort,KeyID) SELECT '" + user.email + "','" + user.username + "','" + user.password + "','" + user.KeyID + "'";
+            const sql = "INSERT INTO benutzer(Email,Username,Password,KeyID) SELECT '" + user.email + "','" + user.username + "','" + user.password + "','" + user.KeyID + "'";
 
             db.run(sql, function (err) {
               //if function fails throw server error (database is not reachable etc.)
@@ -60,7 +60,7 @@ io.on("connection", socket => {
 
   //gets the token of a specific user, emits token when successful, emits error if user was not found
   socket.on("authenticateUser", user => {
-    let sql = "SELECT * FROM benutzer WHERE Nutzername = '" + user.username + "' AND Passwort = '" + user.password + "'";
+    const sql = "SELECT * FROM benutzer WHERE Username = '" + user.username + "' AND Password = '" + user.password + "'";
     db.all(sql, [], (err, row) => {
       if (err) throw err;
       if (row.length == 0) {
@@ -71,7 +71,7 @@ io.on("connection", socket => {
           var token = buffer.toString('hex');
           //emits the generated token for cookies
           socket.emit("message", token);
-          let sql = "UPDATE benutzer SET Token = '" + token + "' WHERE Nutzername = '" + user.username + "'";
+          const sql = "UPDATE benutzer SET Token = '" + token + "' WHERE Username = '" + user.username + "'";
           db.run(sql);
         });
       }
@@ -80,13 +80,13 @@ io.on("connection", socket => {
 
   //sets the token of the user to null to disconnect him from the website
   socket.on("disconnectUser", user => {
-    let sql = "UPDATE benutzer SET Token = NULL WHERE Token = '" + user.token + "'";
+    const sql = "UPDATE benutzer SET Token = NULL WHERE Token = '" + user.token + "'";
     db.run(sql);
   });
 
   //gets the KeyID of a specific User and emits it when the action was successful
   socket.on("getKeyID", user => {
-    let sql = "SELECT KeyID FROM benutzer WHERE Nutzername = '" + user.username + "'";
+    const sql = "SELECT KeyID FROM benutzer WHERE Username = '" + user.username + "'";
     db.all(sql, [], (err, row) => {
       if (err) throw err;
       if (row.length == 0) {
@@ -100,17 +100,17 @@ io.on("connection", socket => {
   });
 
   socket.on("updatePassword", user => {
-    let sql = "UPDATE benutzer SET Passwort = '" + user.password + "', KeyID = '" + user.KeyID + "' WHERE Nutzername = '" + user.username + "'";
+    const sql = "UPDATE benutzer SET Password = '" + user.password + "', KeyID = '" + user.KeyID + "' WHERE Username = '" + user.username + "'";
     db.run(sql);
   });
 
   socket.on("updateEmail", user => {
-    let sql = "UPDATE benutzer SET Email = '" + user.email + "' WHERE Nutzername = '" + user.username + "'";
+    const sql = "UPDATE benutzer SET Email = '" + user.email + "' WHERE Username = '" + user.username + "'";
     db.run(sql);
   });
 
   socket.on("getLoggedInUser", user => {
-    let sql = "SELECT Nutzername FROM benutzer WHERE Token = '" + user.token + "'";
+    const sql = "SELECT Username, Email FROM benutzer WHERE Token = '" + user.token + "'";
     db.all(sql, [], (err, row) => {
       if (err) throw err;
       if (row.length == 0) {
@@ -118,13 +118,13 @@ io.on("connection", socket => {
         socket.emit("message", "USER_NOT_FOUND");
       } else {
         //emits the username of the loggedIn User
-        socket.emit("message", row[0].Nutzername);
+        socket.emit("message", row[0]);
       }
     });
   });
 
   socket.on("checkPasswords", user => {
-    let sql = "SELECT Nutzername FROM benutzer WHERE Passwort = '" + user.password + "'";
+    const sql = "SELECT * FROM benutzer WHERE Password = '" + user.password + "' AND Username = '" + user.username + "'";
     db.all(sql, [], (err, row) => {
       if (err) throw err;
       if (row.length == 0) {
@@ -135,7 +135,7 @@ io.on("connection", socket => {
   })
 
   socket.on('getRezepte', req => {
-    let path = 'http://api.edamam.com';
+    const path = 'http://api.edamam.com';
     if (API_ID == '' || API_KEY == '') {
       console.error('API_ID und API_KEY müssen gegeben sein!');
       socket.emit('message', 'keine API Daten gegeben');
@@ -146,7 +146,7 @@ io.on("connection", socket => {
       path += '&q=' + req.ingredients;
     }
     console.log(path)
-    let httpreq = http2.get(path, function (response) {
+    const httpreq = http2.get(path, function (response) {
       var responseString = '';
       response.on("data", function (data) {
         responseString += data;

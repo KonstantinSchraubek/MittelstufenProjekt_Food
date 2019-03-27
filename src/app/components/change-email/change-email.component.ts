@@ -20,9 +20,10 @@ export class ChangeEmailComponent implements OnInit {
   ngOnInit() {
   }
 
-  async changeEmail(): void {
+  async changeEmail() {
     const user = await this.datsbaseservice.getLoggedInUser();
-    if (this.newMail === this.newConfirmMail && user.Email != this.newMail) {
+    if (this.newMail === this.newConfirmMail && user.Email !== this.newMail) {
+      alert("test ")
       this.datsbaseservice.changeEmail(this.newMail, this.password);
     }
   }

@@ -11,10 +11,12 @@ import {CookieService} from 'ngx-cookie-service';
   providedIn: 'root'
 })
 export class DatabaseService {
-  token: string;
 
   constructor(private router: Router, private socket: Socket, private cookieService: CookieService) {
-    this.token = this.cookieService.get('User');
+  }
+
+  async getToken() {
+    return (await this.cookieService.get('User'));
   }
 
   // adds a User to the Database
@@ -49,7 +51,7 @@ export class DatabaseService {
   }
 
   async getLoggedInUser() {
-    this.socket.emit('getLoggedInUser', {token: this.token});
+    this.socket.emit('getLoggedInUser', {token: await this.getToken()});
     return (await this.onMessage());
   }
 
@@ -79,23 +81,28 @@ export class DatabaseService {
   async checkPasswords(password: string, username: string) {
     const e = new Encrypt(password);
     e.check(this.getKeyID(username));
-    this.socket.emit('checkPasswords', {password: password});
+    if(await this.onMessage() !== "USER_HAS_NO_KEY") {
+    this.socket.emit('checkPasswords', {password: e.encrypted, username: username});
     return (await this.onMessage());
+    }
+    else{
+      return "USER_NOT_FOUND"
+    }
   }
 
   // resets the token of a specific user
   async disconnectUser() {
-    this.socket.emit('disconnectUser', {token: this.token});
+    this.socket.emit('disconnectUser', {token: await this.getToken()});
   }
 
   async changePassword(newPassword: string, oldPassword: string) {
-    const username = await this.getLoggedInUser();
-    if (username !== 'USER_NOT_FOUND') {
-      const passwordCheck = await this.checkPasswords(oldPassword, username);
+    const user = await this.getLoggedInUser();
+    if (user.Username !== 'USER_NOT_FOUND') {
+      const passwordCheck = await this.checkPasswords(oldPassword, user.Username);
       if (passwordCheck !== 'USER_NOT_FOUND') {
         const encrypt = new Encrypt(newPassword);
         encrypt.set();
-        this.socket.emit('updatePassword', {username: username, password: encrypt.encrypted, KeyID: encrypt.num});
+        this.socket.emit('updatePassword', {username: user.Username, password: encrypt.encrypted, KeyID: encrypt.num});
         return true;
       } else {
         // logik wenn altes passwort falsch war
@@ -108,11 +115,11 @@ export class DatabaseService {
   }
 
   async changeEmail(email: string, password: string) {
-    const username = await this.getLoggedInUser();
-    if (username !== 'USER_NOT_FOUND') {
-      const passwordCheck = await this.checkPasswords(password, username);
+    const user = await this.getLoggedInUser();
+    if (user.Username !== 'USER_NOT_FOUND') {
+      const passwordCheck = await this.checkPasswords(password, user.Username);
       if (passwordCheck !== 'USER_NOT_FOUND') {
-        this.socket.emit('updateEmail', {username: username, email: email});
+        this.socket.emit('updateEmail', {username: user.Username, email: email});
         return true;
       } else {
         // logik wenn altes passwort falsch war
