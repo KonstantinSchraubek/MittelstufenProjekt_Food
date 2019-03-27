@@ -6,6 +6,7 @@ import {Socket} from 'ngx-socket-io';
 import {Observable} from 'rxjs';
 import {first} from 'rxjs/operators';
 import {CookieService} from 'ngx-cookie-service';
+import {Rezept} from '../models/rezept';
 
 @Injectable({
   providedIn: 'root'
@@ -136,6 +137,12 @@ export class DatabaseService {
   async getRezepte(ingredients: string) {
     this.socket.emit('getRezepte', {ingredients: ingredients});
     return (await this.onMessage());
+  }
+
+  async addToUserFavorits(rezeptID: string){
+    console.log("favo-called-----------------------");
+    console.log(rezeptID);
+    console.log("-----------------------------------");
   }
 
 }

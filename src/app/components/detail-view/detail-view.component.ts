@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {RecipeServiceService} from '../../services/recipe-service.service';
 import {Rezept} from '../../models/rezept';
+import {DatabaseService} from '../../services/database.service';
 
 @Component({
   selector: 'app-detail-view',
@@ -9,10 +10,16 @@ import {Rezept} from '../../models/rezept';
 })
 export class DetailViewComponent implements OnInit {
 
-  constructor(private recipeService: RecipeServiceService) {
+  constructor(private recipeService: RecipeServiceService, private databaseService: DatabaseService) {
   }
 
   ngOnInit() {
+  }
+
+  addToFav(): void {
+    let id: string = this.selected.uri;
+
+    this.databaseService.addToUserFavorits(id);
   }
 
   get selected(): Rezept {
