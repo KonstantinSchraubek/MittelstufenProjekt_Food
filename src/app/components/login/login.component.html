@@ -1,9 +1,12 @@
 <li class="dropdown" *ngIf="!loginservice.loggedIn">
-  <a href="#" class="nav-link mx-2" data-toggle="dropdown">Log In/Sign Up <span class="caret"></span></a>
+  <a href="#" class="nav-link mx-2" data-toggle="dropdown" (click)="loginservice.loginFailed = false">Log In/Sign Up <span class="caret"></span></a>
   <ul class="dropdown-menu dropdown-lr animated slideInRight" role="menu">
     <div class="col-lg-12">
       <div class="text-center">
         <h3><b>Log In</b></h3>
+      </div>
+      <div *ngIf="loginservice.loginFailed" class="alert alert-danger" role="alert">
+        Password or Username is wrong
       </div>
       <form id="ajax-login-form" action="" method="post" role="form" autocomplete="off">
         <div class="form-group">

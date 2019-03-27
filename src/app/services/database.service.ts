@@ -80,10 +80,12 @@ export class DatabaseService {
 
   async checkPasswords(password: string, username: string) {
     const e = new Encrypt(password);
-    e.check(this.getKeyID(username));
-    if(await this.onMessage() !== "USER_HAS_NO_KEY") {
+    e.check(await this.getKeyID(username));
+    const answer = await this.onMessage()
+    if(answer !== "USER_HAS_NO_KEY") {
     this.socket.emit('checkPasswords', {password: e.encrypted, username: username});
-    return (await this.onMessage());
+    const checkedPassword = await this.onMessage()
+    return checkedPassword;
     }
     else{
       return "USER_NOT_FOUND"
