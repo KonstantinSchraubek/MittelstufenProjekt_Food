@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DatabaseService} from '../../services/database.service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Validation} from '../../models/validation';
 
 @Component({
   selector: 'app-change-email',
@@ -8,23 +10,23 @@ import {DatabaseService} from '../../services/database.service';
 })
 export class ChangeEmailComponent implements OnInit {
 
-  constructor(private datsbaseservice: DatabaseService) {
+  userForm: FormGroup;
+
+  constructor(private datsbaseservice: DatabaseService, private fb: FormBuilder) {
+    this.userForm = fb.group({
+      'email': ['', [Validators.required, Validation.emailValidator]],
+      'email2': ['', [Validators.required, Validation.emailValidator2]]
+    }, {validator: Validation.checkEmails});
   }
 
-  public password: string;
-  public newMail: string;
-  public newConfirmMail: string;
-
-  public error: string;
 
   ngOnInit() {
   }
 
-  async changeEmail() {
+  async changeEmail(newMail: string, newConfirmMail: string, password: string) {
     const user = await this.datsbaseservice.getLoggedInUser();
-    if (this.newMail === this.newConfirmMail && user.Email !== this.newMail) {
-      alert('test ');
-      this.datsbaseservice.changeEmail(this.newMail, this.password);
+    if (newMail === newConfirmMail && user.Email !== newMail) {
+      this.datsbaseservice.changeEmail(newMail, password);
     }
   }
 }

@@ -4,28 +4,27 @@
       Change E-Mail
     </h4>
   </div>
-
+<form [formGroup]="userForm" (submit)="changeEmail(email1.value, email2.value, pw.value)">
   <div class="d-flex flex-column">
     <div class="p-2">
       New E-Mail
-      <input  [(ngModel)]="newMail" class="form-control" type="email" />
+      <input  #email1 formControlName="email" name="email1" class="form-control"  [ngClass]="{'red': (userForm.get('email').hasError('required') || userForm.get('email').hasError('invalidEmailAddress')) && email1.value !== ''}"  />
     </div>
     <div class="p-2">
       Confirm New E-Mail
-      <input  [(ngModel)]="newConfirmMail" class="form-control" type="email" />
+      <input #email2 formControlName="email2"  name="email2" class="form-control" [ngClass]="{'red': (userForm.get('email2').hasError('required') || userForm.hasError('notSame') || userForm.get('email2').hasError('invalidEmailAddress')) && email2.value !== ''}" />
+      <small *ngIf="userForm.hasError('notSame') && email2.value !== ''">Your Emails do not match!</small>
     </div>
 
     <div class="p-2">
       Password:
-      <input [(ngModel)]="password" class="form-control" type="password" />
+      <input #pw class="form-control" type="password" />
     </div>
 
     <div class="p-2">
-      <button (click)="changeEmail()" class="btn btn-info"> Change Password </button>
-    </div>
-
-    <div class="p-2">
-      {{error}}
+      <button type="submit" [disabled]="!userForm.valid" class="btn btn-info"> Change Password </button>
     </div>
   </div>
+</form>
 </div>
+
