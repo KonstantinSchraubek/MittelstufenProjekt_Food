@@ -81,8 +81,13 @@ export class DatabaseService {
   async checkPasswords(password: string, username: string) {
     const e = new Encrypt(password);
     e.check(this.getKeyID(username));
-    this.socket.emit('checkPasswords', {password: password});
+    if(await this.onMessage() !== "USER_HAS_NO_KEY") {
+    this.socket.emit('checkPasswords', {password: e.encrypted, username: username});
     return (await this.onMessage());
+    }
+    else{
+      return "USER_NOT_FOUND"
+    }
   }
 
   // resets the token of a specific user
@@ -93,7 +98,7 @@ export class DatabaseService {
   async changePassword(newPassword: string, oldPassword: string) {
     const user = await this.getLoggedInUser();
     if (user.Username !== 'USER_NOT_FOUND') {
-      const passwordCheck = await this.checkPasswords(oldPassword, user.Nutzeranme);
+      const passwordCheck = await this.checkPasswords(oldPassword, user.Username);
       if (passwordCheck !== 'USER_NOT_FOUND') {
         const encrypt = new Encrypt(newPassword);
         encrypt.set();
