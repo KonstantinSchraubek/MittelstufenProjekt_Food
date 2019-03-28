@@ -17,11 +17,13 @@ export class LoginService {
 
   async checkUser(username: string, passwort: string) {
     const res = await this.databaseservice.authenticateUser(username, passwort);
+    console.log(res)
     if (res !== false) {
       this.createCookie(res);
     }
     else{
       //logik wenn anmelden nicht erfolgreich war
+      alert("Login fehlgeschlagen")
     }
   }
 
