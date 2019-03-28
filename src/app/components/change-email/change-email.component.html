@@ -4,7 +4,7 @@
       Change E-Mail
     </h4>
   </div>
-<form [formGroup]="userForm" (submit)="changeEmail(email1.value, email2.value, pw.value)">
+<form [formGroup]="userForm" (submit)="changeEmail(email1.value, email2.value, pw.value)" *ngIf="!emailChanged">
   <div class="d-flex flex-column">
     <div class="p-2">
       New E-Mail
@@ -26,5 +26,8 @@
     </div>
   </div>
 </form>
+  <div *ngIf="emailChanged">
+    Email changed!
+  </div>
 </div>
 
