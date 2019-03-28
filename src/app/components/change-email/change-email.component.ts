@@ -12,7 +12,7 @@ export class ChangeEmailComponent implements OnInit {
 
   userForm: FormGroup;
 
-  constructor(private datsbaseservice: DatabaseService, private fb: FormBuilder) {
+  constructor(private databaseservice: DatabaseService, private fb: FormBuilder) {
     this.userForm = fb.group({
       'email': ['', [Validators.required, Validation.emailValidator]],
       'email2': ['', [Validators.required, Validation.emailValidator2]]
@@ -24,9 +24,9 @@ export class ChangeEmailComponent implements OnInit {
   }
 
   async changeEmail(newMail: string, newConfirmMail: string, password: string) {
-    const user = await this.datsbaseservice.getLoggedInUser();
+    const user = await this.databaseservice.getLoggedInUser();
     if (newMail === newConfirmMail && user.Email !== newMail) {
-      this.datsbaseservice.changeEmail(newMail, password);
+      this.databaseservice.changeEmail(newMail, password);
     }
   }
 }
