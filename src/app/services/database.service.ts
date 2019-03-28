@@ -6,7 +6,6 @@ import {Socket} from 'ngx-socket-io';
 import {Observable} from 'rxjs';
 import {first} from 'rxjs/operators';
 import {CookieService} from 'ngx-cookie-service';
-import {Rezept} from '../models/rezept';
 
 @Injectable({
   providedIn: 'root'
@@ -66,30 +65,14 @@ export class DatabaseService {
       const encrypt = new Encrypt(password);
       encrypt.check(response);
       this.socket.emit('authenticateUser', {username: username, password: encrypt.encrypted});
-
       const authUserResponse = await this.onMessage();
 
       if (authUserResponse === 'USER_DOES_NOT_EXIST') {
-        return false;
-      } else {
-        // returns the token
-        return authUserResponse;
-      }
-    }
-
-  }
-
-  async checkPasswords(password: string, username: string) {
-    const e = new Encrypt(password);
-    e.check(await this.getKeyID(username));
-    const answer = await this.onMessage()
-    if(answer !== "USER_HAS_NO_KEY") {
-    this.socket.emit('checkPasswords', {password: e.encrypted, username: username});
-    const checkedPassword = await this.onMessage()
-    return checkedPassword;
-    }
-    else{
-      return "USER_NOT_FOUND"
+            return false;
+          } else {
+            // returns the token
+            return authUserResponse;
+          }
     }
   }
 
@@ -101,7 +84,7 @@ export class DatabaseService {
   async changePassword(newPassword: string, oldPassword: string) {
     const user = await this.getLoggedInUser();
     if (user.Username !== 'USER_NOT_FOUND') {
-      const passwordCheck = await this.checkPasswords(oldPassword, user.Username);
+      const passwordCheck = await this.authenticateUser(user.Username, oldPassword);
       if (passwordCheck !== 'USER_NOT_FOUND') {
         const encrypt = new Encrypt(newPassword);
         encrypt.set();
