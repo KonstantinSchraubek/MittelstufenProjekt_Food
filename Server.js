@@ -105,7 +105,7 @@ io.on("connection", socket => {
   });
 
   socket.on("updateEmail", user => {
-    const sql = "UPDATE benutzer SET Email = '" + user.email + "' WHERE Username = '" + user.username + "'";
+    const sql = "UPDATE benutzer SET Email = '" + user.email + "' WHERE   Username = '" + user.username + "'";
     db.run(sql);
   });
 
@@ -122,17 +122,6 @@ io.on("connection", socket => {
       }
     });
   });
-
-  socket.on("checkPasswords", user => {
-    const sql = "SELECT * FROM benutzer WHERE Password = '" + user.password + "' AND Username = '" + user.username + "'";
-    db.all(sql, [], (err, row) => {
-      if (err) throw err;
-      if (row.length == 0) {
-        //if there is no corresponding token return this
-        socket.emit("message", "USER_NOT_FOUND");
-      }
-    });
-  })
 
   socket.on('getRezepte', req => {
     const path = 'http://api.edamam.com';

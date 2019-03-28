@@ -65,28 +65,14 @@ export class DatabaseService {
       const encrypt = new Encrypt(password);
       encrypt.check(response);
       this.socket.emit('authenticateUser', {username: username, password: encrypt.encrypted});
-
       const authUserResponse = await this.onMessage();
 
       if (authUserResponse === 'USER_DOES_NOT_EXIST') {
-        return false;
-      } else {
-        // returns the token
-        return authUserResponse;
-      }
-    }
-
-  }
-
-  async checkPasswords(password: string, username: string) {
-    const e = new Encrypt(password);
-    e.check(this.getKeyID(username));
-    if(await this.onMessage() !== "USER_HAS_NO_KEY") {
-    this.socket.emit('checkPasswords', {password: e.encrypted, username: username});
-    return (await this.onMessage());
-    }
-    else{
-      return "USER_NOT_FOUND"
+            return false;
+          } else {
+            // returns the token
+            return authUserResponse;
+          }
     }
   }
 
@@ -98,7 +84,7 @@ export class DatabaseService {
   async changePassword(newPassword: string, oldPassword: string) {
     const user = await this.getLoggedInUser();
     if (user.Username !== 'USER_NOT_FOUND') {
-      const passwordCheck = await this.checkPasswords(oldPassword, user.Username);
+      const passwordCheck = await this.authenticateUser(user.Username, oldPassword);
       if (passwordCheck !== 'USER_NOT_FOUND') {
         const encrypt = new Encrypt(newPassword);
         encrypt.set();
@@ -117,7 +103,7 @@ export class DatabaseService {
   async changeEmail(email: string, password: string) {
     const user = await this.getLoggedInUser();
     if (user.Username !== 'USER_NOT_FOUND') {
-      const passwordCheck = await this.checkPasswords(password, user.Username);
+        const passwordCheck = await this.authenticateUser(user.Username, password);
       if (passwordCheck !== 'USER_NOT_FOUND') {
         this.socket.emit('updateEmail', {username: user.Username, email: email});
         return true;
@@ -134,6 +120,12 @@ export class DatabaseService {
   async getRezepte(ingredients: string) {
     this.socket.emit('getRezepte', {ingredients: ingredients});
     return (await this.onMessage());
+  }
+
+  async addToUserFavorits(rezeptID: string){
+    console.log("favo-called-----------------------");
+    console.log(rezeptID);
+    console.log("-----------------------------------");
   }
 
 }

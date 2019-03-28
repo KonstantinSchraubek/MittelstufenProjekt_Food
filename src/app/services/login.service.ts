@@ -8,6 +8,7 @@ import { DatabaseService } from './database.service';
 export class LoginService {
 
   public loggedIn = false;
+  public loginFailed = false;
 
   constructor(private cookieservice: CookieService, private databaseservice: DatabaseService) {
     if (this.cookieservice.get('User')) {
@@ -19,9 +20,10 @@ export class LoginService {
     const res = await this.databaseservice.authenticateUser(username, passwort);
     if (res !== false) {
       this.createCookie(res);
+      this.loginFailed = false;
     }
     else{
-      //logik wenn anmelden nicht erfolgreich war
+      this.loginFailed = true;
     }
   }
 
