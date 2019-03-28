@@ -103,7 +103,7 @@ export class DatabaseService {
   async changeEmail(email: string, password: string) {
     const user = await this.getLoggedInUser();
     if (user.Username !== 'USER_NOT_FOUND') {
-      const passwordCheck = await this.checkPasswords(password, user.Username);
+        const passwordCheck = await this.authenticateUser(user.Username, password);
       if (passwordCheck !== 'USER_NOT_FOUND') {
         this.socket.emit('updateEmail', {username: user.Username, email: email});
         return true;
