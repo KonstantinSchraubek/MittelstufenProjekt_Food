@@ -9,6 +9,8 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class ChangePasswordComponent implements OnInit {
 
+  successfulChange: boolean = true;
+
   constructor(private databaseService: DatabaseService) { }
 
   public oldPassword: string;
@@ -20,7 +22,8 @@ export class ChangePasswordComponent implements OnInit {
   ngOnInit() {
   }
 
-  changePassword(): void{
-    this.databaseService.changePassword(this.newPassword, this.oldPassword);
+  async changePassword() {
+    // alert("test")
+    this.successfulChange = await this.databaseService.changePassword(this.newPassword, this.oldPassword);
   }
 }
