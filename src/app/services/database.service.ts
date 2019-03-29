@@ -5,6 +5,7 @@ import {Socket} from 'ngx-socket-io';
 import {Observable} from 'rxjs';
 import {first} from 'rxjs/operators';
 import {CookieService} from 'ngx-cookie-service';
+import {Rezept} from '../models/rezept';
 
 @Injectable({
   providedIn: 'root'
@@ -58,7 +59,6 @@ export class DatabaseService {
   async authenticateUser(username: string, password: string) {
 
     const response = await this.getKeyID(username);
-
     if (response === 'USER_HAS_NO_KEY') {
       return false;
     } else {
@@ -66,7 +66,7 @@ export class DatabaseService {
       encrypt.check(response);
       this.socket.emit('authenticateUser', {username: username, password: encrypt.encrypted});
       const authUserResponse = await this.onMessage();
-      console.log(authUserResponse);
+
       if (authUserResponse === 'USER_DOES_NOT_EXIST') {
             return false;
           } else {
@@ -120,6 +120,12 @@ export class DatabaseService {
   async getRezepte(ingredients: string) {
     this.socket.emit('getRezepte', {ingredients: ingredients});
     return (await this.onMessage());
+  }
+
+  async addToUserFavorits(rezeptID: string){
+    console.log("favo-called-----------------------");
+    console.log(rezeptID);
+    console.log("-----------------------------------");
   }
 
 }

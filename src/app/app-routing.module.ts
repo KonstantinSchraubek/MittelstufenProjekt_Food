@@ -6,6 +6,7 @@ import {RegistrierungComponent} from './components/registrierung/registrierung.c
 import {DetailViewComponent} from './components/detail-view/detail-view.component';
 import {UsermenueComponent} from './components/usermenue/usermenue.component';
 import { SuccessfulRegistrationComponent } from './components/successful-registration/successful-registration.component';
+import {ContactComponent} from './components/contact/contact.component';
 
 const routes: Routes = [
   { path: 'registration', component: RegistrierungComponent },
@@ -14,7 +15,8 @@ const routes: Routes = [
   {path: 'details', component: DetailViewComponent},
   { path: 'home',      component: StartseiteComponent },
   {path: 'userSettings', component: UsermenueComponent},
-  {path: 'successfulRegistration', component: SuccessfulRegistrationComponent}
+  {path: 'successfulRegistration', component: SuccessfulRegistrationComponent},
+  {path: 'contact', component: ContactComponent}
 ];
 
 @NgModule({
