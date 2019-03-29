@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
 import { FormBuilder, Validators, FormGroup, } from '@angular/forms';
 import { Validation } from '../../models/validation';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-registrierung',
@@ -11,19 +12,37 @@ import { Validation } from '../../models/validation';
 export class RegistrierungComponent implements OnInit {
 
   userForm: FormGroup;
+  usernameTaken: boolean;
+  emailTaken: boolean;
 
-  constructor(private databaseService: DatabaseService, private fb: FormBuilder) {
+  constructor(private router: Router, private databaseService: DatabaseService, private fb: FormBuilder) {
     this.userForm = fb.group({
       'email': ['', [Validators.required, Validation.emailValidator]],
-      'username': ['', Validators.required],
+      'username': ['', [Validators.required, Validation.usernameValidator]],
       'password': ['', [Validators.required, Validation.passwordValidator]],
       'confirmedPassword': ['', [Validators.required, Validation.passwordValidator]]
     }, { validator: Validation.checkPasswords });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.emailTaken = false;
+    this.usernameTaken = false;
+  }
 
-  public addUser(email: string, password: string, username: string) {
-    this.databaseService.addUser(email, password, username, this.userForm);
+  public onKeydown(event) {
+    this.usernameTaken = false;
+  }
+
+  public async addUser(email: string, password: string, username: string) {
+    const response = await this.databaseService.addUser(email, password, username, this.userForm);
+    if(response == true) {
+      this.router.navigateByUrl('/successfulRegistration');
+    }
+    else if (response == "USERNAME_TAKEN"){
+      this.usernameTaken = true;
+    }
+    else{
+      this.emailTaken = true;
+    }
   }
 }

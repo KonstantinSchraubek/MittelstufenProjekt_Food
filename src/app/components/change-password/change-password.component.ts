@@ -23,7 +23,7 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   async changePassword() {
-    // alert("test")
     this.successfulChange = await this.databaseService.changePassword(this.newPassword, this.oldPassword);
+    alert(this.successfulChange)
   }
 }

@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {Encrypt} from '../models/encrypt';
-import {Router} from '@angular/router';
 import {FormGroup} from '@angular/forms';
 import {Socket} from 'ngx-socket-io';
 import {Observable} from 'rxjs';
@@ -12,7 +11,7 @@ import {CookieService} from 'ngx-cookie-service';
 })
 export class DatabaseService {
 
-  constructor(private router: Router, private socket: Socket, private cookieService: CookieService) {
+  constructor(private socket: Socket, private cookieService: CookieService) {
   }
 
   async getToken() {
@@ -29,11 +28,11 @@ export class DatabaseService {
     const response = await this.onMessage();
 
     if (response === 'USERNAME_TAKEN') {
-      alert(response);
+      return response;
     } else if (response === 'EMAIL_TAKEN') {
-      alert(response);
+      return response;
     } else {
-      this.router.navigateByUrl('/successfulRegistration');
+      return true;
     }
   }
 
@@ -104,7 +103,7 @@ export class DatabaseService {
   async changeEmail(email: string, password: string) {
     const user = await this.getLoggedInUser();
     if (user.Username !== 'USER_NOT_FOUND') {
-      const passwordCheck = await this.checkPasswords(password, user.Username);
+      const passwordCheck = await this.authenticateUser(user.Username, password);
       if (passwordCheck !== 'USER_NOT_FOUND') {
         this.socket.emit('updateEmail', {username: user.Username, email: email});
         return true;

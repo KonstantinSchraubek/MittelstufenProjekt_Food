@@ -17,6 +17,13 @@ form {
     box-sizing: border-box
 }
 
+button:disabled,
+button[disabled]{
+    background-color: lightgray;
+    color: gray;
+    border-color: lightgray;
+}
+
 div#envelope{
 width: 55%;
 margin: 10px 30% 10px 25%;

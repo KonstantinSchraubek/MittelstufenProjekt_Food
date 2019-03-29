@@ -13,7 +13,7 @@ export class Validation {
     }
 
     static usernameValidator(control) {
-        if (control.value.match(/[^A-Za-z0-9]{6,30}$/)) {
+        if (control.value.match(/^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/)) {
             return null;
         }
         else {
