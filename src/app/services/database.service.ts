@@ -85,7 +85,7 @@ export class DatabaseService {
     const user = await this.getLoggedInUser();
     if (user.Username !== 'USER_NOT_FOUND') {
       const passwordCheck = await this.authenticateUser(user.Username, oldPassword);
-      if (passwordCheck !== 'USER_NOT_FOUND') {
+      if (passwordCheck !== false) {
         const encrypt = new Encrypt(newPassword);
         encrypt.set();
         this.socket.emit('updatePassword', {username: user.Username, password: encrypt.encrypted, KeyID: encrypt.num});

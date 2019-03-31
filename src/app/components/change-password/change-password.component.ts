@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from 'src/app/services/database.service';
-import { CookieService } from 'ngx-cookie-service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Validation} from '../../models/validation';
+import swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-change-password',
@@ -9,21 +12,33 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class ChangePasswordComponent implements OnInit {
 
-  successfulChange: boolean = true;
+  passwordForm: FormGroup;
 
-  constructor(private databaseService: DatabaseService) { }
-
-  public oldPassword: string;
-  public newPassword: string;
-  public repeatNewPassword: string;
-
-  public error: string;
+  constructor(private router: Router, private databaseService: DatabaseService, private fb: FormBuilder) {}
 
   ngOnInit() {
+    this.passwordForm = this.fb.group({
+      'password': ['', [Validators.required, Validation.passwordValidator]],
+      'confirmedPassword': ['', Validators.required],
+      'oldPassword': ['', Validators.required]
+    }, { validator: Validation.checkPasswords });
   }
 
-  async changePassword() {
-    this.successfulChange = await this.databaseService.changePassword(this.newPassword, this.oldPassword);
-    alert(this.successfulChange)
+  async changePassword(newPassword: string, oldPassword: string) {
+    const successfulChange = await this.databaseService.changePassword(newPassword, oldPassword);
+    if (successfulChange) {
+      swal.fire(
+        'Password was changed!',
+        'Continue by clicking the button below.',
+        'success'
+      );
+      this.passwordForm.reset({password: '', confirmedPassword: '', oldPassword: ''});
+    } else {
+      swal.fire({
+        type: 'error',
+        title: 'Your old Password was incorrect!',
+        text: 'Please try again.',
+      });
+    }
   }
 }
