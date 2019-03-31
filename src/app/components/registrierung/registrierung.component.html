@@ -1,7 +1,9 @@
 <body>
 <div class="container">
   <form [formGroup]="userForm" (submit)="addUser(email.value, pw1.value, username.value)">
+    <div class="row-1">
     <h3>Register</h3>
+  </div>
     <div class="form-group row-1">
       <label for="email">E-Mail</label>
       <input #email formControlName="email" placeholder="example@mail.com" class="form-control" type="email"

@@ -104,9 +104,15 @@ export class DatabaseService {
     const user = await this.getLoggedInUser();
     if (user.Username !== 'USER_NOT_FOUND') {
       const passwordCheck = await this.authenticateUser(user.Username, password);
-      if (passwordCheck !== 'USER_NOT_FOUND') {
+      if (passwordCheck) {
         this.socket.emit('updateEmail', {username: user.Username, email: email});
-        return true;
+        const response = await this.onMessage();
+        if(response === "EMAIL_ALREADY_TAKEN") {
+          return false;
+        }
+        else{
+          return true;
+        }
       } else {
         // logik wenn altes passwort falsch war
         return false;
@@ -122,10 +128,22 @@ export class DatabaseService {
     return (await this.onMessage());
   }
 
+  async checkFavorite(recipeID: string): Promise<string>{
+    recipeID = recipeID.substr(51);
+    this.socket.emit('checkFavorite', {token: await this.getToken(), ID: recipeID})
+    return await this.onMessage();
+  } 
+
   async addToUserFavorits(rezeptID: string){
-    console.log("favo-called-----------------------");
-    console.log(rezeptID);
-    console.log("-----------------------------------");
+    rezeptID = rezeptID.substr(51);
+    this.socket.emit('addFavorite', {token: await this.getToken() ,ID: rezeptID})
+    console.log(await this.onMessage())
+  }
+
+  async removeFromUserFavorites(rezeptID: string) {
+    rezeptID = rezeptID.substr(51);
+    this.socket.emit('removeFavorite', {token: await this.getToken() ,ID: rezeptID})
+    console.log(await this.onMessage())
   }
 
 }

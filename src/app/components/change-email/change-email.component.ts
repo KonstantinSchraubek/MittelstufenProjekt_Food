@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {DatabaseService} from '../../services/database.service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Validation} from '../../models/validation';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-change-email',
@@ -8,21 +11,40 @@ import {DatabaseService} from '../../services/database.service';
 })
 export class ChangeEmailComponent implements OnInit {
 
-  constructor(private datsbaseservice: DatabaseService) {
+  emailForm: FormGroup;
+  emailChanged: boolean = false;
+
+  constructor(private databaseservice: DatabaseService, private fb: FormBuilder) {
+
   }
-
-  public password: string;
-  public newMail: string;
-  public newConfirmMail: string;
-
-  public error: string;
 
   ngOnInit() {
+    this.emailForm = this.fb.group({
+      'email': ['', [Validators.required, Validation.emailValidator]],
+      'confirmedEmail': ['', Validators.required],
+      'password': ['', Validators.required]
+    }, {validator: Validation.checkEmails});
   }
 
-  changeEmail(): void {
-    if (this.newMail === this.newConfirmMail) {
-      this.datsbaseservice.changeEmail(this.newMail, this.password);
+  async changeEmail(newMail: string, newConfirmMail: string, password: string) {
+    const user = await this.databaseservice.getLoggedInUser();
+    if (newMail === newConfirmMail && user.Email !== newMail) {
+      const res = await this.databaseservice.changeEmail(newMail, password);
+      if (res) {
+        swal.fire(
+          'Email was changed!',
+          'Continue by clicking the button below.',
+          'success'
+        );
+        this.emailForm.reset({password: '', confirmedEmail: '', email: ''});
+      }
+      else{
+        swal.fire({
+          type: 'error',
+          title: 'Your old Password was incorrect!',
+          text: 'Please try again.',
+        });
+      }
     }
   }
 }
