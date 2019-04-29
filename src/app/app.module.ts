@@ -18,10 +18,10 @@ import { ChangeEmailComponent } from './components/change-email/change-email.com
 import {APP_BASE_HREF} from '@angular/common';
 import { LoginComponent } from './components/login/login.component';
 import { CookieService } from 'ngx-cookie-service';
-import { SuccessfulRegistrationComponent } from './components/successful-registration/successful-registration.component';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { ContactComponent } from './components/contact/contact.component';
 import { ShowHidePasswordModule } from 'ngx-show-hide-password';
+import { FavoritesComponent } from './components/favorites/favorites.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
@@ -38,10 +38,10 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     UsermenueComponent,
     ChangePasswordComponent,
     ChangeEmailComponent,
-    SuccessfulRegistrationComponent,
     ChangeEmailComponent,
     LoginComponent,
-    ContactComponent
+    ContactComponent,
+    FavoritesComponent
   ],
   imports: [
     BrowserModule,
