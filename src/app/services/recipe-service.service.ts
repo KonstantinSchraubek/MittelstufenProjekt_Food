@@ -47,10 +47,8 @@ export class RecipeServiceService {
         checkedDiets.push(diet);
       }
     });
-
-    console.log(this._recipes);
-    checkedDiets.forEach(function (diet) {
-      console.log(this._recipes);
+    
+    checkedDiets.forEach(function (diet) {;
       this._recipes.forEach(function (recipe) {
         if (recipe.dietLabels === diet.name) {
           filterdRecipes.push(recipe);
