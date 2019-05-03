@@ -33,6 +33,7 @@ export class DietFilterComponent implements OnInit {
   }
 
   filter() {
+    console.log("test")
     this.service.addDiet(this._dietArray);
   }
 }

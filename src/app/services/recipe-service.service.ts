@@ -3,6 +3,7 @@ import {Rezept} from '../models/rezept';
 import {DatabaseService} from './database.service';
 import {Http} from '@angular/http';
 import {DietFilter} from '../models/dietfilter';
+import {forEach} from '@angular/router/src/utils/collection';
 
 @Injectable({
   providedIn: 'root'
@@ -37,9 +38,28 @@ export class RecipeServiceService {
     });
   }
 
-  public addDiet(diet: DietFilter[]) {
+  public addDiet(diets: DietFilter[]) {
 
+    const checkedDiets: DietFilter[] = [];
+    const filterdRecipes: Rezept[] = [];
+    diets.forEach(function (diet) {
+      if (diet.checked) {
+        checkedDiets.push(diet);
+      }
+    });
+
+    console.log(this._recipes);
+    checkedDiets.forEach(function (diet) {
+      console.log(this._recipes);
+      this._recipes.forEach(function (recipe) {
+        if (recipe.dietLabels === diet.name) {
+          filterdRecipes.push(recipe);
+        }
+      });
+    });
+    this._recipes = filterdRecipes;
   }
+
 
   changeSelected(nowSelected: Rezept): void {
     this.selected = nowSelected;
