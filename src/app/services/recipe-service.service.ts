@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Rezept } from '../models/rezept';
-import { DatabaseService } from './database.service';
-import { Http } from '@angular/http';
+import {Injectable} from '@angular/core';
+import {Rezept} from '../models/rezept';
+import {DatabaseService} from './database.service';
+import {Http} from '@angular/http';
+import {forEach} from '@angular/router/src/utils/collection';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +11,14 @@ export class RecipeServiceService {
   get recipes(): Rezept[] {
     return this._recipes;
   }
+
   constructor(private http: Http, private databaseService: DatabaseService) {
   }
+
   private _recipes: Rezept[] = [];
 
   public selected: Rezept;
+
   async addRecipes(ingredients?: string) {
     // codezeilen um über die API zu arbeiten -> API ID und KEY müssen eventuell in Server.js gesetzt werden
     // const rezepte = await this.databaseService.getRezepte(ingredients)
@@ -27,6 +31,7 @@ export class RecipeServiceService {
     res.subscribe(data => {
       const a = JSON.parse(data.text());
       a['hits'].forEach(function (recipes) {
+
         this._recipes.push(new Rezept(recipes));
       }, this);
     });
@@ -34,8 +39,6 @@ export class RecipeServiceService {
 
   changeSelected(nowSelected: Rezept): void {
     this.selected = nowSelected;
-    //alert(this.selected.url.toString());
-    //alert(this.selected.label.toString());
-    this.databaseService.addToHistory(this.selected.url.toString(), this.selected.label.toString(), this.selected.image.toString());
+    this.databaseService.addToHistory(this.selected.url, this.selected.label, this.selected.image)
   }
 }

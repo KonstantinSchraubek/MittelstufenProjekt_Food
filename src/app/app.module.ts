@@ -22,6 +22,7 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { ContactComponent } from './components/contact/contact.component';
 import { ShowHidePasswordModule } from 'ngx-show-hide-password';
 import { FavoritesComponent } from './components/favorites/favorites.component';
+import { HistoryComponent } from './components/history/history.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
@@ -41,7 +42,8 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     ChangeEmailComponent,
     LoginComponent,
     ContactComponent,
-    FavoritesComponent
+    FavoritesComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,
