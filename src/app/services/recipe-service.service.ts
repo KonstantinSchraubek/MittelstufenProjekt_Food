@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Rezept} from '../models/rezept';
 import {DatabaseService} from './database.service';
 import {Http} from '@angular/http';
+import {DietFilter} from '../models/dietfilter';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class RecipeServiceService {
 
   public selected: Rezept;
 
-  async addRecipes(ingredients?: string, diet?: Diet) {
+  async addRecipes(ingredients?: string) {
     // codezeilen um über die API zu arbeiten -> API ID und KEY müssen eventuell in Server.js gesetzt werden
     // const rezepte = await this.databaseService.getRezepte(ingredients)
     // rezepte['hits'].forEach(function (recipes) {
@@ -34,6 +35,10 @@ export class RecipeServiceService {
         this._recipes.push(new Rezept(recipes));
       }, this);
     });
+  }
+
+  public addDiet(diet: DietFilter[]) {
+
   }
 
   changeSelected(nowSelected: Rezept): void {

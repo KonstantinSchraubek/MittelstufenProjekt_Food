@@ -22,6 +22,7 @@ import { SuccessfulRegistrationComponent } from './components/successful-registr
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { ContactComponent } from './components/contact/contact.component';
 import { ShowHidePasswordModule } from 'ngx-show-hide-password';
+import { DietFilterComponent } from './components/diet-filter/diet-filter.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
@@ -41,7 +42,8 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     SuccessfulRegistrationComponent,
     ChangeEmailComponent,
     LoginComponent,
-    ContactComponent
+    ContactComponent,
+    DietFilterComponent
   ],
   imports: [
     BrowserModule,

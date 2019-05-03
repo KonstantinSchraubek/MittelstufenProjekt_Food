@@ -1,0 +1,26 @@
+<!--<label>highfiber:-->
+  <!--<input type="checkbox" [(ngModel)]="highfiber">-->
+<!--</label><br/>-->
+<!--<label>balanced:-->
+  <!--<input type="checkbox" [(ngModel)]="balanced">-->
+<!--</label><br/>-->
+<!--<label>highprotein:-->
+  <!--<input type="checkbox" [(ngModel)]="highprotein">-->
+<!--</label><br/>-->
+<!--<label>lowfat:-->
+  <!--<input type="checkbox" [(ngModel)]="lowfat">-->
+<!--</label><br/>-->
+<!--<label>lowcarb:-->
+  <!--<input type="checkbox" [(ngModel)]="lowcarb">-->
+<!--</label><br/>-->
+<!--<label>lowsodium:-->
+  <!--<input type="checkbox" [(ngModel)]="lowsodium">-->
+<!--</label><br/>-->
+
+<label  *ngFor="let item of _dietArray">
+  {{item.name}} <input type="checkbox"[(ngModel)]="item.checked" >
+</label>
+
+<button (click)="filter()" class="btn btn-primary" type="submit">
+  <i class="fas fa-search"></i>
+</button>

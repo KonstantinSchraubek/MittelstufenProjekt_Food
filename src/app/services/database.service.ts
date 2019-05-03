@@ -68,11 +68,11 @@ export class DatabaseService {
       const authUserResponse = await this.onMessage();
 
       if (authUserResponse === 'USER_DOES_NOT_EXIST') {
-            return false;
-          } else {
-            // returns the token
-            return authUserResponse;
-          }
+        return false;
+      } else {
+        // returns the token
+        return authUserResponse;
+      }
     }
   }
 
@@ -107,10 +107,9 @@ export class DatabaseService {
       if (passwordCheck) {
         this.socket.emit('updateEmail', {username: user.Username, email: email});
         const response = await this.onMessage();
-        if(response === "EMAIL_ALREADY_TAKEN") {
+        if (response === 'EMAIL_ALREADY_TAKEN') {
           return false;
-        }
-        else{
+        } else {
           return true;
         }
       } else {
@@ -128,22 +127,22 @@ export class DatabaseService {
     return (await this.onMessage());
   }
 
-  async checkFavorite(recipeID: string): Promise<string>{
+  async checkFavorite(recipeID: string): Promise<string> {
     recipeID = recipeID.substr(51);
-    this.socket.emit('checkFavorite', {token: await this.getToken(), ID: recipeID})
+    this.socket.emit('checkFavorite', {token: await this.getToken(), ID: recipeID});
     return await this.onMessage();
-  } 
+  }
 
-  async addToUserFavorits(rezeptID: string){
+  async addToUserFavorits(rezeptID: string) {
     rezeptID = rezeptID.substr(51);
-    this.socket.emit('addFavorite', {token: await this.getToken() ,ID: rezeptID})
-    console.log(await this.onMessage())
+    this.socket.emit('addFavorite', {token: await this.getToken(), ID: rezeptID});
+    console.log(await this.onMessage());
   }
 
   async removeFromUserFavorites(rezeptID: string) {
     rezeptID = rezeptID.substr(51);
-    this.socket.emit('removeFavorite', {token: await this.getToken() ,ID: rezeptID})
-    console.log(await this.onMessage())
+    this.socket.emit('removeFavorite', {token: await this.getToken(), ID: rezeptID});
+    console.log(await this.onMessage());
   }
 
 }
