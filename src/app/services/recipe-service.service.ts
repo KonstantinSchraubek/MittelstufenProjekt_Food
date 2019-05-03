@@ -42,15 +42,18 @@ export class RecipeServiceService {
 
     const checkedDiets: DietFilter[] = [];
     const filterdRecipes: Rezept[] = [];
+    const tempdiets: Rezept[] = this._recipes;
     diets.forEach(function (diet) {
       if (diet.checked) {
         checkedDiets.push(diet);
       }
     });
-    
-    checkedDiets.forEach(function (diet) {;
-      this._recipes.forEach(function (recipe) {
-        if (recipe.dietLabels === diet.name) {
+
+    checkedDiets.forEach(function (diet) {
+      tempdiets.forEach(function (recipe) {
+        console.log(diet.name)
+        console.log(recipe.dietLabels[0])
+        if (recipe.dietLabels[0] === diet.name) {
           filterdRecipes.push(recipe);
         }
       });
