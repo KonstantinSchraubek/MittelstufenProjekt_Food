@@ -22,7 +22,7 @@ export class FavoritesComponent implements OnInit {
     const response = this.databaseService.getFavorites();
     response.then((val) => {
       val.forEach(element => {
-        console.log(element)
+        console.log(element);
       });
 
     });

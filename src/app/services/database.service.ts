@@ -145,6 +145,17 @@ export class DatabaseService {
     return await this.onMessage();
   }
 
+  async getHistory() {
+    this.socket.emit('getHistory', {token: await this.getToken()})
+    console.log(await this.onMessage());
+    return await this.onMessage();
+  }
+
+  async addToHistory(recipeUrl: string, recipeLabel: string, recipePicture: string) {
+    this.socket.emit('addToHistory', {token: await this.getToken(), RecipeURL: recipeUrl, RecipeLabel: recipeLabel, RecipePicture: recipePicture});
+    return await this.onMessage();
+  }
+
   async removeAccount() {
     this.socket.emit('removeAccount', {token: await this.getToken()});
   }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
+import {DatabaseService} from '../../services/database.service';
+import {forEach} from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-startseite',
@@ -7,7 +9,7 @@ import {Router} from '@angular/router';
   styleUrls: ['./startseite.component.css']
 })
 export class StartseiteComponent implements OnInit {
-  constructor(private r: Router) { }
+  constructor(private r: Router, private databaseServive: DatabaseService) { }
 
   ngOnInit() {
   }

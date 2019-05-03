@@ -10,7 +10,7 @@ import {DatabaseService} from '../../services/database.service';
 })
 export class DetailViewComponent implements OnInit {
 
-  favorite: boolean  = false;
+  favorite = false;
 
   constructor(private recipeService: RecipeServiceService, private databaseService: DatabaseService) {
   }
@@ -18,14 +18,14 @@ export class DetailViewComponent implements OnInit {
   ngOnInit() {
     const response = this.databaseService.checkFavorite(this.selected.uri);
     response.then((val) => {
-    if(val == "ALREADY_FAVORITE") {
+    if (val === 'ALREADY_FAVORITE') {
         this.favorite = true;
-    }  
-    })
+    }
+    });
   }
 
   addToFav(): void {
-    let id: string = this.selected.uri;
+    const id: string = this.selected.uri;
 
     this.databaseService.addToUserFavorits(id);
 
@@ -33,7 +33,7 @@ export class DetailViewComponent implements OnInit {
   }
 
   removeFromFav(): void {
-    let id = this.selected.uri;
+    const id = this.selected.uri;
 
     this.databaseService.removeFromUserFavorites(id);
 
@@ -45,7 +45,7 @@ export class DetailViewComponent implements OnInit {
   }
 
   get ingridients1(): string[] {
-    let test: string[] = [];
+    const test: string[] = [];
     for (let i = 0; i < this.selected.ingredientLines.length / 2; i++) {
       test.push(this.selected.ingredientLines[i]);
     }
@@ -53,7 +53,7 @@ export class DetailViewComponent implements OnInit {
   }
 
   get ingridients2(): string[] {
-    let test: string[] = [];
+    const test: string[] = [];
     for (let i = this.selected.ingredientLines.length / 2; i < this.selected.ingredientLines.length; i++) {
       test.push(this.selected.ingredientLines[i]);
     }
