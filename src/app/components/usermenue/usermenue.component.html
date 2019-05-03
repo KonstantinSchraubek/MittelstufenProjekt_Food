@@ -10,7 +10,7 @@
     <li><a (click)="showEmailChange = true; showPasswordChange = false;">Change Email</a></li>
     <li style="float:right"><a (click)="removeAccount()">Delete Account</a></li>
     <li style="float:right"><a (click)="listFavorites()">Favorites</a></li>
-<!--    <li style="float:right"><a (click)="listHistory()">History</a></li>-->
+    <li style="float:right"><a (click)="showHistory = true">History</a></li>
   </ul>
 
 
@@ -28,6 +28,6 @@
   <div class="d-flex justify-content-around pt-4">
     <app-change-email *ngIf="showEmailChange"></app-change-email>
     <app-change-password *ngIf="showPasswordChange"></app-change-password>
-    <app-change-email></app-change-email>
+    <app-history *ngIf="showHistory"></app-history>
   </div>
 </div>

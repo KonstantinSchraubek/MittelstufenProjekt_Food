@@ -15,6 +15,7 @@ export class UsermenueComponent implements OnInit {
 
   showPasswordChange: boolean = false;
   showEmailChange: boolean = false;
+  showHistory: boolean = false;
 
   constructor(private router: Router,private loginservice: LoginService, private databaseservice: DatabaseService) {
   }
