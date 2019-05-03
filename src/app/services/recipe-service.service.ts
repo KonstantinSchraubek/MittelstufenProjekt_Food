@@ -17,6 +17,7 @@ export class RecipeServiceService {
   }
 
   private _recipes: Rezept[] = [];
+  private allrecipes: Rezept[] = [];
 
   public selected: Rezept;
 
@@ -32,33 +33,37 @@ export class RecipeServiceService {
     res.subscribe(data => {
       const a = JSON.parse(data.text());
       a['hits'].forEach(function (recipes) {
-
-        this._recipes.push(new Rezept(recipes));
+        this.allrecipes.push(new Rezept(recipes));
       }, this);
     });
+    this._recipes = this.allrecipes;
   }
 
   public addDiet(diets: DietFilter[]) {
 
     const checkedDiets: DietFilter[] = [];
     const filterdRecipes: Rezept[] = [];
-    const tempdiets: Rezept[] = this._recipes;
+    const tempdiets: Rezept[] = this.allrecipes;
     diets.forEach(function (diet) {
       if (diet.checked) {
         checkedDiets.push(diet);
       }
     });
-
-    checkedDiets.forEach(function (diet) {
-      tempdiets.forEach(function (recipe) {
-        console.log(diet.name)
-        console.log(recipe.dietLabels[0])
-        if (recipe.dietLabels[0] === diet.name) {
-          filterdRecipes.push(recipe);
-        }
+    if (checkedDiets.length > 0) {
+      checkedDiets.forEach(function (diet) {
+        tempdiets.forEach(function (recipe) {
+          recipe.dietLabels.forEach(function (dietlabel) {
+            if (dietlabel === diet.name) {
+              filterdRecipes.push(recipe); //filter this with map distinct
+            }
+          });
+        });
       });
-    });
-    this._recipes = filterdRecipes;
+      this._recipes = filterdRecipes;
+    } else {
+      this._recipes = this.allrecipes;
+    }
+
   }
 
 
