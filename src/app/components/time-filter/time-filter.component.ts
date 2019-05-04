@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {RecipeServiceService} from '../../services/recipe-service.service';
 
 @Component({
   selector: 'app-time-filter',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TimeFilterComponent implements OnInit {
 
-  constructor() { }
+  constructor(public service: RecipeServiceService) {
+  }
 
   ngOnInit() {
   }
 
+  filter(time: number) {
+    this.service.setTime(time);
+  }
 }

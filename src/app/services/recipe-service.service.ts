@@ -20,6 +20,7 @@ export class RecipeServiceService {
   private allrecipes: Rezept[] = [];
   private _calorierange = 5000;
   private _diets: DietFilter[] = [];
+  private _time: number;
   public selected: Rezept;
 
 
@@ -27,6 +28,9 @@ export class RecipeServiceService {
     this._calorierange = range;
   }
 
+  setTime(time: number) {
+    this._time = time;
+  }
 
   setDiets(diets: DietFilter[]) {
     this._diets = diets;
@@ -54,7 +58,7 @@ export class RecipeServiceService {
     const map = new Map();
     const checkedDiets: DietFilter[] = [];
     const filterdRecipes: Rezept[] = [];
-    const tempdiets: Rezept[] = this._recipes;
+    const temprecipes: Rezept[] = this._recipes;
     this._diets.forEach(function (diet) {
       if (diet.checked) {
         checkedDiets.push(diet);
@@ -62,7 +66,7 @@ export class RecipeServiceService {
     });
     if (checkedDiets.length > 0) {
       checkedDiets.forEach(function (diet) {
-        tempdiets.forEach(function (recipe) {
+        temprecipes.forEach(function (recipe) {
           recipe.dietLabels.forEach(function (dietlabel) {
             if (dietlabel === diet.name) {
               if (!map.has(recipe.url)) {
@@ -72,6 +76,20 @@ export class RecipeServiceService {
             }
           });
         });
+      });
+      this._recipes = filterdRecipes;
+    }
+  }
+
+  private TimeFilter() {
+    const temprecipes: Rezept[] = this._recipes;
+    const filterdRecipes: Rezept[] = [];
+    const time = this._time;
+    if (this._time != null) {
+      temprecipes.forEach(function (recipe) {
+        if (recipe.totalTime <= time) {
+          filterdRecipes.push(recipe);
+        }
       });
       this._recipes = filterdRecipes;
     }
@@ -94,6 +112,7 @@ export class RecipeServiceService {
       this._recipes = tempfilterdRecipes;
     }
     this.addDiet();
+    this.TimeFilter();
   }
 
   changeSelected(nowSelected: Rezept): void {
