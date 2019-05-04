@@ -1,6 +1,6 @@
 <div>
-  <ul *ngFor="let Recipe of service.recipes">
-      <div class="card w-400 recipe-card">
+  <ul *ngFor="let Recipe of service.recipes" class="list-group-horizontal">
+    <li class="list-group-item" class="card w-400 recipe-card" style="width: 50%; float: left;">
         <div class="card-header">{{Recipe.label}}</div>
         <a [routerLink]="['/details']" (click)="service.changeSelected(Recipe)">
         <img class="card-img-top recipe-img" src="{{Recipe.image}}" alt="Recipe image">
@@ -11,6 +11,6 @@
           </div>
         </div>
         <div class="card-footer">Time: {{(Recipe.totalTime / 60).toFixed(0) + 'h ' + Recipe.totalTime % 60 + 'min'}}</div>
-      </div>
+    </li>
   </ul>
 </div>
