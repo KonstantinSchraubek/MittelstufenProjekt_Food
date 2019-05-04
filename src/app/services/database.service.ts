@@ -147,7 +147,6 @@ export class DatabaseService {
 
   async getHistory() {
     this.socket.emit('getHistory', {token: await this.getToken()})
-    console.log(await this.onMessage());
     return await this.onMessage();
   }
 

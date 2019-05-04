@@ -1,3 +1,9 @@
-<p>
-  history works!
-</p>
+<h1>History</h1>
+<ul class="list-group list-group-horizontal">
+  <li *ngFor="let recipe of history" class="list-group-item">
+    <div class="recipeContainer" (click)="forwardTo(recipe)" >
+    <p>{{recipe.recipeLabel}}</p>
+    <img style="size:10px" src="{{recipe.recipeImage}}">
+    </div>
+  </li>
+</ul>

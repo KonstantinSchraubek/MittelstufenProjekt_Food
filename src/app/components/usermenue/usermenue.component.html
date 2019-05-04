@@ -6,8 +6,8 @@
     </h2>
   </div>
   <ul>
-    <li><a (click)="showPasswordChange = true; showEmailChange = false;">Change Password</a></li>
-    <li><a (click)="showEmailChange = true; showPasswordChange = false;">Change Email</a></li>
+    <li><a (click)="showPasswordChange = !showPasswordChange; showEmailChange = false;">Change Password</a></li>
+    <li><a (click)="showEmailChange = !showEmailChange; showPasswordChange = false;">Change Email</a></li>
     <li style="float:right"><a (click)="removeAccount()">Delete Account</a></li>
     <li style="float:right"><a (click)="listFavorites()">Favorites</a></li>
     <li style="float:right"><a (click)="showHistory = true">History</a></li>
