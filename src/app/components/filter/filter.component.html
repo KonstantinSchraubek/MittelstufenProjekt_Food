@@ -1,9 +1,10 @@
 <div class="filer-container">
   <h3 style="text-align: center;">Filter</h3>
+  <app-ingredients-filter></app-ingredients-filter>
   <app-time-filter></app-time-filter>
   <app-calories-filter></app-calories-filter>
   <app-diet-filter></app-diet-filter>
-  <button (click)="filter()" class="btn btn-primary" type="submit">
+  <button style="width: 100%" (click)="filter()" class="btn btn-primary" type="submit">
     <i class="fas fa-search"></i>
   </button>
 </div>

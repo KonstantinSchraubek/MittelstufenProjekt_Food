@@ -1,0 +1,5 @@
+.button{
+  overflow: hidden;
+  width: 40%;
+  text-overflow: ellipsis;
+}

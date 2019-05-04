@@ -1,3 +1,10 @@
-<p>
-  ingredients-filter works!
-</p>
+<div>
+  <label><b>Ingredients-Filter</b></label>
+
+  <input #inputElement type="text" (keyup)="SetValue(inputElement.value)" (keydown)="onKeydown($event)" placeholder="Tomatoes, potatoes, cheese...">
+  <button (click)="Add(inputElement.value)"  type="submit">Add</button>
+
+  <div style="padding-top: 5px" *ngFor="let item of _excludeIngredients">
+    <button class="button" (click)="Deleted(item)">{{item}}</button>
+  </div>
+</div> <br/>
