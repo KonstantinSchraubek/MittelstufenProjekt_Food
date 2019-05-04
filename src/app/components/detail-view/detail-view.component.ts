@@ -16,7 +16,7 @@ export class DetailViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    const response = this.databaseService.checkFavorite(this.selected.uri);
+    const response = this.databaseService.checkFavorite(this.selected.label);
     response.then((val) => {
     if (val === 'ALREADY_FAVORITE') {
         this.favorite = true;
@@ -25,17 +25,13 @@ export class DetailViewComponent implements OnInit {
   }
 
   addToFav(): void {
-    const id: string = this.selected.uri;
-
-    this.databaseService.addToUserFavorits(id);
+    this.databaseService.addToUserFavorits(this.selected.label, this.selected.url, this.selected.image);
 
     this.favorite = true;
   }
 
   removeFromFav(): void {
-    const id = this.selected.uri;
-
-    this.databaseService.removeFromUserFavorites(id);
+    this.databaseService.removeFromUserFavorites(this.selected.label);
 
     this.favorite = false;
   }

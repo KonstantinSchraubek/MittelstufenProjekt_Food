@@ -116,9 +116,8 @@ export class DatabaseService {
     return (await this.onMessage());
   }
 
-  async checkFavorite(recipeID: string): Promise<string> {
-    recipeID = recipeID.substr(51);
-    this.socket.emit('checkFavorite', {token: await this.getToken(), ID: recipeID});
+  async checkFavorite(recipeLabel: string): Promise<string> {
+    this.socket.emit('checkFavorite', {token: await this.getToken(), RecipeLabel: recipeLabel});
     return await this.onMessage();
   }
 
@@ -132,26 +131,35 @@ export class DatabaseService {
     return await this.onMessage();
   }
 
-  async addToUserFavorits(rezeptID: string) {
-    rezeptID = rezeptID.substr(51);
-    this.socket.emit('addFavorite', {token: await this.getToken(), ID: rezeptID});
-    console.log(await this.onMessage());
+  async addToUserFavorits(recipeLabel: string, recipeUrl: string, recipePicture: string) {
+    this.socket.emit('addFavorite', {
+      token: await this.getToken(),
+      RecipeURL: recipeUrl,
+      RecipeLabel: recipeLabel,
+      RecipePicture: recipePicture
+    });
+    return await this.onMessage();
   }
 
   async getFavorites() {
     const user = await this.getLoggedInUser();
     this.socket.emit('getFavorites', {UserID: user.ID});
-    console.log(await this.onMessage())
+    console.log(await this.onMessage());
     return await this.onMessage();
   }
 
   async getHistory() {
-    this.socket.emit('getHistory', {token: await this.getToken()})
+    this.socket.emit('getHistory', {token: await this.getToken()});
     return await this.onMessage();
   }
 
   async addToHistory(recipeUrl: string, recipeLabel: string, recipePicture: string) {
-    this.socket.emit('addToHistory', {token: await this.getToken(), RecipeURL: recipeUrl, RecipeLabel: recipeLabel, RecipePicture: recipePicture});
+    this.socket.emit('addToHistory', {
+      token: await this.getToken(),
+      RecipeURL: recipeUrl,
+      RecipeLabel: recipeLabel,
+      RecipePicture: recipePicture
+    });
     return await this.onMessage();
   }
 
@@ -159,10 +167,9 @@ export class DatabaseService {
     this.socket.emit('removeAccount', {token: await this.getToken()});
   }
 
-  async removeFromUserFavorites(rezeptID: string) {
-    rezeptID = rezeptID.substr(51);
-    this.socket.emit('removeFavorite', {token: await this.getToken(), ID: rezeptID});
-    console.log(await this.onMessage());
+  async removeFromUserFavorites(recipeLabel: string) {
+    this.socket.emit('removeFavorite', {token: await this.getToken(), RecipeLabel: recipeLabel});
+    return await this.onMessage();
   }
 
 }

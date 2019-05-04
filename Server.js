@@ -20,7 +20,7 @@ const db = new sqlite3.Database("./db/mittelstufe.sqlite3", (err) => {
 //creates table benutzer if it doesnt exist 
 const createTable = () => {
   db.run("CREATE TABLE IF NOT EXISTS benutzer(ID INTEGER PRIMARY KEY AUTOINCREMENT, Email TEXT, Username TEXT, Password TEXT, KeyID INTEGER, Token TEXT)");
-  db.run("CREATE TABLE IF NOT EXISTS favoriten(UserID INTEGER, RecipeID TEXT, UNIQUE(UserID, RecipeID))");
+  db.run("CREATE TABLE IF NOT EXISTS favoriten(UserID INTEGER, RecipeURL TEXT, RecipePicture TEXT, RecipeName TEXT, UNIQUE(UserID, RecipeURL, RecipePicture, RecipeName))");
   db.run("CREATE TABLE IF NOT EXISTS verlauf(UserID INTEGER, RecipeURL TEXT, RecipePicture TEXT, RecipeName TEXT)");
 }
 
@@ -192,6 +192,8 @@ io.on("connection", socket => {
   })
 
   socket.on("addFavorite", recipe => {
+
+
     const UserIDCheck = "SELECT ID FROM benutzer WHERE Token = '" + recipe.token + "'";
     db.all(UserIDCheck, [], (err, row) => {
       if (err) throw err;
@@ -199,14 +201,13 @@ io.on("connection", socket => {
         //if User has no valid Token:
         socket.emit("message", "NO_LOGGED_IN_USER");
       } else {
-        const sql = "INSERT INTO favoriten (UserID, RecipeID) SELECT '" + row[0].ID + "','" + recipe.ID + "'";
+        const sql = "INSERT INTO favoriten (UserID, RecipeURL, RecipePicture, RecipeName) SELECT '" + row[0].ID + "','" + recipe.RecipeURL + "','" + recipe.RecipePicture + "','" + recipe.RecipeLabel +"'";
 
         db.all(sql, [], (err, row) => {
           if (err) {
             //if User has already favorirised this recipe return this
             socket.emit("message", "RECIPE_IS_ALREADY_FAVORITE");
           }
-          ;
           //recipe was successfully added to favorites
           socket.emit("message", "RECIPE_ADDED")
 
@@ -223,7 +224,7 @@ io.on("connection", socket => {
         //if User has no valid Token:
         socket.emit("message", "NO_LOGGED_IN_USER");
       } else {
-        const favoriteCheck = "SELECT * FROM favoriten WHERE UserID = '" + row[0].ID + "' AND RecipeID = '" + recipe.ID + "'";
+        const favoriteCheck = "SELECT * FROM favoriten WHERE UserID = '" + row[0].ID + "' AND RecipeName = '" + recipe.RecipeLabel + "'";
         db.all(favoriteCheck, [], (err, row) => {
           if (err) throw err;
           if (row.length == 0) {
@@ -246,7 +247,7 @@ io.on("connection", socket => {
         //if User has no valid KeyID return this
         socket.emit("message", "FAILED_TO_DELETE");
       } else {
-        const sql = "DELETE FROM favoriten WHERE UserID = '" + row[0].ID + "' AND RecipeID = '" + recipe.ID + "'"
+        const sql = "DELETE FROM favoriten WHERE UserID = '" + row[0].ID + "' AND RecipeName = '" + recipe.RecipeLabel + "'"
         db.run(sql)
         socket.emit("message", "FAVORITE_REMOVED");
       }
@@ -254,45 +255,14 @@ io.on("connection", socket => {
   });
 
   socket.on("getFavorites", user => {
-    const sql = "SELECT * FROM favoriten WHERE UserID = " + user.UserID;
+    const sql = "SELECT RecipeURL, RecipeName, RecipePicture FROM favoriten WHERE UserID = " + user.UserID;
     db.all(sql, [], (err, row) => {
       if (err) throw err;
       if (row.length == 0) {
         //if there are no favorties return this
         socket.emit("message", "NO_FAVORITES");
       } else {
-        //emits all favorites of the user
-        //socket.emit("message", row);
-        let path = 'http://api.edamam.com';
-        if (API_ID == '' || API_KEY == '') {
-          console.error('API_ID und API_KEY müssen gegeben sein!');
-          socket.emit('message', 'keine API Daten gegeben');
-          return;
-        }
-
-        let data = [];
-
-        path += '/search?app_id=' + API_ID + '&app_key=' + API_KEY;
-        row.forEach(function (element) {
-          let url = path + '&q=' + element.RecipeID;
-          // console.log(url)
-          var xhr = new XMLHttpRequest();
-          xhr.open("GET", url, true);
-          xhr.setRequestHeader("Content-Type", "application/json");
-          xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-              var json = JSON.parse(xhr.responseText);
-              console.log(json);
-              // data.push(json);
-            }
-          };
-          xhr.send();
-        });
-        // console.log(data.length)
-        // data.forEach(function(element) {
-        //   console.log(element)
-        // })
-        // socket.emit('message', data)
+      socket.emit("message", row);
       }
     });
   });
