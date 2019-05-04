@@ -1,18 +1,9 @@
-<!-- <div>
-    <ul *ngFor="let Recipe of service.recipes">
-        <div class="card w-400 recipe-card">
-          <div class="card-header">{{Recipe.label}}</div>
-          <a [routerLink]="['/details']" (click)="service.changeSelected(Recipe)">
-          <img class="card-img-top recipe-img" src="{{Recipe.image}}" alt="Recipe image">
-          </a>
-          <div class="card-body ingredient">
-          <div *ngFor="let ingredient of Recipe.ingredientLines">
-              <span>{{ingredient}}</span>
-            </div>
-          </div>
-          <div class="card-footer">Time: {{(Recipe.totalTime / 60).toFixed(0) + 'h ' + Recipe.totalTime % 60 + 'min'}}</div>
-        </div>
-    </ul>
-  </div>
-   -->
-   <button (click)="testeFavoriten()">TEST</button>
+<h1 style="text-align: center">Favorites</h1><br/>
+<ul class="list-group-horizontal">
+  <li *ngFor="let recipe of favorites" class="list-group-item" style="width: auto; float: left;">
+    <div class="recipeContainer" (click)="forwardTo(recipe)">
+      <p>{{recipe.recipeLabel}}</p>
+      <img style="size:10px" src="{{recipe.recipeImage}}">
+    </div>
+  </li>
+</ul>

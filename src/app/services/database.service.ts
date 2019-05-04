@@ -144,7 +144,6 @@ export class DatabaseService {
   async getFavorites() {
     const user = await this.getLoggedInUser();
     this.socket.emit('getFavorites', {UserID: user.ID});
-    console.log(await this.onMessage());
     return await this.onMessage();
   }
 

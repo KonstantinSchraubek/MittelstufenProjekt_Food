@@ -1,4 +1,4 @@
-export class HistoryRecipe {
+export class ListRecipe {
   recipeUrl: string;
   recipeLabel: string;
   recipeImage: string;
