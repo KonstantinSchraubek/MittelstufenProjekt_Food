@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {RecipeServiceService} from '../../services/recipe-service.service';
 
 // @ts-ignore
 @Component({
@@ -8,10 +9,13 @@ import {Component, OnInit} from '@angular/core';
 })
 export class FilterComponent implements OnInit {
 
-  constructor() {
+  constructor(public service: RecipeServiceService) {
   }
 
   ngOnInit() {
   }
 
+  filter() {
+  this.service.ApplyFiler()
+  }
 }

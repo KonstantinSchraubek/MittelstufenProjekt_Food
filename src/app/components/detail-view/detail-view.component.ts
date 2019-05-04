@@ -10,7 +10,7 @@ import {DatabaseService} from '../../services/database.service';
 })
 export class DetailViewComponent implements OnInit {
 
-  favorite: boolean  = false;
+  favorite: boolean = false;
 
   constructor(private recipeService: RecipeServiceService, private databaseService: DatabaseService) {
   }
@@ -18,10 +18,10 @@ export class DetailViewComponent implements OnInit {
   ngOnInit() {
     const response = this.databaseService.checkFavorite(this.selected.uri);
     response.then((val) => {
-    if(val == "ALREADY_FAVORITE") {
+      if (val == 'ALREADY_FAVORITE') {
         this.favorite = true;
-    }  
-    })
+      }
+    });
   }
 
   addToFav(): void {

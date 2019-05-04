@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {RecipeServiceService} from '../../services/recipe-service.service';
 
 @Component({
   selector: 'app-calories-filter',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CaloriesFilterComponent implements OnInit {
 
-  constructor() { }
+
+  constructor(public service: RecipeServiceService) {
+  }
 
   ngOnInit() {
   }
 
+  setValue(range: number) {
+    this.service.setCalorieRange(range);
+  }
 }

@@ -12,14 +12,20 @@ export class RecipeServiceService {
     return this._recipes;
   }
 
+
+
   constructor(private http: Http, private databaseService: DatabaseService) {
   }
 
   private _recipes: Rezept[] = [];
   private allrecipes: Rezept[] = [];
-
+  private _calorierange = 0;
   public selected: Rezept;
 
+
+  setCalorieRange(range: number) {
+    this._calorierange = range;
+  }
   async addRecipes(ingredients?: string) {
     // codezeilen um über die API zu arbeiten -> API ID und KEY müssen eventuell in Server.js gesetzt werden
     // const rezepte = await this.databaseService.getRezepte(ingredients)
@@ -67,6 +73,21 @@ export class RecipeServiceService {
     }
   }
 
+  public ApplyFiler() {
+    console.log(this._calorierange);
+    const tempcalorierange = this._calorierange;
+    const tempfilterdRecipes: Rezept[] = [];
+    if (tempcalorierange !== 0) {
+      console.log(this._calorierange);
+      this.allrecipes.forEach(function (recipe) {
+        if (recipe.calories < tempcalorierange) {
+          tempfilterdRecipes.push(recipe);
+        }
+      });
+      this._recipes = tempfilterdRecipes;
+    } else {
+    }
+  }
 
   changeSelected(nowSelected: Rezept): void {
     this.selected = nowSelected;
