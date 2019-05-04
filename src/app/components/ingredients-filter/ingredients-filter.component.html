@@ -1,5 +1,5 @@
 <div>
-  <label><b>Ingredients-Filter</b></label>
+  <label><b>Ingredients-Filter</b></label><br/>
 
   <input #inputElement type="text" (keyup)="SetValue(inputElement.value)" (keydown)="onKeydown($event)" placeholder="Tomatoes, potatoes, cheese...">
   <button (click)="Add(inputElement.value)"  type="submit">Add</button>
