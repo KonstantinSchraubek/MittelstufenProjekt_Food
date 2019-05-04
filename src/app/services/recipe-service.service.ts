@@ -3,7 +3,6 @@ import {Rezept} from '../models/rezept';
 import {DatabaseService} from './database.service';
 import {Http} from '@angular/http';
 import {DietFilter} from '../models/dietfilter';
-import {forEach} from '@angular/router/src/utils/collection';
 
 @Injectable({
   providedIn: 'root'
@@ -66,7 +65,6 @@ export class RecipeServiceService {
     } else {
       this._recipes = this.allrecipes;
     }
-
   }
 
 

@@ -13,7 +13,6 @@ export class DietFilterComponent implements OnInit {
   constructor(public service: RecipeServiceService) {
     this._dietArray = [
       new DietFilter('High-Fiber', false),
-      new DietFilter('High-Fiber', false),
       new DietFilter('Balanced', false),
       new DietFilter('High-Protein', false),
       new DietFilter('Low-Fat', false),
@@ -33,7 +32,7 @@ export class DietFilterComponent implements OnInit {
   }
 
   filter() {
-    console.log("test")
+    console.log('test');
     this.service.addDiet(this._dietArray);
   }
 }
