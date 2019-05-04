@@ -1,5 +1,5 @@
 <div class="slider">
   <label><b>Calories-Filter</b></label><br/>
   <label>Max: {{ rangeCalorie.value }}</label><br/>
-  <input type="range" min="1" #rangeCalorie max="5000" (change)="setValue(rangeCalorie.value)">
+  <input type="range" value="5000" min="1" #rangeCalorie max="5000" (change)="setValue(rangeCalorie.value)">
 </div>

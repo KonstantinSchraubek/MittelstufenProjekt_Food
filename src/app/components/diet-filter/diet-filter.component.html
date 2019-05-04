@@ -1,7 +1,7 @@
 <div>
   <label><b>Diet-Filter</b></label>
   <div *ngFor="let item of _dietArray">
-    <input type="checkbox" [(ngModel)]="item.checked">{{item.name}}
+    <input type="checkbox" (change)="filter()" [(ngModel)]="item.checked">{{item.name}}
   </div>
 </div>
 

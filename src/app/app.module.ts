@@ -25,6 +25,7 @@ import { ShowHidePasswordModule } from 'ngx-show-hide-password';
 import { DietFilterComponent } from './components/diet-filter/diet-filter.component';
 import { CaloriesFilterComponent } from './components/calories-filter/calories-filter.component';
 import { FilterComponent } from './components/filter/filter.component';
+import { TimeFilterComponent } from './components/time-filter/time-filter.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
@@ -47,7 +48,8 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     ContactComponent,
     DietFilterComponent,
     CaloriesFilterComponent,
-    FilterComponent
+    FilterComponent,
+    TimeFilterComponent
   ],
   imports: [
     BrowserModule,

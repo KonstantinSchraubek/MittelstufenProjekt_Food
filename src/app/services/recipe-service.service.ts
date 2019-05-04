@@ -13,19 +13,25 @@ export class RecipeServiceService {
   }
 
 
-
   constructor(private http: Http, private databaseService: DatabaseService) {
   }
 
   private _recipes: Rezept[] = [];
   private allrecipes: Rezept[] = [];
-  private _calorierange = 0;
+  private _calorierange = 5000;
+  private _diets: DietFilter[] = [];
   public selected: Rezept;
 
 
   setCalorieRange(range: number) {
     this._calorierange = range;
   }
+
+
+  setDiets(diets: DietFilter[]) {
+    this._diets = diets;
+  }
+
   async addRecipes(ingredients?: string) {
     // codezeilen um über die API zu arbeiten -> API ID und KEY müssen eventuell in Server.js gesetzt werden
     // const rezepte = await this.databaseService.getRezepte(ingredients)
@@ -44,12 +50,12 @@ export class RecipeServiceService {
     this._recipes = this.allrecipes;
   }
 
-  public addDiet(diets: DietFilter[]) {
+  private addDiet() {
     const map = new Map();
     const checkedDiets: DietFilter[] = [];
     const filterdRecipes: Rezept[] = [];
-    const tempdiets: Rezept[] = this.allrecipes;
-    diets.forEach(function (diet) {
+    const tempdiets: Rezept[] = this._recipes;
+    this._diets.forEach(function (diet) {
       if (diet.checked) {
         checkedDiets.push(diet);
       }
@@ -68,25 +74,26 @@ export class RecipeServiceService {
         });
       });
       this._recipes = filterdRecipes;
-    } else {
-      this._recipes = this.allrecipes;
     }
   }
 
   public ApplyFiler() {
-    console.log(this._calorierange);
+    const map = new Map();
     const tempcalorierange = this._calorierange;
     const tempfilterdRecipes: Rezept[] = [];
     if (tempcalorierange !== 0) {
       console.log(this._calorierange);
       this.allrecipes.forEach(function (recipe) {
         if (recipe.calories < tempcalorierange) {
-          tempfilterdRecipes.push(recipe);
+          if (!map.has(recipe.url)) {
+            map.set(recipe.url, true);
+            tempfilterdRecipes.push(recipe);
+          }
         }
       });
       this._recipes = tempfilterdRecipes;
-    } else {
     }
+    this.addDiet();
   }
 
   changeSelected(nowSelected: Rezept): void {
