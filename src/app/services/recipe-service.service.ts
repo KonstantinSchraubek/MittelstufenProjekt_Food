@@ -40,7 +40,7 @@ export class RecipeServiceService {
   }
 
   public addDiet(diets: DietFilter[]) {
-
+    const map = new Map();
     const checkedDiets: DietFilter[] = [];
     const filterdRecipes: Rezept[] = [];
     const tempdiets: Rezept[] = this.allrecipes;
@@ -54,7 +54,10 @@ export class RecipeServiceService {
         tempdiets.forEach(function (recipe) {
           recipe.dietLabels.forEach(function (dietlabel) {
             if (dietlabel === diet.name) {
-              filterdRecipes.push(recipe); //filter this with map distinct
+              if (!map.has(recipe.url)) {
+                map.set(recipe.url, true);
+                filterdRecipes.push(recipe);
+              }
             }
           });
         });
