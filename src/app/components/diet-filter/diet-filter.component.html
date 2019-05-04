@@ -1,10 +1,8 @@
-<div class="checkboxen">
+<div>
+  <label><b>Diet-Filter</b></label>
   <div *ngFor="let item of _dietArray">
     <input type="checkbox" [(ngModel)]="item.checked">{{item.name}}
   </div>
-  <button (click)="filter()" class="btn btn-primary" type="submit">
-    <i class="fas fa-search"></i>
-  </button>
 </div>
 
 
