@@ -2,16 +2,16 @@ import {Component, OnInit} from '@angular/core';
 import {RecipeServiceService} from '../../services/recipe-service.service';
 
 @Component({
-  selector: 'app-ingredients-filter',
-  templateUrl: './ingredients-filter.component.html',
-  styleUrls: ['./ingredients-filter.component.css']
+  selector: 'app-includeingredients',
+  templateUrl: './includeingredients.component.html',
+  styleUrls: ['./includeingredients.component.css']
 })
-export class IngredientsFilterComponent implements OnInit {
+export class IncludeingredientsComponent implements OnInit {
 
   constructor(public service: RecipeServiceService) {
   }
 
-  _excludeIngredients: string[] = [];
+  _includeIngredients: string[] = [];
 
   textfield: string;
 
@@ -20,17 +20,17 @@ export class IngredientsFilterComponent implements OnInit {
 
   Add(ingredients: string) {
     if (ingredients !== '') {
-      this._excludeIngredients.push(ingredients);
+      this._includeIngredients.push(ingredients);
     }
-    this.service.setExcludedIngredients(this._excludeIngredients);
+    this.service.setIncludedIngredients(this._includeIngredients);
   }
 
   Deleted(item: string) {
-    const filtered = this._excludeIngredients.filter(function (value) {
+    const filtered = this._includeIngredients.filter(function (value) {
       return value !== item;
     });
-    this._excludeIngredients = filtered;
-    this.service.setExcludedIngredients(this._excludeIngredients);
+    this._includeIngredients = filtered;
+    this.service.setIncludedIngredients(this._includeIngredients);
   }
 
   onKeydown(event: KeyboardEvent) {

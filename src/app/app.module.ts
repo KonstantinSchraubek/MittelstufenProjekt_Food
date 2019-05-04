@@ -1,34 +1,35 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {HttpModule} from '@angular/http';
 import {HttpClientModule} from '@angular/common/http';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { DetailViewComponent } from './components/detail-view/detail-view.component';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {DetailViewComponent} from './components/detail-view/detail-view.component';
 import {StartseiteComponent} from './components/startseite/startseite.component';
 import {NavbarComponent} from './components/navbar/navbar.component';
-import { RegistrierungComponent } from './components/registrierung/registrierung.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RecipeListComponent } from './components/recipe-list/recipe-list.component';
-import { RecipeServiceService} from './services/recipe-service.service';
-import { RecipeViewComponent } from './views/recipe-view/recipe-view.component';
-import { UsermenueComponent } from './components/usermenue/usermenue.component';
-import { ChangePasswordComponent } from './components/change-password/change-password.component';
-import { ChangeEmailComponent } from './components/change-email/change-email.component';
+import {RegistrierungComponent} from './components/registrierung/registrierung.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {RecipeListComponent} from './components/recipe-list/recipe-list.component';
+import {RecipeServiceService} from './services/recipe-service.service';
+import {RecipeViewComponent} from './views/recipe-view/recipe-view.component';
+import {UsermenueComponent} from './components/usermenue/usermenue.component';
+import {ChangePasswordComponent} from './components/change-password/change-password.component';
+import {ChangeEmailComponent} from './components/change-email/change-email.component';
 import {APP_BASE_HREF} from '@angular/common';
-import { LoginComponent } from './components/login/login.component';
-import { CookieService } from 'ngx-cookie-service';
-import { SuccessfulRegistrationComponent } from './components/successful-registration/successful-registration.component';
-import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-import { ContactComponent } from './components/contact/contact.component';
-import { ShowHidePasswordModule } from 'ngx-show-hide-password';
-import { DietFilterComponent } from './components/diet-filter/diet-filter.component';
-import { CaloriesFilterComponent } from './components/calories-filter/calories-filter.component';
-import { FilterComponent } from './components/filter/filter.component';
-import { TimeFilterComponent } from './components/time-filter/time-filter.component';
-import { IngredientsFilterComponent } from './components/ingredients-filter/ingredients-filter.component';
+import {LoginComponent} from './components/login/login.component';
+import {CookieService} from 'ngx-cookie-service';
+import {SuccessfulRegistrationComponent} from './components/successful-registration/successful-registration.component';
+import {SocketIoModule, SocketIoConfig} from 'ngx-socket-io';
+import {ContactComponent} from './components/contact/contact.component';
+import {ShowHidePasswordModule} from 'ngx-show-hide-password';
+import {DietFilterComponent} from './components/diet-filter/diet-filter.component';
+import {CaloriesFilterComponent} from './components/calories-filter/calories-filter.component';
+import {FilterComponent} from './components/filter/filter.component';
+import {TimeFilterComponent} from './components/time-filter/time-filter.component';
+import {ExcludeingredientsFilterComponent} from './components/excludeingredients-filter/excludeingredients-filter.component';
+import { IncludeingredientsComponent } from './components/includeingredients/includeingredients.component';
 
-const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
+const config: SocketIoConfig = {url: 'http://localhost:3000', options: {}};
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     CaloriesFilterComponent,
     FilterComponent,
     TimeFilterComponent,
-    IngredientsFilterComponent
+    ExcludeingredientsFilterComponent,
+    IncludeingredientsComponent
   ],
   imports: [
     BrowserModule,
@@ -66,4 +68,5 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
   providers: [RecipeServiceService, CookieService, {provide: APP_BASE_HREF, useValue: '/'}],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

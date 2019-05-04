@@ -22,6 +22,7 @@ export class RecipeServiceService {
   private _diets: DietFilter[] = [];
   private _time: number;
   private _excludedIngredients: string[] = [];
+  private _includedIngredients: string[] = [];
   public selected: Rezept;
 
 
@@ -31,6 +32,10 @@ export class RecipeServiceService {
 
   setExcludedIngredients(ingredients: string[]) {
     this._excludedIngredients = ingredients;
+  }
+
+  setIncludedIngredients(ingredients: string[]) {
+    this._includedIngredients = ingredients;
   }
 
   setTime(time: number) {
@@ -120,6 +125,25 @@ export class RecipeServiceService {
     }
   }
 
+  private IncludeIngredients() {
+    const filterdRecipes: Rezept[] = this._recipes;
+    const tempRecipes: Rezept[] = [];
+    const includeIng = this._includedIngredients;
+    if (this._includedIngredients.length > 0) {
+      this._recipes.forEach(function (recipes) {
+        recipes.ingredientLines.forEach(function (ingredient) {
+          includeIng.forEach(function (incluIngredients) {
+            if (ingredient.includes(incluIngredients)) {
+                  tempRecipes.push(recipes);
+            }
+          });
+        });
+
+      });
+      this._recipes = tempRecipes;
+    }
+  }
+
   public ApplyFiler() {
     const map = new Map();
     const tempcalorierange = this._calorierange;
@@ -139,6 +163,7 @@ export class RecipeServiceService {
     this.addDiet();
     this.TimeFilter();
     this.ExcludeIngredients();
+    this.IncludeIngredients();
   }
 
   changeSelected(nowSelected: Rezept): void {
