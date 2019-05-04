@@ -26,6 +26,7 @@ import { DietFilterComponent } from './components/diet-filter/diet-filter.compon
 import { CaloriesFilterComponent } from './components/calories-filter/calories-filter.component';
 import { FilterComponent } from './components/filter/filter.component';
 import { TimeFilterComponent } from './components/time-filter/time-filter.component';
+import { IngredientsFilterComponent } from './components/ingredients-filter/ingredients-filter.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
@@ -49,7 +50,8 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     DietFilterComponent,
     CaloriesFilterComponent,
     FilterComponent,
-    TimeFilterComponent
+    TimeFilterComponent,
+    IngredientsFilterComponent
   ],
   imports: [
     BrowserModule,
