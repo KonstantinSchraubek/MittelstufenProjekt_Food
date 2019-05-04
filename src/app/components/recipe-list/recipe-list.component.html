@@ -1,4 +1,7 @@
-<div>
+<div style="width: 100%">
+  <div *ngIf="service.recipes.length === 0">
+    <img src="./assets/nothing.jpg" class="center">
+  </div>
   <ul *ngFor="let Recipe of service.recipes" class="list-group-horizontal">
     <li class="list-group-item" class="card w-400 recipe-card" style="width: 50%; float: left;">
       <div class="card-header">{{Recipe.label}}</div>

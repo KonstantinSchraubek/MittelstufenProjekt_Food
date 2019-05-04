@@ -126,15 +126,19 @@ export class RecipeServiceService {
   }
 
   private IncludeIngredients() {
+    const map = new Map();
     const filterdRecipes: Rezept[] = this._recipes;
     const tempRecipes: Rezept[] = [];
     const includeIng = this._includedIngredients;
     if (this._includedIngredients.length > 0) {
-      this._recipes.forEach(function (recipes) {
-        recipes.ingredientLines.forEach(function (ingredient) {
-          includeIng.forEach(function (incluIngredients) {
-            if (ingredient.includes(incluIngredients)) {
-                  tempRecipes.push(recipes);
+      this._recipes.forEach(function (recipe) {
+        recipe.ingredientLines.forEach(function (ingredient) {
+          includeIng.forEach(function (incluIngredient) {
+            if (ingredient.includes(incluIngredient)) {
+              if (!map.has(recipe.url)) {
+                map.set(recipe.url, true);
+                tempRecipes.push(recipe);
+              }
             }
           });
         });
