@@ -1,4 +1,5 @@
 <div>
-  <label>Max: {{ rangeCalorie.value }}</label><br/>
-  <input type="range" value="5000" min="1" #rangeCalorie max="5000" (change)="setValue(rangeCalorie.value)">
+  <p>Min value: <input type="number" step="{{options.step}}" [(ngModel)]="minValue"></p>
+  <p>Max value: <input type="number" step="{{options.step}}" [(ngModel)]="maxValue"></p>
+  <ng5-slider (valueChange)="setValue(5)" [(value)]="minValue" [(highValue)]="maxValue" [options]="options"></ng5-slider>
 </div>

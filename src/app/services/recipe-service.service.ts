@@ -18,7 +18,8 @@ export class RecipeServiceService {
 
   private _recipes: Rezept[] = [];
   private allrecipes: Rezept[] = [];
-  private _calorierange = 5000;
+  private _mincalories;
+  private _maxcalories;
   private _diets: DietFilter[] = [];
   private _time: number;
   private _excludedIngredients: string[] = [];
@@ -26,8 +27,9 @@ export class RecipeServiceService {
   public selected: Rezept;
 
 
-  setCalorieRange(range: number) {
-    this._calorierange = range;
+  setCalorieRange(min: number, max: number) {
+    this._mincalories = min;
+    this._maxcalories = max;
     this.ApplyFiler();
   }
 
@@ -154,11 +156,11 @@ export class RecipeServiceService {
 
   public ApplyFiler() {
     const map = new Map();
-    const tempcalorierange = this._calorierange;
+    const min = this._mincalories;
+    const max = this._maxcalories;
     const tempfilterdRecipes: Rezept[] = [];
-    if (tempcalorierange !== 0) {
       this.allrecipes.forEach(function (recipe) {
-        if (recipe.calories < tempcalorierange) {
+        if (recipe.calories < max && recipe.calories > min) {
           if (!map.has(recipe.url)) {
             map.set(recipe.url, true);
             tempfilterdRecipes.push(recipe);
@@ -166,7 +168,6 @@ export class RecipeServiceService {
         }
       });
       this._recipes = tempfilterdRecipes;
-    }
     this.addDiet();
     this.TimeFilter();
     this.ExcludeIngredients();

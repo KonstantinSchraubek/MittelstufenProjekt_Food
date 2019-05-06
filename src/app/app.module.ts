@@ -28,6 +28,7 @@ import {FilterComponent} from './components/filter/filter.component';
 import {TimeFilterComponent} from './components/time-filter/time-filter.component';
 import {ExcludeingredientsFilterComponent} from './components/excludeingredients-filter/excludeingredients-filter.component';
 import { IncludeingredientsComponent } from './components/includeingredients/includeingredients.component';
+import { Ng5SliderModule } from 'ng5-slider';
 
 const config: SocketIoConfig = {url: 'http://localhost:3000', options: {}};
 
@@ -58,6 +59,7 @@ const config: SocketIoConfig = {url: 'http://localhost:3000', options: {}};
   imports: [
     BrowserModule,
     HttpModule,
+    Ng5SliderModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
