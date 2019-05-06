@@ -28,22 +28,27 @@ export class RecipeServiceService {
 
   setCalorieRange(range: number) {
     this._calorierange = range;
+    this.ApplyFiler();
   }
 
   setExcludedIngredients(ingredients: string[]) {
     this._excludedIngredients = ingredients;
+    this.ApplyFiler();
   }
 
   setIncludedIngredients(ingredients: string[]) {
     this._includedIngredients = ingredients;
+    this.ApplyFiler();
   }
 
   setTime(time: number) {
     this._time = time;
+    this.ApplyFiler();
   }
 
   setDiets(diets: DietFilter[]) {
     this._diets = diets;
+    this.ApplyFiler();
   }
 
   async addRecipes(ingredients?: string) {
@@ -127,7 +132,6 @@ export class RecipeServiceService {
 
   private IncludeIngredients() {
     const map = new Map();
-    const filterdRecipes: Rezept[] = this._recipes;
     const tempRecipes: Rezept[] = [];
     const includeIng = this._includedIngredients;
     if (this._includedIngredients.length > 0) {

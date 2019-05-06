@@ -12,10 +12,12 @@ export class FilterComponent implements OnInit {
   constructor(public service: RecipeServiceService) {
   }
 
-  ngOnInit() {
+  _showfilter = true;
+
+  toggleButton() {
+    this._showfilter = !this._showfilter;
   }
 
-  filter() {
-  this.service.ApplyFiler()
+  ngOnInit() {
   }
 }

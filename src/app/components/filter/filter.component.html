@@ -1,3 +1,4 @@
+<div *ngIf="_showfilter">
 <li class="card recipe-card">
   <div class="card-header"><h3>Filter</h3></div>
   <div class="card-header">Include-Ingredients</div>
@@ -6,8 +7,8 @@
       <span><app-includeingredients></app-includeingredients></span>
     </div>
   </div>
-  <div  class="card-header">Exclude-Ingredients</div>
-  <div   class="card-body filter">
+  <div class="card-header">Exclude-Ingredients</div>
+  <div class="card-body filter">
     <div>
       <span><app-excludeingredients-filter></app-excludeingredients-filter></span>
     </div>
@@ -19,7 +20,7 @@
     </div>
   </div>
   <div class="card-header">Calories</div>
-  <div style="height: 8%;" class="card-body filter">
+  <div style="height: 10%;" class="card-body filter">
     <div>
       <span><app-calories-filter></app-calories-filter></span>
     </div>
@@ -31,7 +32,11 @@
     </div>
   </div>
 </li>
-
+<button (click)="toggleButton()" class="hidebtn"><</button>
+</div>
+<div *ngIf="!_showfilter">
+  <button (click)="toggleButton()" class="showbtn">></button>
+</div>
 <!--<div class="filer-container">-->
 <!--<h3 style="text-align: center;">Filter</h3>-->
 <!--<app-includeingredients></app-includeingredients>-->

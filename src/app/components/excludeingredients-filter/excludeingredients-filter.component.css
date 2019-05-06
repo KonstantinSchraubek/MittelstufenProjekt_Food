@@ -1,5 +1,9 @@
 .button{
-  overflow: hidden;
-  width: 40%;
+  max-width: 120px;
   text-overflow: ellipsis;
+  overflow: hidden;
+  font-size : 13px;
+  white-space: nowrap;
+  margin-right: 1px;
 }
+
