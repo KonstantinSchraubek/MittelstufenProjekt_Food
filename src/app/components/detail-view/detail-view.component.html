@@ -17,9 +17,8 @@
   <hr>
   <div class="row">
     <div class="d-flex justify-content-end text-black font-weight-bold w-100 px-3">
-      <button *ngIf="!favorite" class="btn btn-info w-25 mx-2" (click)="addToFav()"> Favorite </button>
-      <button *ngIf="favorite" class="btn btn-info w-25 mx-2" (click)="removeFromFav()"> Unfavorite </button>
-
+      <button *ngIf="!favorite && loggedIn" class="btn btn-info w-25 mx-2" (click)="addToFav()"> Favorite </button>
+      <button *ngIf="favorite && loggedIn" class="btn btn-info w-25 mx-2" (click)="removeFromFav()"> Unfavorite </button>
       <a href="{{selected.url}}" class="btn btn-info w-25"> Cook it </a>
     </div>
   </div>
