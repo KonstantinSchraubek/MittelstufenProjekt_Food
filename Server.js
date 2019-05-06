@@ -21,7 +21,7 @@ const db = new sqlite3.Database("./db/mittelstufe.sqlite3", (err) => {
 const createTable = () => {
   db.run("CREATE TABLE IF NOT EXISTS benutzer(ID INTEGER PRIMARY KEY AUTOINCREMENT, Email TEXT, Username TEXT, Password TEXT, KeyID INTEGER, Token TEXT)");
   db.run("CREATE TABLE IF NOT EXISTS favoriten(UserID INTEGER, RecipeURL TEXT, RecipePicture TEXT, RecipeName TEXT, UNIQUE(UserID, RecipeURL, RecipePicture, RecipeName))");
-  db.run("CREATE TABLE IF NOT EXISTS verlauf(UserID INTEGER, RecipeURL TEXT, RecipePicture TEXT, RecipeName TEXT)");
+  db.run("CREATE TABLE IF NOT EXISTS verlauf(UserID INTEGER, RecipeURL TEXT, RecipePicture TEXT, RecipeName TEXT, Timestamp TEXT, UNIQUE(Timestamp, RecipeName, UserID))");
 }
 
 //gives connect Client an ID to control access on the server
@@ -159,7 +159,7 @@ io.on("connection", socket => {
         //if User has no valid Token:
         socket.emit("message", "NO_LOGGED_IN_USER");
       } else {
-        const sql = "SELECT RecipeURL, RecipeName, RecipePicture FROM verlauf WHERE UserID = " + row[0].ID;
+        const sql = "SELECT RecipeURL, RecipeName, RecipePicture, Timestamp FROM verlauf WHERE UserID = " + row[0].ID;
         db.all(sql, [], (err, row) => {
           socket.emit("message",row);
       })
@@ -176,12 +176,12 @@ io.on("connection", socket => {
         //if User has no valid Token:
         socket.emit("message", "NO_LOGGED_IN_USER");
       } else {
-        const sql = "INSERT INTO verlauf (UserID, RecipeURL, RecipePicture, RecipeName) SELECT '" + row[0].ID + "','" + user.RecipeURL + "','" + user.RecipePicture + "','" + user.RecipeLabel +"'";
+        const sql = "INSERT INTO verlauf (UserID, RecipeURL, RecipePicture, RecipeName, Timestamp) SELECT '" + row[0].ID + "','" + user.RecipeURL + "','" + user.RecipePicture + "','" + user.RecipeLabel + "','" + user.Timestamp + "'";
 
         db.all(sql, [], (err, row) => {
           if (err) {
             //if User has already favorirised this recipe return this
-            socket.emit("message", "RECIPE_IS_ALREADY_FAVORITE");
+            socket.emit("message", "AN_ERROR_OCCURED");
           }
           //recipe was successfully added to favorites
           socket.emit("message", "ADDED_TO_HISTORY")

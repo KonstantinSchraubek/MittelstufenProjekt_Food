@@ -149,15 +149,17 @@ export class DatabaseService {
 
   async getHistory() {
     this.socket.emit('getHistory', {token: await this.getToken()});
+    // console.log(await this.onMessage());
     return await this.onMessage();
   }
 
-  async addToHistory(recipeUrl: string, recipeLabel: string, recipePicture: string) {
+  async addToHistory(recipeUrl: string, recipeLabel: string, recipePicture: string, timestamp: string) {
     this.socket.emit('addToHistory', {
       token: await this.getToken(),
       RecipeURL: recipeUrl,
       RecipeLabel: recipeLabel,
-      RecipePicture: recipePicture
+      RecipePicture: recipePicture,
+      Timestamp: timestamp
     });
     return await this.onMessage();
   }

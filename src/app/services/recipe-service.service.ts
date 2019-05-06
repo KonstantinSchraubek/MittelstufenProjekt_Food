@@ -39,6 +39,11 @@ export class RecipeServiceService {
 
   changeSelected(nowSelected: Rezept): void {
     this.selected = nowSelected;
-    this.databaseService.addToHistory(this.selected.url, this.selected.label, this.selected.image)
+    let today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const yyyy = today.getFullYear();
+
+    this.databaseService.addToHistory(this.selected.url, this.selected.label, this.selected.image, (mm + '/' + dd + '/' + yyyy));
   }
 }

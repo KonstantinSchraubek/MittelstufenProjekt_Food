@@ -13,29 +13,26 @@ export class UsermenueComponent implements OnInit {
   username: string;
   email: string;
 
-  showPasswordChange: boolean = false;
-  showEmailChange: boolean = false;
-  showHistory: boolean = false;
+  showPasswordChange = false;
+  showEmailChange = false;
+  showHistory = false;
+  showFavorites = false;
 
-  constructor(private router: Router,private loginservice: LoginService, private databaseservice: DatabaseService) {
+  constructor(private router: Router, private loginservice: LoginService, private databaseservice: DatabaseService) {
   }
 
 
  async ngOnInit() {
-    const user = await this.databaseservice.getLoggedInUser()
+    const user = await this.databaseservice.getLoggedInUser();
     this.username = user.Username;
     this.email = user.Email;
    // this.email = await this.databaseservice.getLoggedInUser()
   }
 
-  listFavorites() {
-    this.router.navigateByUrl('favorites');
-  }
-
   removeAccount() {
     swal.fire({
       title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+      text: 'You won\'t be able to revert this!',
       type: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -49,14 +46,14 @@ export class UsermenueComponent implements OnInit {
           'Your Account has been deleted.',
           'success'
         ).then((result) => {
-            if(result.value || !result.value) {
+            if (result.value || !result.value) {
               this.loginservice.logoutUser();
-              this.router.navigateByUrl('/')
+              this.router.navigateByUrl('/');
             }
-        })
-        
+        });
+
       }
-    })
+    });
 
   }
 

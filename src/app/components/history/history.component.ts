@@ -14,17 +14,24 @@ export class HistoryComponent implements OnInit {
   }
 
   history: ListRecipe[] = [];
+  dates: string[] = [];
 
   ngOnInit() {
     const response = this.databaseService.getHistory();
     response.then((val) => {
       val.forEach(element => {
-        console.log(element.RecipeURL + element.RecipeName + element.RecipePicture)
-        const hr = new ListRecipe(element.RecipeURL, element.RecipeName, element.RecipePicture);
+        console.log(element.RecipeURL + element.RecipeName + element.RecipePicture);
+        const hr = new ListRecipe(element.RecipeURL, element.RecipeName, element.RecipePicture, element.Timestamp);
         this.history.push(hr);
+        const index = this.dates.indexOf(element.Timestamp);
+
+        if (index === -1) {
+        this.dates.push(element.Timestamp);
+        }
+
       });
+      // console.log(this.dates.length);
     });
-    // alert(this.history.length);
   }
 
   forwardTo(recipe: ListRecipe) {
