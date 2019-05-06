@@ -18,6 +18,7 @@ export class DietFilterComponent implements OnInit {
       new DietFilter('Low-Fat', false),
       new DietFilter('Low-Carb', false),
       new DietFilter('Low-Sodium', false)
+
     ];
     console.log(this._dietArray[0].name);
   }

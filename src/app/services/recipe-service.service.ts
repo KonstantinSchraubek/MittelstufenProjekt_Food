@@ -117,7 +117,7 @@ export class RecipeServiceService {
       this._recipes.forEach(function (recipes) {
         recipes.ingredientLines.forEach(function (ingredient) {
           excludeIng.forEach(function (excluIngredients) {
-            if (ingredient.includes(excluIngredients)) {
+            if (ingredient.includes(excluIngredients.toLowerCase())) {
               filterdRecipes = filterdRecipes.filter(function (value) {
                 return value !== recipes;
               });
@@ -138,7 +138,7 @@ export class RecipeServiceService {
       this._recipes.forEach(function (recipe) {
         recipe.ingredientLines.forEach(function (ingredient) {
           includeIng.forEach(function (incluIngredient) {
-            if (ingredient.includes(incluIngredient)) {
+            if (ingredient.includes(incluIngredient.toLowerCase())) {
               if (!map.has(recipe.url)) {
                 map.set(recipe.url, true);
                 tempRecipes.push(recipe);
@@ -157,7 +157,6 @@ export class RecipeServiceService {
     const tempcalorierange = this._calorierange;
     const tempfilterdRecipes: Rezept[] = [];
     if (tempcalorierange !== 0) {
-      console.log(this._calorierange);
       this.allrecipes.forEach(function (recipe) {
         if (recipe.calories < tempcalorierange) {
           if (!map.has(recipe.url)) {

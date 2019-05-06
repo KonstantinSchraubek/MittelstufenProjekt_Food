@@ -1,6 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { TimeFilterComponent } from './time-filter.component';
+import {TimeFilterComponent} from './time-filter.component';
+import {AppModule} from '../../app.module';
 
 describe('TimeFilterComponent', () => {
   let component: TimeFilterComponent;
@@ -8,9 +9,11 @@ describe('TimeFilterComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TimeFilterComponent ]
+      imports: [
+        AppModule
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

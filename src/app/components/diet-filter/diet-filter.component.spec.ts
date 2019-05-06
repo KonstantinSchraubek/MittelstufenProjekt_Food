@@ -1,6 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { DietFilterComponent } from './diet-filter.component';
+import {DietFilterComponent} from './diet-filter.component';
+import {AppModule} from '../../app.module';
 
 describe('DietFilterComponent', () => {
   let component: DietFilterComponent;
@@ -8,9 +9,11 @@ describe('DietFilterComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DietFilterComponent ]
+      imports: [
+        AppModule
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

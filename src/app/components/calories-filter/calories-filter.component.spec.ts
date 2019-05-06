@@ -1,6 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CaloriesFilterComponent } from './calories-filter.component';
+import {CaloriesFilterComponent} from './calories-filter.component';
+import {AppModule} from '../../app.module';
 
 describe('CaloriesFilterComponent', () => {
   let component: CaloriesFilterComponent;
@@ -8,9 +9,11 @@ describe('CaloriesFilterComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CaloriesFilterComponent ]
+      imports: [
+        AppModule
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,6 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ExcludeingredientsFilterComponent } from './excludeingredients-filter.component';
+import {ExcludeingredientsFilterComponent} from './excludeingredients-filter.component';
+import {AppModule} from '../../app.module';
 
 describe('ExcludeingredientsFilterComponent', () => {
   let component: ExcludeingredientsFilterComponent;
@@ -8,9 +9,11 @@ describe('ExcludeingredientsFilterComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExcludeingredientsFilterComponent ]
+      imports: [
+        AppModule
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

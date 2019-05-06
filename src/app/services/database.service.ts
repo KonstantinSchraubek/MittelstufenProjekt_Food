@@ -5,7 +5,6 @@ import {Socket} from 'ngx-socket-io';
 import {Observable} from 'rxjs';
 import {first} from 'rxjs/operators';
 import {CookieService} from 'ngx-cookie-service';
-import {Rezept} from '../models/rezept';
 
 @Injectable({
   providedIn: 'root'
