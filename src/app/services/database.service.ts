@@ -5,6 +5,7 @@ import {Socket} from 'ngx-socket-io';
 import {Observable} from 'rxjs';
 import {first} from 'rxjs/operators';
 import {CookieService} from 'ngx-cookie-service';
+import {Rezept} from '../models/rezept';
 
 @Injectable({
   providedIn: 'root'
@@ -19,21 +20,10 @@ export class DatabaseService {
   }
 
   // adds a User to the Database
-  async addUser(email: string, password: string, username: string, userForm: FormGroup) {
+  async addUser(email: string, password: string, username: string) {
     const encrypt = new Encrypt(password);
     encrypt.set();
-
     this.socket.emit('addUser', {email: email, username: username, password: encrypt.encrypted, KeyID: encrypt.num});
-
-    const response = await this.onMessage();
-
-    if (response === 'USERNAME_TAKEN') {
-      return response;
-    } else if (response === 'EMAIL_TAKEN') {
-      return response;
-    } else {
-      return true;
-    }
   }
 
   // gets every emit that has the tag 'message' and returns the data as promise
@@ -126,22 +116,59 @@ export class DatabaseService {
     return (await this.onMessage());
   }
 
-  async checkFavorite(recipeID: string): Promise<string> {
-    recipeID = recipeID.substr(51);
-    this.socket.emit('checkFavorite', {token: await this.getToken(), ID: recipeID});
+  async checkFavorite(recipeLabel: string): Promise<string> {
+    this.socket.emit('checkFavorite', {token: await this.getToken(), RecipeLabel: recipeLabel});
     return await this.onMessage();
   }
 
-  async addToUserFavorits(rezeptID: string) {
-    rezeptID = rezeptID.substr(51);
-    this.socket.emit('addFavorite', {token: await this.getToken(), ID: rezeptID});
-    console.log(await this.onMessage());
+  async checkUsername(username: string) {
+    this.socket.emit('checkUsername', {username: username});
+    return await this.onMessage();
   }
 
-  async removeFromUserFavorites(rezeptID: string) {
-    rezeptID = rezeptID.substr(51);
-    this.socket.emit('removeFavorite', {token: await this.getToken(), ID: rezeptID});
-    console.log(await this.onMessage());
+  async checkEmail(email: string) {
+    this.socket.emit('checkEmail', {email: email});
+    return await this.onMessage();
+  }
+
+  async addToUserFavorits(recipeLabel: string, recipeUrl: string, recipePicture: string) {
+    this.socket.emit('addFavorite', {
+      token: await this.getToken(),
+      RecipeURL: recipeUrl,
+      RecipeLabel: recipeLabel,
+      RecipePicture: recipePicture
+    });
+    return await this.onMessage();
+  }
+
+  async getFavorites() {
+    const user = await this.getLoggedInUser();
+    this.socket.emit('getFavorites', {UserID: user.ID});
+    return await this.onMessage();
+  }
+
+  async getHistory() {
+    this.socket.emit('getHistory', {token: await this.getToken()});
+    // console.log(await this.onMessage());
+    return await this.onMessage();
+  }
+  async addToHistory(recipeUrl: string, recipeLabel: string, recipePicture: string, timestamp: string) {
+    this.socket.emit('addToHistory', {
+      token: await this.getToken(),
+      RecipeURL: recipeUrl,
+      RecipeLabel: recipeLabel,
+      RecipePicture: recipePicture,
+      Timestamp: timestamp
+    });
+    return await this.onMessage();
+  }
+
+  async removeAccount() {
+    this.socket.emit('removeAccount', {token: await this.getToken()});
+
+  async removeFromUserFavorites(recipeLabel: string) {
+    this.socket.emit('removeFavorite', {token: await this.getToken(), RecipeLabel: recipeLabel});
+    return await this.onMessage();
   }
 
 }

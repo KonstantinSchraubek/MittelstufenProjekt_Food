@@ -3,8 +3,10 @@ const http = require('http').Server(app);
 const http2 = require('http')
 const io = require('socket.io')(http);
 const sqlite3 = require('sqlite3');
-const API_KEY = ''; //107825e88315af6b3054a9ad7f08fa1d
-const API_ID = ''; //94481c62
+const API_KEY = '107825e88315af6b3054a9ad7f08fa1d'; //107825e88315af6b3054a9ad7f08fa1d
+const API_ID = '94481c62'; //94481c62
+const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
 
 //creates the sqlite database if it doesnt exist
 const db = new sqlite3.Database("./db/mittelstufe.sqlite3", (err) => {
@@ -18,7 +20,8 @@ const db = new sqlite3.Database("./db/mittelstufe.sqlite3", (err) => {
 //creates table benutzer if it doesnt exist 
 const createTable = () => {
   db.run("CREATE TABLE IF NOT EXISTS benutzer(ID INTEGER PRIMARY KEY AUTOINCREMENT, Email TEXT, Username TEXT, Password TEXT, KeyID INTEGER, Token TEXT)");
-  db.run("CREATE TABLE IF NOT EXISTS favoriten(ID INTEGER, RecipeID TEXT, UNIQUE(ID, RecipeID))");
+  db.run("CREATE TABLE IF NOT EXISTS favoriten(UserID INTEGER, RecipeURL TEXT, RecipePicture TEXT, RecipeName TEXT, UNIQUE(UserID, RecipeURL, RecipePicture, RecipeName))");
+  db.run("CREATE TABLE IF NOT EXISTS verlauf(UserID INTEGER, RecipeURL TEXT, RecipePicture TEXT, RecipeName TEXT, Timestamp TEXT, UNIQUE(Timestamp, RecipeName, UserID))");
 }
 
 //gives connect Client an ID to control access on the server
@@ -30,55 +33,40 @@ io.on("connection", socket => {
     previousId = currentId;
   };
 
-  socket.on("addFavorite", recipe => {
-    const UserIDCheck = "SELECT ID FROM benutzer WHERE Token = '" + recipe.token + "'";
-    db.all(UserIDCheck, [], (err, row) => {
-      if (err) throw err;
-      if (row.length == 0) {
-        //if User has no valid KeyID return this
-        socket.emit("message", "NO_LOGGED_IN_USER");
+  socket.on("checkEmail", user => {
+    const emailCheck = "SELECT * FROM benutzer WHERE Email = '" + user.email + "'";
+
+    db.all(emailCheck, [], (err1, row1) => {
+      if (err1) throw err1;
+      if (row1.length > 0) {
+        socket.emit("message", "EMAIL_TAKEN");
       } else {
-         const sql = "INSERT INTO favoriten (ID, RecipeID) SELECT '" + row[0].ID + "','" + recipe.ID + "'";
-         
-         db.all(sql, [], (err, row) => {
-          if (err) {
-            //if User has already favorirised this recipe return this            
-            socket.emit("message", "RECIPE_IS_ALREADY_FAVORITE");
-          };
-            //recipe was successfully added to favorites
-            socket.emit("message", "RECIPE_ADDED")
-          
-        });
+        socket.emit("message", "EMAIL_FREE")
       }
-    });  
+    })
   })
 
-  //adds a User to the database, if the nutzername or the email are not taken, emits nothing if action was successful
-  socket.on("addUser", user => {
-
+  socket.on("checkUsername", user => {
     const usernameCheck = "SELECT * FROM benutzer WHERE Username = '" + user.username + "'";
-    const emailCheck = "SELECT * FROM benutzer WHERE Email = '" + user.email + "'";
-    db.all(usernameCheck, [], (err, row) => {
-      if (err) throw err;
-      if (row.length == 0) {
-        db.all(emailCheck, [], (err1, row1) => {
-          if (err1) throw err1;
-          if (row1.length == 0) {
-            const sql = "INSERT INTO benutzer(Email,Username,Password,KeyID) SELECT '" + user.email + "','" + user.username + "','" + user.password + "','" + user.KeyID + "'";
 
-            db.run(sql, function (err) {
-              //if function fails throw server error (database is not reachable etc.)
-              if (err) throw err;
-              socket.emit("message", "REGISTRATION_SUCCESSFUL")
-            });
-          } else {
-            socket.emit("message", "EMAIL_TAKEN");
-          }
-        });
-      } else {
-        //if username or email are alredy taken emit this
+    db.all(usernameCheck, [], (err1, row1) => {
+      if (err1) throw err1;
+      if (row1.length > 0) {
         socket.emit("message", "USERNAME_TAKEN");
+      } else {
+        socket.emit("message", "USERNAME_FREE")
       }
+    })
+  });
+
+  //adds a User to the database, if username and email are not taken, emits REGISTRATION_SUCCESSFUL if action was successful
+  socket.on("addUser", user => {
+    const sql = "INSERT INTO benutzer(Email,Username,Password,KeyID) SELECT '" + user.email + "','" + user.username + "','" + user.password + "','" + user.KeyID + "'";
+
+    db.run(sql, function (err) {
+      //if function fails throw server error (database is not reachable etc.)
+      if (err) throw err;
+      socket.emit("message", "REGISTRATION_SUCCESSFUL")
     });
   });
 
@@ -145,7 +133,7 @@ io.on("connection", socket => {
   });
 
   socket.on("getLoggedInUser", user => {
-    const sql = "SELECT Username, Email FROM benutzer WHERE Token = '" + user.token + "'";
+    const sql = "SELECT Username, Email, ID FROM benutzer WHERE Token = '" + user.token + "'";
     db.all(sql, [], (err, row) => {
       if (err) throw err;
       if (row.length == 0) {
@@ -158,27 +146,98 @@ io.on("connection", socket => {
     });
   });
 
+  socket.on("removeAccount", user => {
+    const sql = "DELETE FROM benutzer WHERE Token = '" + user.token + "'";
+    db.run(sql);
+  });
+
+  socket.on("getHistory", user => {
+    const UserIDCheck = "SELECT ID FROM benutzer WHERE Token = '" + user.token + "'";
+    db.all(UserIDCheck, [], (err, row) => {
+      if (err) throw err;
+      if (row.length == 0) {
+        //if User has no valid Token:
+        socket.emit("message", "NO_LOGGED_IN_USER");
+      } else {
+        const sql = "SELECT RecipeURL, RecipeName, RecipePicture, Timestamp FROM verlauf WHERE UserID = " + row[0].ID;
+        db.all(sql, [], (err, row) => {
+          socket.emit("message",row);
+      })
+
+      }
+  })
+  });
+
+  socket.on("addToHistory", user => {
+    const UserIDCheck = "SELECT ID FROM benutzer WHERE Token = '" + user.token + "'";
+    db.all(UserIDCheck, [], (err, row) => {
+      if (err) throw err;
+      if (row.length == 0) {
+        //if User has no valid Token:
+        socket.emit("message", "NO_LOGGED_IN_USER");
+      } else {
+        const sql = "INSERT INTO verlauf (UserID, RecipeURL, RecipePicture, RecipeName, Timestamp) SELECT '" + row[0].ID + "','" + user.RecipeURL + "','" + user.RecipePicture + "','" + user.RecipeLabel + "','" + user.Timestamp + "'";
+
+        db.all(sql, [], (err, row) => {
+          if (err) {
+            //if User has already favorirised this recipe return this
+            socket.emit("message", "AN_ERROR_OCCURED");
+          }
+          //recipe was successfully added to favorites
+          socket.emit("message", "ADDED_TO_HISTORY")
+
+        });
+      }
+    });
+  })
+
+  socket.on("addFavorite", recipe => {
+
+
+    const UserIDCheck = "SELECT ID FROM benutzer WHERE Token = '" + recipe.token + "'";
+    db.all(UserIDCheck, [], (err, row) => {
+      if (err) throw err;
+      if (row.length == 0) {
+        //if User has no valid Token:
+        socket.emit("message", "NO_LOGGED_IN_USER");
+      } else {
+        const sql = "INSERT INTO favoriten (UserID, RecipeURL, RecipePicture, RecipeName) SELECT '" + row[0].ID + "','" + recipe.RecipeURL + "','" + recipe.RecipePicture + "','" + recipe.RecipeLabel +"'";
+
+        db.all(sql, [], (err, row) => {
+          if (err) {
+            //if User has already favorirised this recipe return this
+            socket.emit("message", "RECIPE_IS_ALREADY_FAVORITE");
+          }
+          //recipe was successfully added to favorites
+          socket.emit("message", "RECIPE_ADDED")
+
+        });
+      }
+    });
+  });
+
   socket.on("checkFavorite", recipe => {
     const UserIDCheck = "SELECT ID FROM benutzer WHERE Token = '" + recipe.token + "'";
     db.all(UserIDCheck, [], (err, row) => {
       if (err) throw err;
       if (row.length == 0) {
-        //if User has no valid KeyID return this
+        //if User has no valid Token:
         socket.emit("message", "NO_LOGGED_IN_USER");
       } else {
-    const favoriteCheck = "SELECT * FROM favoriten WHERE ID = '" + row[0].ID + "' AND RecipeID = '"+recipe.ID+"'";
-    db.all(favoriteCheck, [], (err, row) => {
-      if (err) throw err;
-      if (row.length == 0) {
-        //if User has no valid KeyID return this
-        socket.emit("message", "NO_FAVORITE");
-      } else {
-        socket.emit("message", "ALREADY_FAVORITE")
+        const favoriteCheck = "SELECT * FROM favoriten WHERE UserID = '" + row[0].ID + "' AND RecipeName = '" + recipe.RecipeLabel + "'";
+        db.all(favoriteCheck, [], (err, row) => {
+          if (err) throw err;
+          if (row.length == 0) {
+            //if Recipe is not already a favortite of the logged in user:
+            socket.emit("message", "NO_FAVORITE");
+          } else {
+            //if Recipe is already a favortite of the logged in user:
+            socket.emit("message", "ALREADY_FAVORITE")
+          }
+        });
       }
-      });
-    }
+    });
   });
-});
 
   socket.on("removeFavorite", recipe => {
     const UserIDCheck = "SELECT ID FROM benutzer WHERE Token = '" + recipe.token + "'";
@@ -187,17 +246,29 @@ io.on("connection", socket => {
       if (row.length == 0) {
         //if User has no valid KeyID return this
         socket.emit("message", "FAILED_TO_DELETE");
-      } else {  
-          const sql = "DELETE FROM favoriten WHERE ID = '"+row[0].ID+"' AND RecipeID = '"+recipe.ID+"'"
-          db.run(sql)
-          socket.emit("message", "FAVORITE_REMOVED");
+      } else {
+        const sql = "DELETE FROM favoriten WHERE UserID = '" + row[0].ID + "' AND RecipeName = '" + recipe.RecipeLabel + "'"
+        db.run(sql)
+        socket.emit("message", "FAVORITE_REMOVED");
       }
-      });
     });
+  });
 
+  socket.on("getFavorites", user => {
+    const sql = "SELECT RecipeURL, RecipeName, RecipePicture FROM favoriten WHERE UserID = " + user.UserID;
+    db.all(sql, [], (err, row) => {
+      if (err) throw err;
+      if (row.length == 0) {
+        //if there are no favorties return this
+        socket.emit("message", "NO_FAVORITES");
+      } else {
+      socket.emit("message", row);
+      }
+    });
+  });
 
   socket.on('getRezepte', req => {
-    const path = 'http://api.edamam.com';
+    let path = 'http://api.edamam.com';
     if (API_ID == '' || API_KEY == '') {
       console.error('API_ID und API_KEY müssen gegeben sein!');
       socket.emit('message', 'keine API Daten gegeben');
@@ -207,9 +278,9 @@ io.on("connection", socket => {
     if (req.ingredients) {
       path += '&q=' + req.ingredients;
     }
-    console.log(path)
-    const httpreq = http2.get(path, function (response) {
-      var responseString = '';
+    // console.log(path)
+    const response = http2.get(path, function (response) {
+      let responseString = '';
       response.on("data", function (data) {
         responseString += data;
         // save all the data from response

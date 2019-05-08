@@ -7,7 +7,7 @@
     <div class="form-group row-1">
       <label for="email">E-Mail</label>
       <input #email formControlName="email" placeholder="example@mail.com" class="form-control" type="email"
-             (keydown)="onKeydownEmail()" id="email"
+             (input)="checkEmail(email.value)" id="email"
              [ngClass]="{'red': (userForm.get('email').hasError('required') ||
              userForm.get('email').hasError('invalidEmailAddress') || emailTaken) && email.value !== ''}"/>
       <small class="form-text text-muted"
@@ -22,7 +22,7 @@
     <div class="form-group row-1">
       <label for="username">Username</label>
       <input #username formControlName="username" type="text" class="form-control" id="username" placeholder="Username"
-             autocomplete="off" (keydown)="onKeydownUsername()"
+             autocomplete="off" (input)="checkUsername(username.value)"
              [ngClass]="{'red': (userForm.get('username').hasError('required') ||
              userForm.get('username').hasError('invalidUsername') || usernameTaken) && username.value !== ''}"/>
       <small class="form-text text-muted"
@@ -42,7 +42,7 @@
              autocomplete="new-password"
              [ngClass]="{'red': (userForm.get('password').hasError('required') || userForm.get('password').hasError('invalidPassword')) && pw1.value !== ''}"/>
       </show-hide-password>
-        <small class="form-text text-muted"
+      <small class="form-text text-muted"
              *ngIf="userForm.get('password').hasError('invalidPassword') && pw1.value !== ''">Your
         password
         does not match the requirements.

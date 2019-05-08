@@ -16,6 +16,13 @@ import {UsermenueComponent} from './components/usermenue/usermenue.component';
 import {ChangePasswordComponent} from './components/change-password/change-password.component';
 import {ChangeEmailComponent} from './components/change-email/change-email.component';
 import {APP_BASE_HREF} from '@angular/common';
+import { LoginComponent } from './components/login/login.component';
+import { CookieService } from 'ngx-cookie-service';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { ContactComponent } from './components/contact/contact.component';
+import { ShowHidePasswordModule } from 'ngx-show-hide-password';
+import { FavoritesComponent } from './components/favorites/favorites.component';
+import { HistoryComponent } from './components/history/history.component';
 import {LoginComponent} from './components/login/login.component';
 import {CookieService} from 'ngx-cookie-service';
 import {SuccessfulRegistrationComponent} from './components/successful-registration/successful-registration.component';
@@ -45,7 +52,6 @@ const config: SocketIoConfig = {url: 'http://localhost:3000', options: {}};
     UsermenueComponent,
     ChangePasswordComponent,
     ChangeEmailComponent,
-    SuccessfulRegistrationComponent,
     ChangeEmailComponent,
     LoginComponent,
     ContactComponent,
@@ -55,6 +61,9 @@ const config: SocketIoConfig = {url: 'http://localhost:3000', options: {}};
     TimeFilterComponent,
     ExcludeingredientsFilterComponent,
     IncludeingredientsComponent
+    ContactComponent,
+    FavoritesComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,

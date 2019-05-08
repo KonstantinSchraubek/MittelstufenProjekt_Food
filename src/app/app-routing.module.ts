@@ -5,8 +5,8 @@ import {StartseiteComponent} from './components/startseite/startseite.component'
 import {RegistrierungComponent} from './components/registrierung/registrierung.component';
 import {DetailViewComponent} from './components/detail-view/detail-view.component';
 import {UsermenueComponent} from './components/usermenue/usermenue.component';
-import { SuccessfulRegistrationComponent } from './components/successful-registration/successful-registration.component';
 import {ContactComponent} from './components/contact/contact.component';
+import { FavoritesComponent } from './components/favorites/favorites.component';
 
 const routes: Routes = [
   { path: 'registration', component: RegistrierungComponent },
@@ -15,8 +15,8 @@ const routes: Routes = [
   {path: 'details', component: DetailViewComponent},
   { path: 'home',      component: StartseiteComponent },
   {path: 'userSettings', component: UsermenueComponent},
-  {path: 'successfulRegistration', component: SuccessfulRegistrationComponent},
-  {path: 'contact', component: ContactComponent}
+  {path: 'contact', component: ContactComponent},
+  {path: 'favorites', component: FavoritesComponent}
 ];
 
 @NgModule({

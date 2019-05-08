@@ -30,35 +30,33 @@ export class RegistrierungComponent implements OnInit {
     this.usernameTaken = false;
   }
 
-  public onKeydownEmail() {
-    this.emailTaken = false;
-  }
-
-  public onKeydownUsername() {
-    this.usernameTaken = false;
-  }
-
-  public async addUser(email: string, password: string, username: string) {
-    const response = await this.databaseService.addUser(email, password, username, this.userForm);
-
-    switch (response) {
-      case true:
-        swal.fire(
-          'Registration was successful!',
-          'Continue by clicking the button below.',
-          'success'
-        );
-        this.router.navigate(['/']);
-        break;
-      case 'USERNAME_TAKEN':
-        this.usernameTaken = true;
-        break;
-      case 'EMAIL_TAKEN':
-        this.emailTaken = true;
-        break;
-      default:
-        this.emailTaken = true;
-        this.usernameTaken = true;
+  public async checkEmail(email: string) {
+    const response = await this.databaseService.checkEmail(email);
+    if (response === 'EMAIL_TAKEN') {
+      this.emailTaken = true;
+      this.userForm.controls['email'].setErrors({'incorrect': true});
+    } else {
+      this.emailTaken = false;
     }
+  }
+
+  public async checkUsername(username: string) {
+    const response = await this.databaseService.checkUsername(username);
+    if (response === 'USERNAME_TAKEN') {
+      this.usernameTaken = true;
+      this.userForm.controls['username'].setErrors({'incorrect': true});
+    } else {
+      this.usernameTaken = false;
+    }
+  }
+
+  public addUser(email: string, password: string, username: string) {
+    this.databaseService.addUser(email, password, username);
+    swal.fire(
+      'Registration was successful!',
+      'Continue by clicking the button below.',
+      'success'
+    );
+    this.router.navigate(['/']);
   }
 }

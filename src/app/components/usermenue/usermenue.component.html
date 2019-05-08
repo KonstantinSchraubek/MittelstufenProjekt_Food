@@ -1,10 +1,17 @@
 <div class="container mx-auto">
+
   <div class="row mt-2 px-3 w-100 headline">
     <h2>
       User
     </h2>
   </div>
-
+  <ul>
+    <li><a (click)="showPasswordChange = !showPasswordChange; showEmailChange = false; showHistory = false; showFavorites=false;">Change Password</a></li>
+    <li><a (click)="showEmailChange = !showEmailChange; showPasswordChange = false; showHistory = false; showFavorites=false;">Change Email</a></li>
+    <li style="float:right"><a (click)="removeAccount()">Delete Account</a></li>
+    <li style="float:right"><a (click)="showHistory = !showHistory; showPasswordChange = false; showEmailChange = false; showFavorites=false;">History</a></li>
+    <li style="float:right"><a (click)="showFavorites = !showFavorites; showPasswordChange = false; showHistory = false; showEmailChange = false;">Favorites</a></li>
+  </ul>
 
 
   <hr>
@@ -19,7 +26,10 @@
     </tr>
   </table>
   <div class="d-flex justify-content-around pt-4">
-  <app-change-email></app-change-email>
-  <app-change-password></app-change-password>
+    <app-change-email *ngIf="showEmailChange"></app-change-email>
+    <app-change-password *ngIf="showPasswordChange"></app-change-password>
+    <app-history *ngIf="showHistory"></app-history>
+    <app-favorites *ngIf="showFavorites"></app-favorites>
   </div>
+
 </div>

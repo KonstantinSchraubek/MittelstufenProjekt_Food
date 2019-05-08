@@ -10,32 +10,44 @@ import {DatabaseService} from '../../services/database.service';
 })
 export class DetailViewComponent implements OnInit {
 
-  favorite: boolean = false;
+  favorite = false;
+  loggedIn = true;
 
   constructor(private recipeService: RecipeServiceService, private databaseService: DatabaseService) {
   }
 
   ngOnInit() {
-    const response = this.databaseService.checkFavorite(this.selected.uri);
+
+    const response = this.databaseService.checkFavorite(this.selected.label);
     response.then((val) => {
-      if (val == 'ALREADY_FAVORITE') {
+      // alert(val)
+      if (val === 'ALREADY_FAVORITE') {
         this.favorite = true;
+      }
+    });
+
+    let today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const yyyy = today.getFullYear();
+
+    this.databaseService.addToHistory(this.selected.url, this.selected.label, this.selected.image, (mm + '/' + dd + '/' + yyyy));
+    const userResponse = this.databaseService.getLoggedInUser();
+    userResponse.then((val) => {
+      if (val === 'NO_LOGGED_IN_USER') {
+        this.loggedIn = false;
       }
     });
   }
 
   addToFav(): void {
-    let id: string = this.selected.uri;
-
-    this.databaseService.addToUserFavorits(id);
+    this.databaseService.addToUserFavorits(this.selected.label, this.selected.url, this.selected.image);
 
     this.favorite = true;
   }
 
   removeFromFav(): void {
-    let id = this.selected.uri;
-
-    this.databaseService.removeFromUserFavorites(id);
+    this.databaseService.removeFromUserFavorites(this.selected.label);
 
     this.favorite = false;
   }
@@ -45,7 +57,7 @@ export class DetailViewComponent implements OnInit {
   }
 
   get ingridients1(): string[] {
-    let test: string[] = [];
+    const test: string[] = [];
     for (let i = 0; i < this.selected.ingredientLines.length / 2; i++) {
       test.push(this.selected.ingredientLines[i]);
     }
@@ -53,7 +65,7 @@ export class DetailViewComponent implements OnInit {
   }
 
   get ingridients2(): string[] {
-    let test: string[] = [];
+    const test: string[] = [];
     for (let i = this.selected.ingredientLines.length / 2; i < this.selected.ingredientLines.length; i++) {
       test.push(this.selected.ingredientLines[i]);
     }

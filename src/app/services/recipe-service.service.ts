@@ -3,6 +3,11 @@ import {Rezept} from '../models/rezept';
 import {DatabaseService} from './database.service';
 import {Http} from '@angular/http';
 import {DietFilter} from '../models/dietfilter';
+import {Injectable} from '@angular/core';
+import {Rezept} from '../models/rezept';
+import {DatabaseService} from './database.service';
+import {Http} from '@angular/http';
+import {forEach} from '@angular/router/src/utils/collection';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +16,7 @@ export class RecipeServiceService {
   get recipes(): Rezept[] {
     return this._recipes;
   }
+
 
 
   constructor(private http: Http, private databaseService: DatabaseService) {
@@ -25,6 +31,7 @@ export class RecipeServiceService {
   private _excludedIngredients: string[] = [];
   private _includedIngredients: string[] = [];
   public selected: Rezept;
+
 
 
   setCalorieRange(min: number, max: number) {

@@ -1,0 +1,14 @@
+<h1 style="text-align: center">History</h1><br/>
+<ul class="list-group">
+  <li *ngFor="let d of dates">
+    <p>{{d}}</p>
+    <ul *ngFor="let recipe of history" class="list-group-horizontal" style="width: auto; float: left;">
+      <li *ngIf="recipe.timestamp === d" class="list-group-item">
+        <div  class="recipeContainer" (click)="forwardTo(recipe)">
+          <p>{{recipe.recipeLabel}}</p>
+          <img style="size:10px" src="{{recipe.recipeImage}}">
+        </div>
+      </li>
+    </ul>
+  </li>
+</ul>

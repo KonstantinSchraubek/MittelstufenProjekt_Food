@@ -1,0 +1,9 @@
+<h1 style="text-align: center">Favorites</h1><br/>
+<ul class="list-group-horizontal">
+  <li *ngFor="let recipe of favorites" class="list-group-item" style="width: auto; float: left;">
+    <div class="recipeContainer" (click)="forwardTo(recipe)">
+      <p>{{recipe.recipeLabel}}</p>
+      <img style="size:10px" src="{{recipe.recipeImage}}">
+    </div>
+  </li>
+</ul>
