@@ -25,4 +25,18 @@ describe('IncludeingredientsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should add item to array', () => {
+    component.Add('chicken');
+    expect(component._includeIngredients.length).toBe(1);
+    expect(component._includeIngredients[0]).toBe('chicken');
+  });
+
+  it('should not add ingriends a secound time', () => {
+    component.Add('chicken');
+    component.Add('chicken');
+    expect(component._includeIngredients.length).toBe(1);
+    expect(component._includeIngredients[0]).toBe('chicken');
+    expect(component._includeIngredients[1]).toBeUndefined();
+  });
 });
