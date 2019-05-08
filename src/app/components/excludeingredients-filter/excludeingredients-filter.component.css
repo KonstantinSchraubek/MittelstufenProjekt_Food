@@ -1,0 +1,9 @@
+.button{
+  max-width: 120px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size : 13px;
+  white-space: nowrap;
+  margin-right: 1px;
+}
+

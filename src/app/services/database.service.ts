@@ -1,19 +1,17 @@
 import {Injectable} from '@angular/core';
 import {Encrypt} from '../models/encrypt';
-import {Router} from '@angular/router';
 import {FormGroup} from '@angular/forms';
 import {Socket} from 'ngx-socket-io';
 import {Observable} from 'rxjs';
 import {first} from 'rxjs/operators';
 import {CookieService} from 'ngx-cookie-service';
-import {Rezept} from '../models/rezept';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService {
 
-  constructor(private router: Router, private socket: Socket, private cookieService: CookieService) {
+  constructor(private socket: Socket, private cookieService: CookieService) {
   }
 
   async getToken() {
@@ -30,11 +28,11 @@ export class DatabaseService {
     const response = await this.onMessage();
 
     if (response === 'USERNAME_TAKEN') {
-      alert(response);
+      return response;
     } else if (response === 'EMAIL_TAKEN') {
-      alert(response);
+      return response;
     } else {
-      this.router.navigateByUrl('/successfulRegistration');
+      return true;
     }
   }
 
@@ -66,7 +64,6 @@ export class DatabaseService {
       const encrypt = new Encrypt(password);
       encrypt.check(response);
       this.socket.emit('authenticateUser', {username: username, password: encrypt.encrypted});
-
       const authUserResponse = await this.onMessage();
 
       if (authUserResponse === 'USER_DOES_NOT_EXIST') {
@@ -75,21 +72,6 @@ export class DatabaseService {
         // returns the token
         return authUserResponse;
       }
-    }
-
-  }
-
-  async checkPasswords(password: string, username: string) {
-    const e = new Encrypt(password);
-    e.check(await this.getKeyID(username));
-    const answer = await this.onMessage()
-    if(answer !== "USER_HAS_NO_KEY") {
-    this.socket.emit('checkPasswords', {password: e.encrypted, username: username});
-    const checkedPassword = await this.onMessage()
-    return checkedPassword;
-    }
-    else{
-      return "USER_NOT_FOUND"
     }
   }
 
@@ -101,8 +83,8 @@ export class DatabaseService {
   async changePassword(newPassword: string, oldPassword: string) {
     const user = await this.getLoggedInUser();
     if (user.Username !== 'USER_NOT_FOUND') {
-      const passwordCheck = await this.checkPasswords(oldPassword, user.Username);
-      if (passwordCheck !== 'USER_NOT_FOUND') {
+      const passwordCheck = await this.authenticateUser(user.Username, oldPassword);
+      if (passwordCheck !== false) {
         const encrypt = new Encrypt(newPassword);
         encrypt.set();
         this.socket.emit('updatePassword', {username: user.Username, password: encrypt.encrypted, KeyID: encrypt.num});
@@ -120,10 +102,15 @@ export class DatabaseService {
   async changeEmail(email: string, password: string) {
     const user = await this.getLoggedInUser();
     if (user.Username !== 'USER_NOT_FOUND') {
-      const passwordCheck = await this.checkPasswords(password, user.Username);
-      if (passwordCheck !== 'USER_NOT_FOUND') {
+      const passwordCheck = await this.authenticateUser(user.Username, password);
+      if (passwordCheck) {
         this.socket.emit('updateEmail', {username: user.Username, email: email});
-        return true;
+        const response = await this.onMessage();
+        if (response === 'EMAIL_ALREADY_TAKEN') {
+          return false;
+        } else {
+          return true;
+        }
       } else {
         // logik wenn altes passwort falsch war
         return false;
@@ -139,10 +126,22 @@ export class DatabaseService {
     return (await this.onMessage());
   }
 
-  async addToUserFavorits(rezeptID: string){
-    console.log("favo-called-----------------------");
-    console.log(rezeptID);
-    console.log("-----------------------------------");
+  async checkFavorite(recipeID: string): Promise<string> {
+    recipeID = recipeID.substr(51);
+    this.socket.emit('checkFavorite', {token: await this.getToken(), ID: recipeID});
+    return await this.onMessage();
+  }
+
+  async addToUserFavorits(rezeptID: string) {
+    rezeptID = rezeptID.substr(51);
+    this.socket.emit('addFavorite', {token: await this.getToken(), ID: rezeptID});
+    console.log(await this.onMessage());
+  }
+
+  async removeFromUserFavorites(rezeptID: string) {
+    rezeptID = rezeptID.substr(51);
+    this.socket.emit('removeFavorite', {token: await this.getToken(), ID: rezeptID});
+    console.log(await this.onMessage());
   }
 
 }

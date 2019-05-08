@@ -1,0 +1,5 @@
+<div>
+  <p>Min value: <input type="number" step="{{options.step}}" [(ngModel)]="minValue"></p>
+  <p>Max value: <input type="number" step="{{options.step}}" [(ngModel)]="maxValue"></p>
+  <ng5-slider (valueChange)="setValue(5)" [(value)]="minValue" [(highValue)]="maxValue" [options]="options"></ng5-slider>
+</div>

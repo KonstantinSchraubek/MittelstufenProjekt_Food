@@ -22,7 +22,7 @@ describe('DetailViewComponent', () => {
 
   beforeEach(() => {
     service = TestBed.get(RecipeServiceService);
-    var r: Rezept = new Rezept(data.hits[0]);
+    const r: Rezept = new Rezept(data.hits[0]);
     service.changeSelected(r);
     fixture = TestBed.createComponent(DetailViewComponent);
     component = fixture.componentInstance;
@@ -33,7 +33,7 @@ describe('DetailViewComponent', () => {
     expect(component).toBeTruthy();
   });
 
-   it('Should return the rounded number of calories', () => {
-     expect(component.calories).toBe('4230.31');
-   });
+  it('Should return the rounded number of calories', () => {
+    expect(component.calories).toBe('4230.31');
+  });
 });

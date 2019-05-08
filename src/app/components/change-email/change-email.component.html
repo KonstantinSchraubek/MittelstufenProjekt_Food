@@ -1,31 +1,30 @@
 <div class="">
   <div class="">
-    <h4>
+      <form [formGroup]="emailForm" (submit)="changeEmail(email1.value, email2.value, pw.value)">
+        <h4>
       Change E-Mail
     </h4>
-  </div>
-
   <div class="d-flex flex-column">
-    <div class="p-2">
-      New E-Mail
-      <input  [(ngModel)]="newMail" class="form-control" type="email" />
+    <div class="form-group row-1">
+      <label for="email1">New E-Mail</label>
+      <input  #email1 formControlName="email" id="email1" class="form-control"  [ngClass]="{'red': (emailForm.get('email').hasError('required') || emailForm.get('email').hasError('invalidEmailAddress')) && email1.value !== ''}"  />
+      <small *ngIf="emailForm.get('email').hasError('invalidEmailAddress') && email1.value !== ''">Please enter a valid Email!</small>
     </div>
-    <div class="p-2">
-      Confirm New E-Mail
-      <input  [(ngModel)]="newConfirmMail" class="form-control" type="email" />
-    </div>
-
-    <div class="p-2">
-      Password:
-      <input [(ngModel)]="password" class="form-control" type="password" />
+    <div class="form-group row-1">
+      <label for="email2">Confirm New E-Mail</label>
+      <input #email2 formControlName="confirmedEmail"  id="email2" class="form-control" [ngClass]="{'red': (emailForm.get('confirmedEmail').hasError('required') || emailForm.hasError('notSame')) && email2.value !== ''}" />
+      <small *ngIf="emailForm.hasError('notSame') && email2.value !== ''">Your Emails do not match!</small>
     </div>
 
-    <div class="p-2">
-      <button (click)="changeEmail()" class="btn btn-info"> Change Password </button>
+    <div class="form-group row-1">
+      <label for="password">Password:</label>
+      <input #pw id="password" class="form-control" formControlName="password" type="password" autocomplete="new-password"/>
     </div>
 
-    <div class="p-2">
-      {{error}}
+    <div class="form-group">
+      <button type="submit" [disabled]="!emailForm.valid" class="btn btn-info"> Change Email </button>
     </div>
   </div>
+</form>
+</div>
 </div>

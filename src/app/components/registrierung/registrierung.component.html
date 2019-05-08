@@ -1,56 +1,79 @@
 <body>
-<div id="envelope">
-<form [formGroup]="userForm" (submit)="addUser(email.value, pw1.value, username.value)">
-    <header>
-        <h3>Register</h3>
-    </header>
+<div class="container">
+  <form [formGroup]="userForm" (submit)="addUser(email.value, pw1.value, username.value)">
+    <div class="row-1">
+    <h3>Register</h3>
+  </div>
+    <div class="form-group row-1">
+      <label for="email">E-Mail</label>
+      <input #email formControlName="email" placeholder="example@mail.com" class="form-control" type="email"
+             (keydown)="onKeydownEmail()" id="email"
+             [ngClass]="{'red': (userForm.get('email').hasError('required') ||
+             userForm.get('email').hasError('invalidEmailAddress') || emailTaken) && email.value !== ''}"/>
+      <small class="form-text text-muted"
+             *ngIf="userForm.get('email').hasError('invalidEmailAddress') && email.value !== ''">Please
+        enter
+        a valid email
+      </small>
+      <small class="form-text text-muted" *ngIf="emailTaken">
+        Email is already taken.
+      </small>
+    </div>
+    <div class="form-group row-1">
+      <label for="username">Username</label>
+      <input #username formControlName="username" type="text" class="form-control" id="username" placeholder="Username"
+             autocomplete="off" (keydown)="onKeydownUsername()"
+             [ngClass]="{'red': (userForm.get('username').hasError('required') ||
+             userForm.get('username').hasError('invalidUsername') || usernameTaken) && username.value !== ''}"/>
+      <small class="form-text text-muted"
+             *ngIf="userForm.get('username').hasError('invalidUsername') && username.value !== ''">Your
+        username
+        does not match the requirements.
+      </small>
+      <small class="form-text text-muted" *ngIf="usernameTaken">
+        Username is already taken.
+      </small>
+    </div>
+    <div class="form-group row-1">
+      <label for="password">Password</label>
+      <show-hide-password btnStyle="primary" [btnOutline]="false">
+      <input #pw1 formControlName="password" type="password" class="form-control" id="password" required
+             placeholder="Password"
+             autocomplete="new-password"
+             [ngClass]="{'red': (userForm.get('password').hasError('required') || userForm.get('password').hasError('invalidPassword')) && pw1.value !== ''}"/>
+      </show-hide-password>
+        <small class="form-text text-muted"
+             *ngIf="userForm.get('password').hasError('invalidPassword') && pw1.value !== ''">Your
+        password
+        does not match the requirements.
+      </small>
+    </div>
+    <div class="form-group row-1">
+      <label for="confirmedPassword">Confirm Password</label>
+      <show-hide-password btnStyle="primary" [btnOutline]="false">
+      <input #pw2 formControlName="confirmedPassword" type="password" class="form-control" autocomplete="new-password"
+             id="confirmedPassword" placeholder="Confirm Password"
+             [ngClass]="{'red': (userForm.get('confirmedPassword').hasError('required') || userForm.hasError('notSame')) && pw2.value !== ''}"/>
+      </show-hide-password>
+      <small class="form-text text-muted" *ngIf="userForm.hasError('notSame') && pw2.value !== ''">Your passwords do not
+        match.
+      </small>
+    </div>
 
-    <div class="form-group">
-        <label for="email">E-Mail</label>
-        <input #email formControlName="email" placeholder="example@mail.com" type="email" autocomplete="off"
-            class="form-control" name="Email" required
-            [ngClass]="{'red': (userForm.get('email').hasError('required') || userForm.get('email').hasError('invalidEmailAddress')) && email.value !== ''}" />
-        <small *ngIf="userForm.get('email').hasError('invalidEmailAddress') && email.value !== ''">Please
-            enter
-            a valid email</small>
-    </div>
-    <div class="form-group">
-        <label for="username">Username</label>
-        <input #username formControlName="username" type="text" class="form-control" name="Username" autocomplete="off"
-            required [ngClass]="{'red': userForm.get('username').hasError('required') && username.value !== ''}" />
-        <small *ngIf="userForm.get('username').hasError('invalidUsername') && username.value !== ''">Your
-            username
-            does not match the requirements</small>
-    </div>
-    <div class="form-group">
-        <label for="pw1">Password</label>
-        <input #pw1 formControlName="password" type="password" class="form-control" name="password" required
-            autocomplete="new-password"
-            [ngClass]="{'red': (userForm.get('password').hasError('required') || userForm.get('password').hasError('invalidPassword')) && pw1.value !== ''}" />
-        <small *ngIf="userForm.get('password').hasError('invalidPassword') && pw1.value !== ''">Your
-            password
-            does not match the requirements</small>
-    </div>
-    <div class="form-group">
-        <label for="pw2">Confirm Password</label>
-        <input #pw2 formControlName="confirmedPassword" type="password" class="form-control" autocomplete="new-password"
-            name="confirmedPassword" required
-            [ngClass]="{'red': (userForm.get('confirmedPassword').hasError('required') || userForm.hasError('notSame') || userForm.get('confirmedPassword').hasError('invalidPassword')) && pw2.value !== ''}" />
-        <small *ngIf="userForm.hasError('notSame') && pw2.value !== ''">Your passwords do not match</small>
-    </div>
-    <div class="form-group">
-        <button type="submit" [disabled]="!userForm.valid" class="btn btn-primary">Register</button>
-        <a [routerLink]="['/']" class="btn btn-link">Cancel</a>
-    </div>
-    <small>The password must</small>
-    <div class="border p-2">
-        <small>- contain at least one number</small>
-        <br>
-        <small>- be at least 6 characters long</small>
-        <br>
-        <small>- only contain up to 30 characters</small>
-    </div>
+    <button type="submit" [disabled]="!userForm.valid" class="btn btn-primary">Register</button>
+    <a [routerLink]="['/']" class="btn btn-link">Cancel</a>
 
-</form>
+
+    <div *ngIf="userForm.get('password').hasError('invalidPassword') && pw1.value !== ''">
+      <small class="form-text text-muted">The password must</small>
+      <div class="border">
+        <small class="form-text text-muted">- contain at least one number</small>
+        <br>
+        <small class="form-text text-muted">- be at least 6 characters long</small>
+        <br>
+        <small class="form-text text-muted">- only contain up to 30 characters</small>
+      </div>
+    </div>
+  </form>
 </div>
 </body>

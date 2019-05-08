@@ -18,6 +18,7 @@ const db = new sqlite3.Database("./db/mittelstufe.sqlite3", (err) => {
 //creates table benutzer if it doesnt exist 
 const createTable = () => {
   db.run("CREATE TABLE IF NOT EXISTS benutzer(ID INTEGER PRIMARY KEY AUTOINCREMENT, Email TEXT, Username TEXT, Password TEXT, KeyID INTEGER, Token TEXT)");
+  db.run("CREATE TABLE IF NOT EXISTS favoriten(ID INTEGER, RecipeID TEXT, UNIQUE(ID, RecipeID))");
 }
 
 //gives connect Client an ID to control access on the server
@@ -28,6 +29,29 @@ io.on("connection", socket => {
     socket.join(currentId);
     previousId = currentId;
   };
+
+  socket.on("addFavorite", recipe => {
+    const UserIDCheck = "SELECT ID FROM benutzer WHERE Token = '" + recipe.token + "'";
+    db.all(UserIDCheck, [], (err, row) => {
+      if (err) throw err;
+      if (row.length == 0) {
+        //if User has no valid KeyID return this
+        socket.emit("message", "NO_LOGGED_IN_USER");
+      } else {
+         const sql = "INSERT INTO favoriten (ID, RecipeID) SELECT '" + row[0].ID + "','" + recipe.ID + "'";
+         
+         db.all(sql, [], (err, row) => {
+          if (err) {
+            //if User has already favorirised this recipe return this            
+            socket.emit("message", "RECIPE_IS_ALREADY_FAVORITE");
+          };
+            //recipe was successfully added to favorites
+            socket.emit("message", "RECIPE_ADDED")
+          
+        });
+      }
+    });  
+  })
 
   //adds a User to the database, if the nutzername or the email are not taken, emits nothing if action was successful
   socket.on("addUser", user => {
@@ -105,7 +129,18 @@ io.on("connection", socket => {
   });
 
   socket.on("updateEmail", user => {
-    const sql = "UPDATE benutzer SET Email = '" + user.email + "' WHERE Username = '" + user.username + "'";
+    const emailCheck = "SELECT * FROM benutzer WHERE Email = '" + user.email + "' AND Username = '" + user.username + "'";
+    db.all(emailCheck, [], (err, row) => {
+      if (err) throw err;
+      if (row.length == 0) {
+        //if User has no valid KeyID return this
+        socket.emit("message", "EMAIL_ALREADY_TAKEN");
+      } else {
+        //emits the token
+        socket.emit("message", "EMAIL_FREE");
+      }
+    });
+    const sql = "UPDATE benutzer SET Email = '" + user.email + "' WHERE   Username = '" + user.username + "'";
     db.run(sql);
   });
 
@@ -123,16 +158,43 @@ io.on("connection", socket => {
     });
   });
 
-  socket.on("checkPasswords", user => {
-    const sql = "SELECT * FROM benutzer WHERE Password = '" + user.password + "' AND Username = '" + user.username + "'";
-    db.all(sql, [], (err, row) => {
+  socket.on("checkFavorite", recipe => {
+    const UserIDCheck = "SELECT ID FROM benutzer WHERE Token = '" + recipe.token + "'";
+    db.all(UserIDCheck, [], (err, row) => {
       if (err) throw err;
       if (row.length == 0) {
-        //if there is no corresponding token return this
-        socket.emit("message", "USER_NOT_FOUND");
+        //if User has no valid KeyID return this
+        socket.emit("message", "NO_LOGGED_IN_USER");
+      } else {
+    const favoriteCheck = "SELECT * FROM favoriten WHERE ID = '" + row[0].ID + "' AND RecipeID = '"+recipe.ID+"'";
+    db.all(favoriteCheck, [], (err, row) => {
+      if (err) throw err;
+      if (row.length == 0) {
+        //if User has no valid KeyID return this
+        socket.emit("message", "NO_FAVORITE");
+      } else {
+        socket.emit("message", "ALREADY_FAVORITE")
       }
+      });
+    }
+  });
+});
+
+  socket.on("removeFavorite", recipe => {
+    const UserIDCheck = "SELECT ID FROM benutzer WHERE Token = '" + recipe.token + "'";
+    db.all(UserIDCheck, [], (err, row) => {
+      if (err) throw err;
+      if (row.length == 0) {
+        //if User has no valid KeyID return this
+        socket.emit("message", "FAILED_TO_DELETE");
+      } else {  
+          const sql = "DELETE FROM favoriten WHERE ID = '"+row[0].ID+"' AND RecipeID = '"+recipe.ID+"'"
+          db.run(sql)
+          socket.emit("message", "FAVORITE_REMOVED");
+      }
+      });
     });
-  })
+
 
   socket.on('getRezepte', req => {
     const path = 'http://api.edamam.com';

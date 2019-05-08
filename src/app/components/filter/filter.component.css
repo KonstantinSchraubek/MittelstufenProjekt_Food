@@ -1,0 +1,44 @@
+.filer-container {
+  border-color: black;
+  border-width: 1px;
+  border-style: solid;
+  width: 20%;
+  position: fixed;
+  margin-top: 3%;
+  margin-left: 3%;
+  padding: 1%;
+}
+
+
+.recipe-card {
+  margin-top: 3%;
+  width: 19%;
+  position: fixed;
+  bottom: 4%;
+  top: 10%;
+  overflow-y: scroll;
+
+}
+
+
+
+.hidebtn {
+  margin-top: 3%;
+  top: 10%;
+  bottom: 4%;
+  width: 1%;
+  position: fixed;
+  margin-left: 19%;
+  padding-left: 0px;
+  padding-right: 0px;
+
+}
+.showbtn{
+  margin-top: 3%;
+  top: 10%;
+  bottom: 4%;
+  width: 1%;
+  position: fixed;
+  padding-left: 0px;
+  padding-right: 0px;
+}

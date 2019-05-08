@@ -20,3 +20,10 @@
   top:0;
   background:linear-gradient(transparent 150px, white);
 }
+
+.center{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
