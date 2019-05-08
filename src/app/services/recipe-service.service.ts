@@ -13,7 +13,6 @@ export class RecipeServiceService {
   }
 
 
-
   constructor(private http: Http, private databaseService: DatabaseService) {
   }
 
@@ -26,7 +25,6 @@ export class RecipeServiceService {
   private _excludedIngredients: string[] = [];
   private _includedIngredients: string[] = [];
   public selected: Rezept;
-
 
 
   setCalorieRange(min: number, max: number) {
@@ -57,9 +55,9 @@ export class RecipeServiceService {
 
   async addRecipes(ingredients?: string) {
     // codezeilen um über die API zu arbeiten -> API ID und KEY müssen eventuell in Server.js gesetzt werden
-    // const rezepte = await this.databaseService.getRezepte(ingredients)
+    // const rezepte = await this.databaseService.getRezepte(ingredients);
     // rezepte['hits'].forEach(function (recipes) {
-    //   this._recipes.push(new Rezept(recipes));
+    //   this.allrecipes.push(new Rezept(recipes));
     // }, this);
 
     // Nur für Offline Nutzung
@@ -70,6 +68,7 @@ export class RecipeServiceService {
         this.allrecipes.push(new Rezept(recipes));
       }, this);
     });
+
     this._recipes = this.allrecipes;
   }
 
