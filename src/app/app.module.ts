@@ -16,26 +16,20 @@ import {UsermenueComponent} from './components/usermenue/usermenue.component';
 import {ChangePasswordComponent} from './components/change-password/change-password.component';
 import {ChangeEmailComponent} from './components/change-email/change-email.component';
 import {APP_BASE_HREF} from '@angular/common';
-import { LoginComponent } from './components/login/login.component';
-import { CookieService } from 'ngx-cookie-service';
-import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-import { ContactComponent } from './components/contact/contact.component';
-import { ShowHidePasswordModule } from 'ngx-show-hide-password';
-import { FavoritesComponent } from './components/favorites/favorites.component';
-import { HistoryComponent } from './components/history/history.component';
 import {LoginComponent} from './components/login/login.component';
 import {CookieService} from 'ngx-cookie-service';
-import {SuccessfulRegistrationComponent} from './components/successful-registration/successful-registration.component';
 import {SocketIoModule, SocketIoConfig} from 'ngx-socket-io';
 import {ContactComponent} from './components/contact/contact.component';
 import {ShowHidePasswordModule} from 'ngx-show-hide-password';
+import {FavoritesComponent} from './components/favorites/favorites.component';
+import {HistoryComponent} from './components/history/history.component';
 import {DietFilterComponent} from './components/diet-filter/diet-filter.component';
 import {CaloriesFilterComponent} from './components/calories-filter/calories-filter.component';
 import {FilterComponent} from './components/filter/filter.component';
 import {TimeFilterComponent} from './components/time-filter/time-filter.component';
 import {ExcludeingredientsFilterComponent} from './components/excludeingredients-filter/excludeingredients-filter.component';
-import { IncludeingredientsComponent } from './components/includeingredients/includeingredients.component';
-import { Ng5SliderModule } from 'ng5-slider';
+import {IncludeingredientsComponent} from './components/includeingredients/includeingredients.component';
+import {Ng5SliderModule} from 'ng5-slider';
 
 const config: SocketIoConfig = {url: 'http://localhost:3000', options: {}};
 
@@ -60,8 +54,7 @@ const config: SocketIoConfig = {url: 'http://localhost:3000', options: {}};
     FilterComponent,
     TimeFilterComponent,
     ExcludeingredientsFilterComponent,
-    IncludeingredientsComponent
-    ContactComponent,
+    IncludeingredientsComponent,
     FavoritesComponent,
     HistoryComponent
   ],

@@ -1,5 +1,5 @@
 <div>
-  <input #inputElement type="text"  (keydown)="onKeydown($event)"
+  <input #inputElement type="text" (keyup)="SetValue(inputElement.value)" (keydown)="onKeydown($event)"
          placeholder="Tomatoes, potatoes, cheese...">
   <button style="margin-bottom: 4px" class="btn btn-primary btn-sm" (click)="Add(inputElement.value)" type="submit">
     Add

@@ -1,11 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Encrypt} from '../models/encrypt';
-import {FormGroup} from '@angular/forms';
 import {Socket} from 'ngx-socket-io';
 import {Observable} from 'rxjs';
 import {first} from 'rxjs/operators';
 import {CookieService} from 'ngx-cookie-service';
-import {Rezept} from '../models/rezept';
 
 @Injectable({
   providedIn: 'root'
@@ -164,7 +162,8 @@ export class DatabaseService {
   }
 
   async removeAccount() {
-    this.socket.emit('removeAccount', {token: await this.getToken()});
+    this.socket.emit('removeAccount', {token: await this.getToken()})
+  }
 
   async removeFromUserFavorites(recipeLabel: string) {
     this.socket.emit('removeFavorite', {token: await this.getToken(), RecipeLabel: recipeLabel});
