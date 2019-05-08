@@ -25,4 +25,25 @@ describe('ExcludeingredientsFilterComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should add item to array', () => {
+    component.Add('chicken');
+    expect(component._excludeIngredients.length).toBe(1);
+    expect(component._excludeIngredients[0]).toBe('chicken');
+  });
+
+  it('should not add ingredients a second time', () => {
+    component.Add('chicken');
+    component.Add('chicken');
+    expect(component._excludeIngredients.length).toBe(1);
+    expect(component._excludeIngredients[0]).toBe('chicken');
+    expect(component._excludeIngredients[1]).toBeUndefined();
+  });
+
+  it('should delete item from array', () => {
+    component.Add('chicken');
+    component.Deleted('chicken');
+    expect(component._excludeIngredients.length).toBe(0);
+    expect(component._excludeIngredients[0]).toBeUndefined();
+  });
 });

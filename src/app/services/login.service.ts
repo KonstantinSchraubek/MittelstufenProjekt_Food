@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
-import { DatabaseService } from './database.service';
+import {Injectable} from '@angular/core';
+import {CookieService} from 'ngx-cookie-service';
+import {DatabaseService} from './database.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +21,7 @@ export class LoginService {
     if (res !== false) {
       this.createCookie(res);
       this.loginFailed = false;
-    }
-    else{
+    } else {
       this.loginFailed = true;
     }
   }
