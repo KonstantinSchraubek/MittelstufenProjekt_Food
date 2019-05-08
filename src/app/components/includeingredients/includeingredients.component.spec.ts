@@ -39,4 +39,11 @@ describe('IncludeingredientsComponent', () => {
     expect(component._includeIngredients[0]).toBe('chicken');
     expect(component._includeIngredients[1]).toBeUndefined();
   });
+
+  it('should delete item from array', () => {
+    component.Add('chicken');
+    component.Deleted('chicken');
+    expect(component._includeIngredients.length).toBe(0);
+    expect(component._includeIngredients[0]).toBeUndefined();
+  });
 });

@@ -20,7 +20,6 @@ export class DietFilterComponent implements OnInit {
       new DietFilter('Low-Sodium', false)
 
     ];
-    console.log(this._dietArray[0].name);
   }
 
   public _dietArray: DietFilter[];
@@ -28,12 +27,7 @@ export class DietFilterComponent implements OnInit {
   ngOnInit() {
   }
 
-  get DietArray() {
-    return this._dietArray;
-  }
-
   filter() {
-    console.log('test');
     this.service.setDiets(this._dietArray);
   }
 }
