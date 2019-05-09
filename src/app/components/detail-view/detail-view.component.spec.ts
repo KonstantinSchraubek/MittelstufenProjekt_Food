@@ -34,6 +34,6 @@ describe('DetailViewComponent', () => {
   });
 
   it('Should return the rounded number of calories', () => {
-    expect(component.calories).toBe(4230.31);
+    expect(component.calories).toBe('4230.31');
   });
 });

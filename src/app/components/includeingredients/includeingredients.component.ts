@@ -19,17 +19,17 @@ export class IncludeingredientsComponent implements OnInit {
   }
 
   Add(ingredients: string) {
-    if (ingredients !== '') {
+    ingredients = ingredients.toLowerCase();
+    if (ingredients !== '' && this._includeIngredients.indexOf(ingredients) === -1) {
       this._includeIngredients.push(ingredients);
     }
     this.service.setIncludedIngredients(this._includeIngredients);
   }
 
   Deleted(item: string) {
-    const filtered = this._includeIngredients.filter(function (value) {
+    this._includeIngredients = this._includeIngredients.filter(function (value) {
       return value !== item;
     });
-    this._includeIngredients = filtered;
     this.service.setIncludedIngredients(this._includeIngredients);
   }
 

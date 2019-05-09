@@ -19,17 +19,17 @@ export class ExcludeingredientsFilterComponent implements OnInit {
   }
 
   Add(ingredients: string) {
-    if (ingredients !== '') {
+    ingredients = ingredients.toLowerCase();
+    if (ingredients !== '' && this._excludeIngredients.indexOf(ingredients) === -1) {
       this._excludeIngredients.push(ingredients);
     }
     this.service.setExcludedIngredients(this._excludeIngredients);
   }
 
   Deleted(item: string) {
-    const filtered = this._excludeIngredients.filter(function (value) {
+    this._excludeIngredients = this._excludeIngredients.filter(function (value) {
       return value !== item;
     });
-    this._excludeIngredients = filtered;
     this.service.setExcludedIngredients(this._excludeIngredients);
   }
 

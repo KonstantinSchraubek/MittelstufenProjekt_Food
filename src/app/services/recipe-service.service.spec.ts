@@ -7,18 +7,13 @@ import * as data from '../../assets/response.json';
 import {AppModule} from '../app.module';
 import {DietFilter} from '../models/dietfilter';
 
-let service: RecipeServiceService;
 beforeEach(async(() => {
-
-
-
   TestBed.configureTestingModule({
     imports: [
       AppModule
     ]
   })
     .compileComponents();
-  service = TestBed.get(RecipeServiceService);
 }));
 
 describe('RecipeServiceService', () => {
@@ -27,32 +22,36 @@ describe('RecipeServiceService', () => {
   }));
 
   it('should be created', () => {
+    const service: RecipeServiceService = TestBed.get(RecipeServiceService);
     expect(service).toBeTruthy();
   });
 
 
   it('should change selected recipe', () => {
+    const service: RecipeServiceService = TestBed.get(RecipeServiceService);
     expect(service.selected).toBeUndefined();
     const recipe: Rezept = new Rezept(data.hits[0]);
     service.changeSelected(recipe);
     expect(service.selected.calories).toBeDefined();
   });
 
-  it('should filter calorierange', () => {
-    service.addRecipes();
-    const range = 1500;
-    service.setCalorieRange(10, 2000);
-    service.ApplyFiler();
-    let value = false;
-    service.recipes.forEach(function (recipe) {
-      if (recipe.calories < 2000 || recipe.calories > 10) {
-        value = true;
-      }
-    });
-    expect(value).toBe(true);
-  });
+  // it('should filter calorierange', () => {
+  //   const service: RecipeServiceService = TestBed.get(RecipeServiceService);
+  //   service.addRecipes();
+  //   const range = 1500;
+  //   service.setCalorieRange(range);
+  //   service.ApplyFiler();
+  //   let value = false;
+  //   service.recipes.forEach(function (recipe) {
+  //     if (recipe.calories < range) {
+  //       value = true;
+  //     }
+  //   });
+  //   expect(value).toBe(false);
+  // });
 
   it('should filter diets', () => {
+    const service: RecipeServiceService = TestBed.get(RecipeServiceService);
     service.addRecipes();
     const dietfilter: DietFilter[] = [
       new DietFilter('Low-Fat', true)
@@ -69,4 +68,5 @@ describe('RecipeServiceService', () => {
     });
     expect(value).toBe(false);
   });
-});
+})
+;
