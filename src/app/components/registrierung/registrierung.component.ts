@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DatabaseService} from '../../services/database.service';
-import {FormBuilder, Validators, FormGroup,} from '@angular/forms';
+import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 import {Validation} from '../../models/validation';
 import {Router} from '@angular/router';
 import swal from 'sweetalert2';
