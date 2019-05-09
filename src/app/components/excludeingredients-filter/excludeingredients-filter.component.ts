@@ -33,13 +33,12 @@ export class ExcludeingredientsFilterComponent implements OnInit {
     this.service.setExcludedIngredients(this._excludeIngredients);
   }
 
-  onKeydown(event: KeyboardEvent) {
+  onKeydown(event: KeyboardEvent, value: string) {
     if (event.key === 'Enter') {
       this.Add(this.textfield);
+    } else {
+      this.textfield = value;
     }
   }
 
-  SetValue(value: string) {
-    this.textfield = value;
-  }
 }
