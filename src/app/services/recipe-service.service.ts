@@ -54,21 +54,10 @@ export class RecipeServiceService {
   }
 
   async addRecipes(ingredients?: string) {
-    // codezeilen um über die API zu arbeiten -> API ID und KEY müssen eventuell in Server.js gesetzt werden
-    // const rezepte = await this.databaseService.getRezepte(ingredients);
-    // rezepte['hits'].forEach(function (recipes) {
-    //   this.allrecipes.push(new Rezept(recipes));
-    // }, this);
-
-    // Nur für Offline Nutzung
-    const res = this.http.get('./assets/response.json');
-    res.subscribe(data => {
-      const a = JSON.parse(data.text());
-      a['hits'].forEach(function (recipes) {
-        this.allrecipes.push(new Rezept(recipes));
-      }, this);
-    });
-
+     const rezepte = await this.databaseService.getRezepte(ingredients);
+     rezepte['hits'].forEach(function (recipes) {
+       this.allrecipes.push(new Rezept(recipes));
+     }, this);
     this._recipes = this.allrecipes;
   }
 
@@ -139,18 +128,15 @@ export class RecipeServiceService {
     const includeIng = this._includedIngredients;
     if (this._includedIngredients.length > 0) {
       this._recipes.forEach(function (recipe) {
-        recipe.ingredientLines.forEach(function (ingredient) {
-          includeIng.forEach(function (incluIngredient) {
-            if (ingredient.includes(incluIngredient.toLowerCase())) {
-              if (!map.has(recipe.url)) {
-                map.set(recipe.url, true);
-                tempRecipes.push(recipe);
-              }
-            }
+        const hasIngredients = includeIng.every(function (incluIngredient) {
+          return recipe.ingredientLines.some(function (ingredient) {
+            return ingredient.toLowerCase().includes(incluIngredient.toLowerCase());
           });
         });
-
-      });
+        if (hasIngredients) {
+          tempRecipes.push(recipe);
+        }
+        });
       this._recipes = tempRecipes;
     }
   }

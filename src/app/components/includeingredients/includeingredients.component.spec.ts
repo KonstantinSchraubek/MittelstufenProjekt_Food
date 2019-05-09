@@ -27,22 +27,22 @@ describe('IncludeingredientsComponent', () => {
   });
 
   it('should add item to array', () => {
-    component.Add('chicken');
+    component.Add({id: 'chicken', itemName: 'Chicken'});
     expect(component._includeIngredients.length).toBe(1);
     expect(component._includeIngredients[0]).toBe('chicken');
   });
 
   it('should not add ingriends a secound time', () => {
-    component.Add('chicken');
-    component.Add('chicken');
+    component.Add({id: 'chicken', itemName: 'Chicken'});
+    component.Add({id: 'chicken', itemName: 'Chicken'});
     expect(component._includeIngredients.length).toBe(1);
     expect(component._includeIngredients[0]).toBe('chicken');
     expect(component._includeIngredients[1]).toBeUndefined();
   });
 
   it('should delete item from array', () => {
-    component.Add('chicken');
-    component.Deleted('chicken');
+    component.Add({id: 'chicken', itemName: 'Chicken'});
+    component.Deleted({id: 'chicken', itemName: 'Chicken'});
     expect(component._includeIngredients.length).toBe(0);
     expect(component._includeIngredients[0]).toBeUndefined();
   });

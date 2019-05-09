@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {RecipeServiceService} from '../../services/recipe-service.service';
+import * as data from '../../../assets/ingredients.json';
 
 @Component({
   selector: 'app-excludeingredients-filter',
@@ -13,31 +14,36 @@ export class ExcludeingredientsFilterComponent implements OnInit {
 
   _excludeIngredients: string[] = [];
 
-  textfield: string;
+  itemList = [];
+  selectedItems = [];
+  settings = {};
 
   ngOnInit() {
+    this.itemList = data.ingredients;
+    this.settings = {
+      singleSelection: false,
+      text: 'Exclude Ingredients',
+      enableSearchFilter: true,
+      addNewItemOnFilter: true
+    };
   }
-
-  Add(ingredients: string) {
-    ingredients = ingredients.toLowerCase();
-    if (ingredients !== '' && this._excludeIngredients.indexOf(ingredients) === -1) {
-      this._excludeIngredients.push(ingredients);
+  Add(item: {id: string, itemName: string}) {
+    console.log(item);
+    const ingredient = item.id.toLowerCase();
+    if (ingredient !== '' && this._excludeIngredients.indexOf(ingredient) === -1) {
+      this._excludeIngredients.push(ingredient);
     }
     this.service.setExcludedIngredients(this._excludeIngredients);
   }
-
-  Deleted(item: string) {
+  onAddItem(newItem: string) {
+    this.itemList.push({'id': newItem.toLowerCase(), 'itemName': newItem});
+    this.selectedItems.push({'id': newItem.toLowerCase(), 'itemName': newItem});
+    this.Add({'id': newItem.toLowerCase(), 'itemName': newItem});
+  }
+  Deleted(item: {id: string, itemName: string}) {
     this._excludeIngredients = this._excludeIngredients.filter(function (value) {
-      return value !== item;
+      return value !== item.id;
     });
     this.service.setExcludedIngredients(this._excludeIngredients);
   }
-
-  onKeydown(event: KeyboardEvent, value: string) {
-    this.textfield = value;
-    if (event.key === 'Enter') {
-      this.Add(this.textfield);
-    }
-  }
-
 }

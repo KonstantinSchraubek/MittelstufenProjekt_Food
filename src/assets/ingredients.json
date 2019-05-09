@@ -1,0 +1,13 @@
+{
+  "ingredients": [
+    {"id": "tomato", "itemName": "Tomato"},
+    {"id": "eggs", "itemName": "Eggs"},
+    {"id": "chicken", "itemName": "Chicken"},
+    {"id": "pig", "itemName": "Pig"},
+    {"id": "milk", "itemName": "Milk"},
+    {"id": "Cheese", "itemName": "Cheese"},
+    {"id": "apple", "itemName": "Apple"},
+    {"id": "sugar", "itemName": "Sugar"},
+    {"id": "potato", "itemName": "Potato"}
+  ]
+}

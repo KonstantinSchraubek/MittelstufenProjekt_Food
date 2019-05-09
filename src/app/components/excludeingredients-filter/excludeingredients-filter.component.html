@@ -1,11 +1,7 @@
-<div>
-  <input #inputElement type="text" (keydown)="onKeydown($event, inputElement.value)"
-         placeholder="Tomatoes, potatoes, cheese...">
-  <button style="margin-bottom: 4px" class="btn btn-primary btn-sm" (click)="Add(inputElement.value)" type="submit">
-    Add
-  </button>
-  <br/>
-  <li style="float: left; list-style: none; margin-top: 5px" *ngFor="let item of _excludeIngredients">
-    <button class="button btn-danger" (click)="Deleted(item)">{{item}}</button>
-  </li>
+<div class="exclude dropdown-container">
+  <angular2-multiselect [data]="itemList" [(ngModel)]="selectedItems" [settings]="settings" (onSelect)="Add($event)"
+                        (onDeSelect)="Deleted($event)" (onAddFilterNewItem)="onAddItem($event)">
+  </angular2-multiselect>
 </div>
+
+

@@ -30,6 +30,7 @@ import {TimeFilterComponent} from './components/time-filter/time-filter.componen
 import {ExcludeingredientsFilterComponent} from './components/excludeingredients-filter/excludeingredients-filter.component';
 import {IncludeingredientsComponent} from './components/includeingredients/includeingredients.component';
 import {Ng5SliderModule} from 'ng5-slider';
+import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown';
 
 const config: SocketIoConfig = {url: 'http://localhost:3000', options: {}};
 
@@ -67,7 +68,8 @@ const config: SocketIoConfig = {url: 'http://localhost:3000', options: {}};
     ReactiveFormsModule,
     FormsModule,
     SocketIoModule.forRoot(config),
-    ShowHidePasswordModule
+    ShowHidePasswordModule,
+    AngularMultiSelectModule
   ],
   providers: [RecipeServiceService, CookieService, {provide: APP_BASE_HREF, useValue: '/'}],
   bootstrap: [AppComponent]
