@@ -44,7 +44,6 @@ export class DatabaseService {
 
   // gets the generated token of the corresponding user based on the username and hashed password
   async authenticateUser(username: string, password: string) {
-
     const response = await this.getKeyID(username);
     if (response === 'USER_HAS_NO_KEY') {
       return false;
@@ -162,7 +161,7 @@ export class DatabaseService {
   }
 
   async removeAccount() {
-    this.socket.emit('removeAccount', {token: await this.getToken()})
+    this.socket.emit('removeAccount', {token: await this.getToken()});
   }
 
   async removeFromUserFavorites(recipeLabel: string) {
