@@ -1,4 +1,3 @@
-import * as CryptoJS from 'crypto-js';
 import {Encrypt} from './Encrypt';
 
 describe('Encrypt', () => {
@@ -15,7 +14,6 @@ describe('Encrypt', () => {
   it('should Encrypt', () => {
     const crypt = new Encrypt('password123456');
     crypt.set();
-    console.log('Encrypted: ' + crypt.encrypted.toString());
     expect(crypt.encrypted).toBeTruthy();
   });
 });
