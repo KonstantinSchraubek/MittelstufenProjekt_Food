@@ -7,18 +7,17 @@ import * as data from '../../assets/response.json';
 import {AppModule} from '../app.module';
 import {DietFilter} from '../models/dietfilter';
 
-beforeEach(async(() => {
-  TestBed.configureTestingModule({
-    imports: [
-      AppModule
-    ]
-  })
-    .compileComponents();
-}));
+
 
 describe('RecipeServiceService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [HttpClientModule]
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        AppModule,
+        HttpClientModule
+      ]
+    })
+      .compileComponents();
   }));
 
   it('should be created', () => {

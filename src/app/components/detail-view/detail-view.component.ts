@@ -26,9 +26,9 @@ export class DetailViewComponent implements OnInit {
       }
     });
 
-    let today = new Date();
+    const today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
     const yyyy = today.getFullYear();
 
     this.databaseService.addToHistory(this.selected.url, this.selected.label, this.selected.image, (mm + '/' + dd + '/' + yyyy));
@@ -103,8 +103,7 @@ export class DetailViewComponent implements OnInit {
   }
 
   get calories(): number {
-    // @ts-ignore
-    return this.selected.calories.toFixed(2);
+    return +this.selected.calories.toFixed(2);
   }
 
 
