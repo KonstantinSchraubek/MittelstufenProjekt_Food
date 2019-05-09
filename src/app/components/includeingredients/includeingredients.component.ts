@@ -12,6 +12,7 @@ export class IncludeingredientsComponent implements OnInit {
   }
 
   _includeIngredients: string[] = [];
+
   textfield: string;
 
   ngOnInit() {
@@ -23,7 +24,6 @@ export class IncludeingredientsComponent implements OnInit {
       this._includeIngredients.push(ingredients);
     }
     this.service.setIncludedIngredients(this._includeIngredients);
-    this.service.setIncludedIngredients(this._includeIngredients);
   }
 
   Deleted(item: string) {
@@ -34,10 +34,9 @@ export class IncludeingredientsComponent implements OnInit {
   }
 
   onKeydown(event: KeyboardEvent, value: string) {
+    this.textfield = value;
     if (event.key === 'Enter') {
       this.Add(this.textfield);
-    } else {
-      this.textfield = value;
     }
   }
 }

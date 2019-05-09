@@ -34,10 +34,9 @@ export class ExcludeingredientsFilterComponent implements OnInit {
   }
 
   onKeydown(event: KeyboardEvent, value: string) {
+    this.textfield = value;
     if (event.key === 'Enter') {
       this.Add(this.textfield);
-    } else {
-      this.textfield = value;
     }
   }
 

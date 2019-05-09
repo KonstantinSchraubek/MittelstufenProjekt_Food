@@ -1,5 +1,5 @@
 <div>
-  <input #inputElement type="text" (keyup)="SetValue(inputElement.value)" (keydown)="onKeydown($event, inputElement.value)"
+  <input #inputElement type="text" (keydown)="onKeydown($event, inputElement.value)"
          placeholder="Tomatoes, potatoes, cheese...">
   <button style="margin-bottom: 4px" class="btn btn-primary btn-sm" (click)="Add(inputElement.value)" type="submit">Add</button><br/>
   <li style="float: left; list-style: none; margin-top: 5px" *ngFor="let item of _includeIngredients">
