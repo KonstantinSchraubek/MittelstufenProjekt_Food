@@ -28,7 +28,6 @@ export class ExcludeingredientsFilterComponent implements OnInit {
     };
   }
   Add(item: {id: string, itemName: string}) {
-    console.log(item);
     const ingredient = item.id.toLowerCase();
     if (ingredient !== '' && this._excludeIngredients.indexOf(ingredient) === -1) {
       this._excludeIngredients.push(ingredient);

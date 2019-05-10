@@ -34,20 +34,21 @@ describe('RecipeServiceService', () => {
     expect(service.selected.calories).toBeDefined();
   });
 
-  // it('should filter calorierange', () => {
-  //   const service: RecipeServiceService = TestBed.get(RecipeServiceService);
-  //   service.addRecipes();
-  //   const range = 1500;
-  //   service.setCalorieRange(range);
-  //   service.ApplyFiler();
-  //   let value = false;
-  //   service.recipes.forEach(function (recipe) {
-  //     if (recipe.calories < range) {
-  //       value = true;
-  //     }
-  //   });
-  //   expect(value).toBe(false);
-  // });
+  it('should filter calorierange', () => {
+    const service: RecipeServiceService = TestBed.get(RecipeServiceService);
+    service.addRecipes();
+    const min = 1500;
+    const max = 2000;
+    service.setCalorieRange(min, max);
+    service.ApplyFiler();
+    let value = false;
+    service.recipes.forEach(function (recipe) {
+      if (recipe.calories < min || recipe.calories > max) {
+        value = true;
+      }
+    });
+    expect(value).toBe(false);
+  });
 
   it('should filter diets', () => {
     const service: RecipeServiceService = TestBed.get(RecipeServiceService);
